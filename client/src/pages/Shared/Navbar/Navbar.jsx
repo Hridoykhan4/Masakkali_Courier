@@ -18,8 +18,6 @@ const Navbar = () => {
     </>
   );
 
-  console.log(isOpen);
-
   return (
     <>
       <div className="navbar bg-base-100 shadow-sm">

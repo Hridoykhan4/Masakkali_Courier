@@ -10,17 +10,39 @@ const Banner = () => {
   const images = [img1, img2, img3, img4, img5, img6];
 
   return (
-    <div>
+    <div className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden">
       <Carousel
+        autoPlay
+        infiniteLoop
+        swipeable
         showThumbs={false}
-        autoPlay={true}
-        interval={4000}
-        infiniteLoop={true}
-        
-        // className="min-h-125"
+        showStatus={false}
+        interval={3500}
+        transitionTime={800}
+        stopOnHover
+        emulateTouch
       >
-        {images.map((img, i) => (
-          <img className="object-cover" key={i} src={img} />
+        {images.map((image, i) => (
+          <div className="relative h-[70vh] md:h-[85vh]" key={i}>
+            <img
+              src={image}
+              alt={`Banner-${i}`}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black-40 to-black/50"></div>
+              <div className="absolute inset-0 flex items-center justify-center px-6 md:px-16">
+
+            <div className="max-w-xl text-white space-y-4">
+              <h2 className="text-2xl md:text-4xl font-bold leading-tight">
+                Fast & Reliable <br /> Courier Service
+              </h2>
+              <p className="text-sm md:text-base text-gray-200">
+                Delivering trust, speed, and safety across the country.
+              </p>
+            </div>
+
+              </div>
+          </div>
         ))}
       </Carousel>
     </div>
