@@ -3,6 +3,8 @@ import { HiOutlineBars4 } from "react-icons/hi2";
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import MasakkaliLogo from "../MasakkaliLogo/MasakkaliLogo";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,16 +22,26 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="navbar bg-base-100 shadow-sm">
-        <div className="navbar-start">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="navbar sticky top-0 z-1000 bg-base-100 shadow-sm"
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ ease: "easeInOut", duration: 0.3 }}
+          className="navbar-start"
+        >
           <Link to="/">
             <MasakkaliLogo></MasakkaliLogo>
           </Link>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{navOptions}</ul>
-        </div>
+        </motion.div>
         <div className="navbar-end space-x-2">
+          <ul className="menu menu-horizontal px-1 hidden lg:flex">
+            {navOptions}
+          </ul>
           <div className="dropdown dropdown-end">
             <button
               onClick={(e) => {
@@ -40,12 +52,14 @@ const Navbar = () => {
             >
               {isOpen ? <IoCloseOutline /> : <HiOutlineBars4 />}
             </button>
-            <ul className="menu menu-sm z-50 dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
-              {isOpen && navOptions}
-            </ul>
+            {isOpen && (
+              <ul className="menu menu-sm z-50 dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
+                {navOptions}
+              </ul>
+            )}
           </div>
         </div>
-      </div>
+      </motion.div>
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
