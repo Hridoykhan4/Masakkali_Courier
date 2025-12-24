@@ -4,10 +4,10 @@ import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import MasakkaliLogo from "../MasakkaliLogo/MasakkaliLogo";
 // eslint-disable-next-line no-unused-vars
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import useTheme from "../../../hooks/useTheme";
 import { FaMoon, FaSun } from "react-icons/fa";
-const Navbar = () => {
+const Navbar = ({ fromAuth }) => {
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -15,7 +15,7 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  const navOptions = (
+  const navOptions = fromAuth || (
     <>
       <li onClick={autoCloseLinks}>
         <NavLink to="/">Home</NavLink>
@@ -42,24 +42,29 @@ const Navbar = () => {
           </Link>
         </motion.div>
         <div className="navbar-end space-x-2">
-
-      <button className="btn btn-ghost btn-circle" aria-label="ToggleTheme" onClick={toggleTheme}>
-        {theme === 'light' ? <FaMoon></FaMoon> : <FaSun></FaSun>}
-      </button>
+          <button
+            className="btn btn-ghost btn-circle"
+            aria-label="ToggleTheme"
+            onClick={toggleTheme}
+          >
+            {theme === "light" ? <FaMoon></FaMoon> : <FaSun></FaSun>}
+          </button>
 
           <ul className="menu menu-horizontal px-1 hidden lg:flex">
             {navOptions}
           </ul>
           <div className="dropdown block lg:hidden dropdown-end">
-            <button
-              onClick={(e) => {
-                setIsOpen((prev) => !prev);
-                e.stopPropagation();
-              }}
-              className=" cursor-pointer btn text-2xl"
-            >
-              {isOpen ? <IoCloseOutline /> : <HiOutlineBars4 />}
-            </button>
+            {fromAuth || (
+              <button
+                onClick={(e) => {
+                  setIsOpen((prev) => !prev);
+                  e.stopPropagation();
+                }}
+                className=" cursor-pointer btn text-2xl"
+              >
+                {isOpen ? <IoCloseOutline /> : <HiOutlineBars4 />}
+              </button>
+            )}
             {isOpen && (
               <ul className="menu menu-sm z-50 dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
                 {navOptions}

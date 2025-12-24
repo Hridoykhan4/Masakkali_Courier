@@ -1,48 +1,89 @@
 import merchantImg from "../../../assets/location-merchant.png";
 import beMerchantBg from "../../../assets/be-a-merchant-bg.png";
 import { motion as Motion } from "framer-motion";
+
 const BeMerchant = () => {
   return (
-    <Motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+    <Motion.section
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      transition={{ ease: "easeInOut", duration: 0.6 }}
+      transition={{ duration: 0.8 }}
       style={{
-        background: `linear-gradient(rgba(51, 146, 157, 0.2), rgba(51, 146, 157, 0.1)), url(${beMerchantBg})`,
+        background: `
+          linear-gradient(135deg, rgba(51, 146, 157, 1), rgba(51, 146, 157, 0.56)),
+          url(${beMerchantBg})
+        `,
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "top",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
       }}
-      className="hero overflow-hidden mb-10 bg-base-200 py-10 bg-cover bg-no-repeat"
+      className="relative hero overflow-hidden mb-16 py-20 rounded-3xl"
     >
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <img src={merchantImg} className="max-w-sm w-full rounded-lg shadow-2xl" />
-        <div>
+      {/* Soft Glow Accent */}
+      <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/20 blur-3xl rounded-full"></div>
+
+      <div className="hero-content flex-col lg:flex-row-reverse gap-14 relative z-10">
+        {/* Image */}
+        <Motion.img
+          src={merchantImg}
+          className="max-w-sm w-full rounded-2xl shadow-2xl"
+          initial={{ opacity: 0, y: 40, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          animate={{ y: [0, -8, 0] }}
+          viewport={{ once: true }}
+        />
+
+        {/* Content */}
+        <div className="text-white max-w-xl">
           <Motion.h1
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ ease: "easeInOut", duration: 0.6, delay: 0.3 }}
-            className="sm:text-5xl text-2xl font-bold"
+            transition={{ duration: 0.7 }}
+            className="text-3xl sm:text-5xl font-extrabold leading-tight"
           >
-            Merchant and Customer Satisfaction is Our First Priority
+            Merchant & Customer <br />
+            Satisfaction Comes First
           </Motion.h1>
-          <p className="py-6">
-            We offer the lowest delivery charge with the highest value along
-            with 100% safety of your product. Pathao courier delivers your
-            parcels in every corner of Bangladesh right on time.
-          </p>
-          <div className="flex flex-wrap items-center gap-5">
-            <button className="btn  btn-primary rounded-full">
+
+          <Motion.p
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="py-6 text-white/80"
+          >
+            Lowest delivery charge, fastest service, and 100% product safety. We
+            deliver parcels to every corner of Bangladesh—right on time, every
+            time.
+          </Motion.p>
+
+          {/* CTA Buttons */}
+          <Motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="flex flex-wrap items-center gap-5"
+          >
+            <Motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn btn-primary rounded-full px-8"
+            >
               Become a Merchant
-            </button>
-            <button className="btn btn-primary btn-outline">
-              Earn with Masakkali Courier
-            </button>
-          </div>
+            </Motion.button>
+
+            <Motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn btn-outline text-neutral btn-primary rounded-full px-8"
+            >
+              Earn with Masakkali
+            </Motion.button>
+          </Motion.div>
         </div>
       </div>
-    </Motion.div>
+    </Motion.section>
   );
 };
 
