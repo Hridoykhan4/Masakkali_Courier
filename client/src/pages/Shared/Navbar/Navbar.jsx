@@ -5,7 +5,10 @@ import { IoCloseOutline } from "react-icons/io5";
 import MasakkaliLogo from "../MasakkaliLogo/MasakkaliLogo";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import useTheme from "../../../hooks/useTheme";
+import { FaMoon, FaSun } from "react-icons/fa";
 const Navbar = () => {
+  const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
   const autoCloseLinks = () => {
@@ -39,16 +42,21 @@ const Navbar = () => {
           </Link>
         </motion.div>
         <div className="navbar-end space-x-2">
+
+      <button className="btn btn-ghost btn-circle" aria-label="ToggleTheme" onClick={toggleTheme}>
+        {theme === 'light' ? <FaMoon></FaMoon> : <FaSun></FaSun>}
+      </button>
+
           <ul className="menu menu-horizontal px-1 hidden lg:flex">
             {navOptions}
           </ul>
-          <div className="dropdown dropdown-end">
+          <div className="dropdown block lg:hidden dropdown-end">
             <button
               onClick={(e) => {
                 setIsOpen((prev) => !prev);
                 e.stopPropagation();
               }}
-              className="lg:hidden cursor-pointer btn text-2xl"
+              className=" cursor-pointer btn text-2xl"
             >
               {isOpen ? <IoCloseOutline /> : <HiOutlineBars4 />}
             </button>

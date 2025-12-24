@@ -1,6 +1,6 @@
 import merchantImg from "../../../assets/location-merchant.png";
 import beMerchantBg from "../../../assets/be-a-merchant-bg.png";
-import {motion as Motion} from 'framer-motion'
+import { motion as Motion } from "framer-motion";
 const BeMerchant = () => {
   return (
     <Motion.div
@@ -13,10 +13,10 @@ const BeMerchant = () => {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top",
       }}
-      className="hero bg-base-200 py-10 bg-cover bg-no-repeat"
+      className="hero overflow-hidden mb-10 bg-base-200 py-10 bg-cover bg-no-repeat"
     >
       <div className="hero-content flex-col lg:flex-row-reverse">
-        <img src={merchantImg} className="max-w-sm rounded-lg shadow-2xl" />
+        <img src={merchantImg} className="max-w-sm w-full rounded-lg shadow-2xl" />
         <div>
           <Motion.h1
             initial={{ opacity: 0, x: 30 }}
@@ -36,7 +36,7 @@ const BeMerchant = () => {
             <button className="btn  btn-primary rounded-full">
               Become a Merchant
             </button>
-            <button className="btn dark:btn-primary btn-outline">
+            <button className="btn btn-primary btn-outline">
               Earn with Masakkali Courier
             </button>
           </div>

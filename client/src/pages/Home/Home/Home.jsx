@@ -5,15 +5,15 @@ import ClientLogoMarquee from "../ClientLogoMarquee/ClientLogoMarquee";
 import OurServices from "../Services/OurServices";
 
 const Home = () => {
-    return (
-        <div>
-        <Banner></Banner>   
-        <OurServices></OurServices>         
-        <ClientLogoMarquee></ClientLogoMarquee>
-        <Benefits></Benefits>
-        <BeMerchant></BeMerchant>
-        </div>
-    );
+  return (
+    <div>
+      <Banner></Banner>
+      <OurServices></OurServices>
+      <ClientLogoMarquee></ClientLogoMarquee>
+      <Benefits></Benefits>
+      <BeMerchant></BeMerchant>
+    </div>
+  );
 };
 
 export default Home;

@@ -10,7 +10,7 @@ const logos = [logo1, logo2, logo3, logo4, logo5, logo6];
 const ClientLogoMarquee = () => {
   return (
     <Motion.section
-      className="py-10 max-w-7xl mx-auto px-4"
+      className="py-10 bg-accent/40 max-w-7xl mx-auto px-4"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
