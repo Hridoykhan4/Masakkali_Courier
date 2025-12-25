@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import usePasswordToggle from "../../../hooks/usePasswordToggle";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router";
+import SocialLogin from "../SocialLogin/SocialLogin";
 const Login = () => {
   const { show, toggle, type: passType } = usePasswordToggle();
   const {
@@ -79,7 +80,7 @@ const Login = () => {
           <div>
             <a className="link link-hover">Forgot password?</a>
           </div>
-          <button disabled={isSubmitting} className="btn btn-neutral mt-4">
+          <button disabled={isSubmitting} className="btn btn-primary mt-4">
             {isSubmitting ? "Logging in" : "Login"}
           </button>
         </fieldset>
@@ -90,6 +91,7 @@ const Login = () => {
           </Link>
         </p>
       </form>
+      <SocialLogin></SocialLogin>
     </div>
   );
 };

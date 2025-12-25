@@ -7,10 +7,12 @@ import MasakkaliLogo from "../MasakkaliLogo/MasakkaliLogo";
 import { motion } from "framer-motion";
 import useTheme from "../../../hooks/useTheme";
 import { FaMoon, FaSun } from "react-icons/fa";
+import useAuthValue from "../../../hooks/useAuthValue";
 const Navbar = ({ fromAuth }) => {
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-
+  const { user } = useAuthValue();
+  console.log(user);
   const autoCloseLinks = () => {
     setIsOpen(false);
   };
@@ -19,6 +21,9 @@ const Navbar = ({ fromAuth }) => {
     <>
       <li onClick={autoCloseLinks}>
         <NavLink to="/">Home</NavLink>
+      </li>
+      <li onClick={autoCloseLinks}>
+        <NavLink to="/coverage">Coverage</NavLink>
       </li>
     </>
   );
