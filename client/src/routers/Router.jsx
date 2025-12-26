@@ -16,9 +16,11 @@ const Router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: 'coverage',
-        Component: Coverage
-      }
+        path: "coverage",
+        Component: Coverage,
+        loader: () => fetch("/coverageData.json"),
+        hydrateFallbackElement: <p>Loading ... </p>,
+      },
     ],
   },
   {
@@ -30,9 +32,9 @@ const Router = createBrowserRouter([
         Component: Login,
       },
       {
-        path: '/register',
-        Component: Register
-      }
+        path: "/register",
+        Component: Register,
+      },
     ],
   },
 ]);

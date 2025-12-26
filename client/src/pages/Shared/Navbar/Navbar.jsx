@@ -34,7 +34,7 @@ const Navbar = ({ fromAuth }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="navbar sticky top-0 z-1000 bg-base-100 shadow-sm"
+        className="navbar sticky top-0 z-1000 px-3 bg-base-100 shadow-sm"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
