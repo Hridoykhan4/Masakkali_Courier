@@ -34,6 +34,9 @@ const Navbar = ({ fromAuth }) => {
         <NavLink to="/">Home</NavLink>
       </li>
       <li onClick={autoCloseLinks}>
+        <NavLink to="/sendParcel">Send Parcel</NavLink>
+      </li>
+      <li onClick={autoCloseLinks}>
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
       {loginOptions}

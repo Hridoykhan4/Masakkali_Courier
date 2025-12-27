@@ -7,7 +7,15 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 //Middleware
-app.use(cors());
+// app.use(
+//   cors({
+//     origin: [
+//       "https://9jnv16dr-5000.asse.devtunnels.ms",
+//       "http://localhost:5173",
+//     ],
+//   })
+// );
+app.use(cors())
 app.use(express.json());
 
 const client = new MongoClient(uri, {
@@ -40,6 +48,6 @@ app.get("/", async (req, res) => {
   res.send("Ur Masakkali Ur");
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Bistro is running on PORT: ${port}`);
 });

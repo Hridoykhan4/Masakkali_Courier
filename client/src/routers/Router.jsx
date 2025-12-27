@@ -5,6 +5,8 @@ import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Authentication/Login/Login";
 import Register from "../pages/Authentication/Register/Register";
 import Coverage from "../pages/Coverage/Coverage";
+import PrivateRoute from "./PrivateRoute";
+import SendParcel from "../pages/SendParcel/SendParcel";
 
 const Router = createBrowserRouter([
   {
@@ -20,6 +22,12 @@ const Router = createBrowserRouter([
         Component: Coverage,
         loader: () => fetch("/coverageData.json"),
         hydrateFallbackElement: <p>Loading ... </p>,
+      },
+      {
+        path: 'sendParcel',
+        element: <PrivateRoute>
+          <SendParcel></SendParcel>
+        </PrivateRoute>
       },
     ],
   },
