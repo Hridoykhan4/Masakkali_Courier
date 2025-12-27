@@ -17,6 +17,17 @@ const Navbar = ({ fromAuth }) => {
     setIsOpen(false);
   };
 
+
+  const loginOptions = <>
+  <li>
+    {
+      user ?
+      <button>Log out</button> :
+      <Link to="/login">Login</Link>
+    }
+  </li>
+  </>
+
   const navOptions = fromAuth || (
     <>
       <li onClick={autoCloseLinks}>
@@ -25,6 +36,7 @@ const Navbar = ({ fromAuth }) => {
       <li onClick={autoCloseLinks}>
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
+      {loginOptions}
     </>
   );
 
@@ -47,6 +59,7 @@ const Navbar = ({ fromAuth }) => {
           </Link>
         </motion.div>
         <div className="navbar-end space-x-2">
+
           <button
             className="btn btn-ghost btn-circle"
             aria-label="ToggleTheme"
