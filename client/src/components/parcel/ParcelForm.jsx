@@ -1,9 +1,10 @@
 import { useForm, useWatch } from "react-hook-form";
 import calculateParcelCost from "./parcel.utils";
 import coverageData from "../../utils/coverageData";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuthValue from "../../hooks/useAuthValue";
 import { motion as Motion } from "framer-motion";
+import { useNavigate } from "react-router";
 
 const generateTrackingID = () => {
   const date = new Date();
@@ -16,18 +17,6 @@ const ParcelForm = ({
   defaultValues = {},
   onSubmitParcel,
 }) => {
-  const [pendingData, setPendingData] = useState(null);
-  const { user } = useAuthValue();
-  const [costBreakdown, setCostBreakDown] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const coverage = coverageData;
-  const uniqueRegions = [...new Set(coverage.map((w) => w.region))];
-  const regionsVal = uniqueRegions.map((region) => (
-    <option key={region} value={region}>
-      {region}
-    </option>
-  ));
-
   const {
     register,
     handleSubmit,
@@ -37,16 +26,14 @@ const ParcelForm = ({
     watch,
     setValue,
   } = useForm({ defaultValues });
-
-  const parcelType = useWatch({
-    control,
-    name: "parcelType",
-    defaultValue: "",
-  });
-
-  const getDistrictsByRegion = (region) =>
-    coverage.filter((w) => w.region === region).map((r) => r.district) || [];
-
+  const [pendingData, setPendingData] = useState(null);
+  const senderCenterRef = useRef(null);
+  const receiverCenterRef = useRef(null);
+  const { user } = useAuthValue();
+  const [costBreakdown, setCostBreakDown] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const coverage = coverageData;
+  const navigate = useNavigate();
   const senderRegion = useWatch({
     control,
     name: "senderRegion",
@@ -58,6 +45,49 @@ const ParcelForm = ({
     name: "receiverRegion",
     defaultValue: "",
   });
+
+  useEffect(() => {
+    if (senderRegion && senderCenterRef.current) {
+      senderCenterRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [senderRegion]);
+
+  useEffect(() => {
+    if (receiverRegion && receiverCenterRef.current) {
+      receiverCenterRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [receiverRegion]);
+
+  useEffect(() => {
+    if (receiverRegion && receiverCenterRef.current) {
+      receiverCenterRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [receiverRegion]);
+
+  const uniqueRegions = [...new Set(coverage.map((w) => w.region))];
+  const regionsVal = uniqueRegions.map((region) => (
+    <option key={region} value={region}>
+      {region}
+    </option>
+  ));
+
+  const parcelType = useWatch({
+    control,
+    name: "parcelType",
+    defaultValue: "",
+  });
+
+  const getDistrictsByRegion = (region) =>
+    coverage.filter((w) => w.region === region).map((r) => r.district) || [];
 
   const onSubmit = (data) => {
     const cost = calculateParcelCost({
@@ -87,7 +117,7 @@ const ParcelForm = ({
         setPendingData(null);
         setCostBreakDown(null);
         setShowModal(false);
-        
+        navigate("/dashboard/myParcels");
       },
     });
   };
@@ -145,7 +175,11 @@ const ParcelForm = ({
                   Close
                 </button>
                 <button onClick={handleConfirm} className="btn btn-primary">
-                  Confirm & Proceed
+                  {isSubmitting ? (
+                    <span className="loading loading-spinner loading-sm"></span>
+                  ) : (
+                    "Confirm & Proceed"
+                  )}
                 </button>
               </div>
             </div>
@@ -160,14 +194,19 @@ const ParcelForm = ({
           </div>
 
           {/* PARCEL INFO S */}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <Motion.section
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          >
             <h3 className="md:col-span-3 font-semibold text-lg">Parcel Info</h3>
             <select
               {...register("parcelType", { required: true })}
               className="select select-bordered w-full"
             >
               <option value="">Select Type</option>
-              <option value="document">document</option>
+              <option value="document">Document</option>
               <option value="non-document">Non Document</option>
             </select>
 
@@ -188,7 +227,7 @@ const ParcelForm = ({
                 className="input input-bordered w-full"
               />
             )}
-          </section>
+          </Motion.section>
 
           {/* PARCEL INFO E */}
 
@@ -232,6 +271,7 @@ const ParcelForm = ({
 
             <select
               disabled={!senderRegion}
+              ref={senderCenterRef}
               {...register("senderServiceCenter", { required: true })}
               className="select select-bordered w-full"
             >
@@ -303,6 +343,7 @@ const ParcelForm = ({
 
             <select
               disabled={!receiverRegion}
+              ref={receiverCenterRef}
               {...register("receiverServiceCenter", { required: true })}
               className="select select-bordered w-full"
             >

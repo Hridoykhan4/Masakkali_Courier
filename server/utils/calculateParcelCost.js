@@ -1,18 +1,38 @@
-const calculateParcelCost = ({ type, weight, isSameRegion }) => {
-  let totalCost = 0;
+// Backend version
+const calculateParcelCost = ({ type, weight: weightData, isSameRegion }) => {
+  const weight = Number(weightData) || 0;
+
+  const breakdown = {
+    type,
+    baseCost: 0,
+    weightCharge: 0,
+    regionCharge: 0,
+    total: 0,
+  };
+
+  // ===== Document =====
   if (type === "document") {
-    totalCost = isSameRegion ? 60 : 80;
-  } else {
-    if (weight <= 3) {
-      totalCost = isSameRegion ? 110 : 150;
-    } else {
-      const extraKg = weight - 3;
-      const extraCost = extraKg * 40;
-      totalCost = isSameRegion ? extraCost + 110 : 150 + extraCost + 40;
+    breakdown.baseCost = 60;
+    if (!isSameRegion) breakdown.regionCharge = 20;
+  }
+
+  // ===== Non-document =====
+  if (type === "non-document") {
+    breakdown.baseCost = 110;
+
+    if (weight > 3) {
+      breakdown.weightCharge = (weight - 3) * 40;
+    }
+
+    if (!isSameRegion) {
+      breakdown.regionCharge = 40;
     }
   }
 
-  return totalCost;
+  breakdown.total =
+    breakdown.baseCost + breakdown.weightCharge + breakdown.regionCharge;
+
+  return breakdown;
 };
 
 module.exports = calculateParcelCost;

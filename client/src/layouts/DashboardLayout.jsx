@@ -2,7 +2,13 @@ import { NavLink, Outlet } from "react-router";
 import useTheme from "../hooks/useTheme";
 import useMyParcels from "../hooks/useMyParcels";
 import MasakkaliLogo from "../pages/Shared/MasakkaliLogo/MasakkaliLogo";
-
+import {
+  HiOutlineHome,
+  HiOutlineMapPin,
+  HiOutlineUserCircle,
+  HiOutlineCreditCard,
+} from "react-icons/hi2";
+import { FaBoxOpen, FaStripe } from "react-icons/fa";
 const DashboardLayout = () => {
   // eslint-disable-next-line no-unused-vars
   const { theme } = useTheme();
@@ -49,12 +55,51 @@ const DashboardLayout = () => {
             <MasakkaliLogo></MasakkaliLogo>
           </div>
           <li>
-            <NavLink to="myParcels">
+            <NavLink
+              to="/dashboard/myParcels"
+              className="flex items-center gap-2"
+            >
+              <HiOutlineHome className="text-lg" />
+              My Home
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/myParcels"
+              className="flex items-center gap-2"
+            >
+              <FaBoxOpen className="text-lg" />
               My Parcels ( {myParcels?.length || 0} )
             </NavLink>
           </li>
+
           <li>
-            <a>Sidebar Item 2</a>
+            <NavLink
+              to="/dashboard/paymentHistory"
+              className="flex items-center gap-2"
+            >
+              {/* Stripe branding */}
+              <FaStripe className="text-lg" />
+              Payment History
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink to="/dashboard/track" className="flex items-center gap-2">
+              <HiOutlineMapPin className="text-lg" />
+              Track a Package
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/profile"
+              className="flex items-center gap-2"
+            >
+              <HiOutlineUserCircle className="text-lg" />
+              Update Profile
+            </NavLink>
           </li>
         </ul>
       </div>

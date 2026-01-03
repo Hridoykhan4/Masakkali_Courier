@@ -1,7 +1,8 @@
+// Frontend version
 const calculateParcelCost = ({ type, weight: weightData, isSameRegion }) => {
-  const weight = parseFloat(weightData) || 0;
+  const weight = Number(weightData) || 0;
 
-  let breakdown = {
+  const breakdown = {
     type,
     baseCost: 0,
     weightCharge: 0,
@@ -11,16 +12,16 @@ const calculateParcelCost = ({ type, weight: weightData, isSameRegion }) => {
 
   // ===== Document =====
   if (type === "document") {
-    breakdown.baseCost = isSameRegion ? 60 : 80;
+    breakdown.baseCost = 60;
+    if (!isSameRegion) breakdown.regionCharge = 20;
   }
 
   // ===== Non-document =====
   if (type === "non-document") {
-    breakdown.baseCost = isSameRegion ? 110 : 150;
+    breakdown.baseCost = 110;
 
     if (weight > 3) {
-      const extraKg = weight - 3;
-      breakdown.weightCharge = extraKg * 40;
+      breakdown.weightCharge = (weight - 3) * 40;
     }
 
     if (!isSameRegion) {

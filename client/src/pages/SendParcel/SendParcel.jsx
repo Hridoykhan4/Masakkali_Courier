@@ -21,6 +21,7 @@ const SendParcel = () => {
       if (data?.insertedId) {
         toast.success("Parcel placed successfully", {
           className: "font-medium text-lg tracking-wide",
+          autoClose: 1500,
         });
       }
     },

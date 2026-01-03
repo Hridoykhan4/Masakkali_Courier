@@ -1,10 +1,11 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import useAuthValue from "../../../../hooks/useAuthValue";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
+import { toast } from "react-toastify";
 
 const CheckoutForm = () => {
   const { id } = useParams();
@@ -13,7 +14,8 @@ const CheckoutForm = () => {
   const elements = useElements();
   const { user } = useAuthValue();
   const axiosSecure = useAxiosSecure();
-  const [processing, setProcessing] = useState(false)
+  const [processing, setProcessing] = useState(false);
+  const nav = useNavigate();
   const {
     data: parcel = {},
     isPending,
@@ -34,7 +36,7 @@ const CheckoutForm = () => {
     const card = elements.getElement(CardElement);
     if (!card) return null;
     setErrorMessage(null);
-    setProcessing(true)
+    setProcessing(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const { error: paymentMethodError, paymentMethod } =
@@ -49,10 +51,9 @@ const CheckoutForm = () => {
       }
 
       //   Create Payment Intent
-      const {data} = await axiosSecure.post("/create-payment-intent", {
+      const { data } = await axiosSecure.post("/create-payment-intent", {
         cost: parcel?.cost,
       });
-
 
       const { error: cardIntentError, paymentIntent } =
         await stripe.confirmCardPayment(data?.clientSecret, {
@@ -65,25 +66,37 @@ const CheckoutForm = () => {
           },
         });
 
-        if(cardIntentError){
-            setErrorMessage(cardIntentError?.message);
-            return
-        }
-        if(paymentIntent?.status === 'succeeded'){
-            const payment = {
-                email: user?.email,
-                name: user?.displayName,
-                amount: parcel?.cost,
-                transactionId: paymentIntent?.id,
-                status: 'pending'
-            }
-        }
+      if (cardIntentError) {
+        setErrorMessage(cardIntentError?.message);
+        return;
+      }
 
+      console.log(paymentIntent);
+
+      if (paymentIntent?.status === "succeeded") {
+        const payment = {
+          name: user?.displayName,
+          email: user?.email,
+          amount: parcel?.cost,
+          transactionId: paymentIntent?.id,
+          parcelId: id,
+          paymentMethod: paymentIntent.payment_method_types,
+        };
+
+        const { data } = await axiosSecure.post("/payments", payment);
+        console.log(data);
+        if (data?.insertedId) {
+          toast.success(data?.message || "Payment Success", {
+            position: "top-right",
+            autoClose: 1500,
+          });
+          nav("/dashboard/myParcels");
+        }
+      }
     } catch (err) {
       console.log(err);
-    }
-    finally{
-        setProcessing(false)
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -119,7 +132,7 @@ const CheckoutForm = () => {
         className="btn rounded-md  btn-primary text-neutral disabled:bg-gray-700 disabled:cursor-not-allowed"
         disabled={!stripe || !elements || !parcel?.cost || processing}
       >
-        {processing ? 'paying' : 'Pay'} ${parcel?.cost} for parcel pickup
+        {processing ? "paying" : "Pay"} ${parcel?.cost} for parcel pickup
       </button>
       {errorMessage && (
         <p className="text-red-600 font-semibold">{errorMessage}</p>

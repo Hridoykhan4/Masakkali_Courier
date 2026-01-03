@@ -33,38 +33,8 @@ async function run() {
     const db = client.db("Masakkali");
     const reviewCollection = db.collection("reviews");
     const parcelCollection = db.collection("parcel");
-
+    const paymentCollection = db.collection("payment");
     /* Parcel APIs */
-    app.get("/parcels", async (req, res) => {
-      res.send(await parcelCollection.find().toArray());
-    });
-
-    app.post("/parcels", async (req, res) => {
-      try {
-        const {
-          parcelType,
-          weight,
-          cost: frontendCost,
-          receiverRegion,
-          senderRegion,
-        } = req.body;
-
-        const actualCost = calculateParcelCost({
-          isSameRegion: receiverRegion === senderRegion,
-          weight,
-          type: parcelType,
-        });
-        if (frontendCost !== actualCost) {
-          return res.status(400).json({
-            message: "Parcel cost mismatch. Please refresh and try again.",
-          });
-        }
-        res.status(201).send(await parcelCollection.insertOne(req?.body));
-      } catch (err) {
-        console.log(err);
-        res.status(500).send({ message: "Failed to create parcel" });
-      }
-    });
 
     app.get("/parcels", async (req, res) => {
       try {
@@ -84,6 +54,34 @@ async function run() {
       );
     });
 
+    app.post("/parcels", async (req, res) => {
+      try {
+        const {
+          parcelType,
+          weight,
+          cost: frontendCost,
+          receiverRegion,
+          senderRegion,
+        } = req.body;
+
+        const actualCost = calculateParcelCost({
+          isSameRegion: receiverRegion === senderRegion,
+          weight,
+          type: parcelType,
+        });
+        console.log(frontendCost, actualCost.total);
+        if (frontendCost !== actualCost.total) {
+          return res.status(400).json({
+            message: "Parcel cost mismatch. Please refresh and try again.",
+          });
+        }
+        res.status(201).send(await parcelCollection.insertOne(req?.body));
+      } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: "Failed to create parcel" });
+      }
+    });
+
     app.delete("/parcels/:id", async (req, res) => {
       res.send(
         await parcelCollection.deleteOne({ _id: new ObjectId(req.params.id) })
@@ -93,6 +91,14 @@ async function run() {
     /* Parcel APIs */
 
     /* Payment APIS */
+
+    app.get("/payments", async (req, res) => {
+      const { email } = req?.query;
+      const query = email ? { email } : {};
+      const options = { sort: { paidAt: -1 } };
+      const payments = await paymentCollection.find(query, options).toArray();
+      res.send(payments);
+    });
 
     app.post("/create-payment-intent", async (req, res) => {
       const { cost } = req.body;
@@ -104,6 +110,42 @@ async function run() {
       });
       res.send({
         clientSecret: paymentIntent.client_secret,
+      });
+    });
+
+    app.post("/payments", async (req, res) => {
+      const { parcelId, email, amount, transactionId, paymentMethod, name } =
+        req.body;
+      console.log(req.body);
+      if (!parcelId || !email || !amount)
+        return res
+          .status(400)
+          .send({ message: "parcelId, email and amount are required" });
+
+      const updateResult = await parcelCollection.updateOne(
+        { _id: new ObjectId(parcelId) },
+        { $set: { payment_status: "paid" } }
+      );
+
+      if (updateResult.modifiedCount === 0)
+        return res
+          .status(404)
+          .send({ message: "Parcel not found or already paid" });
+
+      const paymentDoc = {
+        parcelId,
+        email,
+        amount,
+        transactionId,
+        paymentMethod,
+        paidAt: new Date(),
+        paidAtString: new Date().toISOString(),
+        name,
+      };
+      const paymentResult = await paymentCollection.insertOne(paymentDoc);
+      res.send({
+        message: "Payment recorded and parcel marked as paid",
+        insertedId: paymentResult.insertedId,
       });
     });
 
@@ -126,6 +168,6 @@ app.get("/", async (req, res) => {
   res.send("Ur Masakkali Ur");
 });
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
   console.log(`Bistro is running on PORT: ${port}`);
 });
