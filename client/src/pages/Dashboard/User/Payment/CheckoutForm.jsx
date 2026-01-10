@@ -38,18 +38,7 @@ const CheckoutForm = () => {
     setErrorMessage(null);
     setProcessing(true);
     try {
-      // eslint-disable-next-line no-unused-vars
-      const { error: paymentMethodError, paymentMethod } =
-        await stripe.createPaymentMethod({
-          type: "card",
-          card,
-        });
-      if (paymentMethodError) {
-        setErrorMessage(paymentMethodError.message);
-        console.log("method Error", paymentMethodError);
-        return;
-      }
-
+   
       //   Create Payment Intent
       const { data } = await axiosSecure.post("/create-payment-intent", {
         cost: parcel?.cost,
@@ -100,11 +89,27 @@ const CheckoutForm = () => {
     }
   };
 
+  if (!parcel?._id) {
+    return (
+      <p className="text-center text-red-500">
+        Parcel not found or already paid.
+      </p>
+    );
+  }
+
+
   return (
     <form
       className="md:w-[60%] mx-auto border p-4 rounded-xl space-y-6"
       onSubmit={handleSubmit}
     >
+    <div className="bg-base-100 text-base-content shadow-md p-3 rounded text-sm">
+        <p>
+          Parcel Cost: <strong>${parcel?.cost}</strong>
+        </p>
+        <p>Payment Method: Card</p>
+      </div>
+
       <ErrorLoadingState
         error={error}
         isError={isError}
@@ -132,7 +137,7 @@ const CheckoutForm = () => {
         className="btn rounded-md  btn-primary text-neutral disabled:bg-gray-700 disabled:cursor-not-allowed"
         disabled={!stripe || !elements || !parcel?.cost || processing}
       >
-        {processing ? "paying" : "Pay"} ${parcel?.cost} for parcel pickup
+        {processing ? "Processing Payment..." : `Pay $${parcel?.cost}`}
       </button>
       {errorMessage && (
         <p className="text-red-600 font-semibold">{errorMessage}</p>

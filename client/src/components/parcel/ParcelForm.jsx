@@ -107,7 +107,7 @@ const ParcelForm = ({
       delivery_status: "not-collected",
       creation_date: new Date().toISOString(),
       payment_status: "unpaid",
-      tracking_id: generateTrackingID(),
+      trackingId: generateTrackingID(),
       cost: costBreakdown.total,
       costBreakDown: costBreakdown,
     };

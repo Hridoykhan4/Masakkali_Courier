@@ -34,6 +34,7 @@ async function run() {
     const reviewCollection = db.collection("reviews");
     const parcelCollection = db.collection("parcel");
     const paymentCollection = db.collection("payment");
+    const trackingCollection = db.collection("tracking");
     /* Parcel APIs */
 
     app.get("/parcels", async (req, res) => {
@@ -62,6 +63,7 @@ async function run() {
           cost: frontendCost,
           receiverRegion,
           senderRegion,
+          trackingId,
         } = req.body;
 
         const actualCost = calculateParcelCost({
@@ -75,6 +77,13 @@ async function run() {
             message: "Parcel cost mismatch. Please refresh and try again.",
           });
         }
+        await trackingCollection.insertOne({
+          trackingId,
+          status: "Created",
+          message: "Parcel Created Successfully",
+          location: senderRegion,
+          createdAt: new Date(),
+        });
         res.status(201).send(await parcelCollection.insertOne(req?.body));
       } catch (err) {
         console.log(err);
@@ -150,6 +159,28 @@ async function run() {
     });
 
     /* Payment APIS */
+
+    /* Tracking APIS */
+    app.get("/track/:trackingId", async (req, res) => {
+      const { trackingId } = req.params;
+
+      const parcel = await parcelCollection.findOne({
+        trackingId,
+      });
+      if (!parcel) {
+        return res.status(404).send({ message: "Invalid tracking ID" });
+      }
+
+      const trackingHistory = await trackingCollection
+        .find({ trackingId })
+        .sort({ createdAt: 1 })
+        .toArray();
+
+      res.send({
+        parcel,
+        trackingHistory,
+      }); 
+    });
 
     app.get("/reviews", async (req, res) => {
       res.send(await reviewCollection.find().toArray());

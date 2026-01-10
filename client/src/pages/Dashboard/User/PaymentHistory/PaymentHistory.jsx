@@ -1,29 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import useAuthValue from "../../../../hooks/useAuthValue";
-import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
+import usePaymentHistory from "../../../../hooks/usePaymentHistory";
 
 const PaymentHistory = () => {
-  const { user, loading } = useAuthValue();
-  const axiosSecure = useAxiosSecure();
   const {
     data: payments = [],
     isPending,
     isError,
     error,
-  } = useQuery({
-    queryKey: ["my-payments", user?.email],
-    queryFn: async () => {
-      const { data } = await axiosSecure.get(`/payments?email=${user?.email}`);
-      return data;
-    },
-    enabled: !!user && !loading,
-    staleTime: 1000 * 60 * 5,
-  });
+  } = usePaymentHistory();
 
   console.log(payments);
 
-  if (isPending || isError )
+  if (isPending || isError)
     return (
       <ErrorLoadingState
         error={error}

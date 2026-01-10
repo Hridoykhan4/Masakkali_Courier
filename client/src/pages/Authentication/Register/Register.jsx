@@ -5,12 +5,16 @@ import usePasswordToggle from "../../../hooks/usePasswordToggle";
 import useAuthValue from "../../../hooks/useAuthValue";
 import { useState } from "react";
 import SocialLogin from "../SocialLogin/SocialLogin";
-// import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import axios from "axios";
+import { toast } from "react-toastify";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 const Register = () => {
   const { show, toggle, type: passType } = usePasswordToggle();
   const { createNewUser, updateUserInfo } = useAuthValue();
   const [error, setError] = useState("");
-  // const axiosPublic = useAxiosPublic();
+  const [preview, setPreview] = useState("");
+  const [imageLoading, setImageLoading] = useState(false);
   const nav = useNavigate();
   const {
     register,
@@ -25,17 +29,43 @@ const Register = () => {
     defaultValue: "",
   });
 
-  const onsubmit = async ({ name, email, password, photo }) => {
-      try {
-        const { user } = await createNewUser(email, password);
-        await updateUserInfo(name, photo);
-        console.log(user);
-        reset();
-        nav("/");
-      } catch (err) {
-        console.log(err);
-        setError(err?.message);
-      }
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_PRESET_NAME
+    );
+    setImageLoading(true);
+    try {
+      const { data: cloudRes } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/image/upload`,
+        formData
+      );
+      if (!cloudRes?.url) return toast.error("Image Upload failed");
+      setPreview(cloudRes.url);
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    } finally {
+      setImageLoading(false);
+    }
+  };
+
+  const onsubmit = async ({ name, email, password }) => {
+    try {
+      const { user } = await createNewUser(email, password);
+      await updateUserInfo(name, preview);
+      console.log(user);
+      reset();
+      nav("/");
+    } catch (err) {
+      console.log(err);
+      setError(err?.message);
+    }
   };
 
   return (
@@ -62,24 +92,6 @@ const Register = () => {
           {errors?.name && (
             <p className="text-red-600 font-semibold">
               {errors?.name?.message}
-            </p>
-          )}
-
-          <label htmlFor="photo" className="label">
-            Photo
-          </label>
-          <input
-            id="photo"
-            {...register("photo", {
-              required: `Must fill photo`,
-            })}
-            type="url"
-            className="input w-full"
-            placeholder="Photo URL"
-          />
-          {errors?.photo && (
-            <p className="text-red-600 font-semibold">
-              {errors?.photo?.message}
             </p>
           )}
 
@@ -175,6 +187,20 @@ const Register = () => {
 
           {error && <p className="text-red-600 font-semibold">{error}</p>}
 
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">
+              {imageLoading ? "Uploading" : "Upload"} Profile Picture
+            </legend>
+            <input
+              accept="image/*"
+              disabled={imageLoading}
+              onChange={handleFileChange}
+              type="file"
+              className="file-input"
+            />
+            <label className="label">Max size 2MB</label>
+          </fieldset>
+
           <button disabled={isSubmitting} className="btn btn-primary mt-4">
             {isSubmitting ? "Creating Account" : "Signup"}
           </button>
@@ -186,6 +212,20 @@ const Register = () => {
           </Link>
         </p>
       </form>
+      {preview && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex mt-6 justify-center pb-4"
+        >
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-24 h-24 rounded-lg object-cover border border-gray-200 shadow-md"
+          />
+        </motion.div>
+      )}
       <SocialLogin></SocialLogin>
     </div>
   );

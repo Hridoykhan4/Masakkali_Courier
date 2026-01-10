@@ -84,6 +84,7 @@ const MyParcels = () => {
         isPending={isPending}
       ></ErrorLoadingState>
 
+      <p>Click on the tracking Id to copy the parcel Id</p>
       {myParcels?.length > 0 && (
         <table className="table table-zebra w-full">
           <thead>
@@ -100,12 +101,21 @@ const MyParcels = () => {
             </tr>
           </thead>
 
+
           <tbody>
             {myParcels.map((parcel, index) => (
               <tr key={parcel._id}>
                 <td>{index + 1}</td>
 
-                <td className="font-mono text-sm">{parcel.tracking_id}</td>
+                <td
+                  onClick={() => {
+                    navigator.clipboard.writeText(parcel.trackingId);
+                    toast.success("Successfully Copied");
+                  }}
+                  className="font-mono text-sm"
+                >
+                  {parcel.trackingId}
+                </td>
 
                 <td>{parcel.title}</td>
 
@@ -154,11 +164,11 @@ const MyParcels = () => {
                 {/* Actions */}
                 <td className="flex gap-2">
                   <Link
-                    to={`/dashboard/parcels/${parcel._id}`}
+                    to={`/dashboard/track?tid=${parcel.trackingId}`}
                     className="btn btn-xs btn-outline"
-                    title="View Details"
+                    title="Track Parcel"
                   >
-                    <FaEye />
+                    Track
                   </Link>
 
                   {parcel.payment_status === "unpaid" && (

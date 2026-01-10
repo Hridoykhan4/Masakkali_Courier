@@ -9,10 +9,12 @@ import {
   HiOutlineCreditCard,
 } from "react-icons/hi2";
 import { FaBoxOpen, FaStripe } from "react-icons/fa";
+import usePaymentHistory from "../hooks/usePaymentHistory";
 const DashboardLayout = () => {
   // eslint-disable-next-line no-unused-vars
   const { theme } = useTheme();
   const { myParcels } = useMyParcels();
+  const {data: payments = []} = usePaymentHistory()
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -81,7 +83,7 @@ const DashboardLayout = () => {
             >
               {/* Stripe branding */}
               <FaStripe className="text-lg" />
-              Payment History
+              Payment History ( {payments?.length || 0} )
             </NavLink>
           </li>
 
