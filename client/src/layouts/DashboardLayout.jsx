@@ -4,17 +4,20 @@ import useMyParcels from "../hooks/useMyParcels";
 import MasakkaliLogo from "../pages/Shared/MasakkaliLogo/MasakkaliLogo";
 import {
   HiOutlineHome,
-  HiOutlineMapPin,
   HiOutlineUserCircle,
-  HiOutlineCreditCard,
-} from "react-icons/hi2";
+  HiOutlineBadgeCheck,
+  HiOutlineClock,
+  HiOutlineLocationMarker,
+} from "react-icons/hi";
+
 import { FaBoxOpen, FaStripe } from "react-icons/fa";
+
 import usePaymentHistory from "../hooks/usePaymentHistory";
 const DashboardLayout = () => {
   // eslint-disable-next-line no-unused-vars
   const { theme } = useTheme();
   const { myParcels } = useMyParcels();
-  const {data: payments = []} = usePaymentHistory()
+  const { data: payments = [] } = usePaymentHistory();
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -81,7 +84,6 @@ const DashboardLayout = () => {
               to="/dashboard/paymentHistory"
               className="flex items-center gap-2"
             >
-              {/* Stripe branding */}
               <FaStripe className="text-lg" />
               Payment History ( {payments?.length || 0} )
             </NavLink>
@@ -89,7 +91,7 @@ const DashboardLayout = () => {
 
           <li>
             <NavLink to="/dashboard/track" className="flex items-center gap-2">
-              <HiOutlineMapPin className="text-lg" />
+              <HiOutlineLocationMarker className="text-lg" />
               Track a Package
             </NavLink>
           </li>
@@ -101,6 +103,26 @@ const DashboardLayout = () => {
             >
               <HiOutlineUserCircle className="text-lg" />
               Update Profile
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/activeRiders"
+              className="flex items-center gap-2"
+            >
+              <HiOutlineBadgeCheck className="text-lg text-success" />
+              Active Riders
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/dashboard/pendingRiders"
+              className="flex items-center gap-2"
+            >
+              <HiOutlineClock className="text-lg text-warning" />
+              Pending Riders
             </NavLink>
           </li>
         </ul>

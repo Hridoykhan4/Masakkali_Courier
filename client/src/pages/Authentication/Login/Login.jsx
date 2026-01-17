@@ -20,17 +20,19 @@ const Login = () => {
 
   const onsubmit = async ({ email, password }) => {
     try {
-      await signInUser(email, password);
+      const { user } = await signInUser(email, password);
       reset();
-      nav(from, {replace: true});
-          toast.success("Log in successfully!");
-      
+      nav(from, { replace: true });
+      toast.success(`Welcome Back ${user?.displayName || ""}`, {
+        position: "top-left",
+        autoClose: 1500,
+      });
     } catch (err) {
-    toast.error(
-      err?.code === "auth/invalid-credential"
-        ? "Invalid email or password"
-        : "Login failed. Please try again."
-    );
+      toast.error(
+        err?.code === "auth/invalid-credential"
+          ? "Invalid email or password"
+          : "Login failed. Please try again."
+      );
     }
   };
 

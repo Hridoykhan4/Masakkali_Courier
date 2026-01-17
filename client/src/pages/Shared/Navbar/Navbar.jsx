@@ -22,6 +22,7 @@ const Navbar = ({ fromAuth }) => {
     await logOut();
     toast.success("Logged out successfully!", {
       autoClose: 1500,
+      position: "bottom-right",
     });
     setIsOpen(false);
   };
@@ -59,10 +60,10 @@ const Navbar = ({ fromAuth }) => {
                 ),
                 {
                   position: "top-center",
-                  autoClose: false, // Keep open until user decides
+                  autoClose: false,
                   closeOnClick: false,
                   draggable: false,
-                  icon: false, // We'll use our custom styling
+                  icon: false, 
                 }
               );
             }}
@@ -86,6 +87,9 @@ const Navbar = ({ fromAuth }) => {
       </li>
       <li onClick={autoCloseLinks}>
         <NavLink to="/coverage">Coverage</NavLink>
+      </li>
+      <li onClick={autoCloseLinks}>
+        <NavLink to="/beARider">Be a rider</NavLink>
       </li>
       {user && (
         <>

@@ -87,8 +87,7 @@ const Faq = () => {
             className="collapse collapse-arrow bg-base-100 border border-base-300 rounded-xl shadow-sm hover:shadow-md transition-shadow"
           >
             <input
-              type="radio"
-              name="faq-accordion"
+              type="checkbox"
               defaultChecked={faq.id === 1}
             />
             <div className="collapse-title text-base sm:text-lg font-semibold">

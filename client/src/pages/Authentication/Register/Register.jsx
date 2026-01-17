@@ -5,16 +5,18 @@ import usePasswordToggle from "../../../hooks/usePasswordToggle";
 import useAuthValue from "../../../hooks/useAuthValue";
 import { useState } from "react";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import axios from "axios";
 import { toast } from "react-toastify";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 const Register = () => {
   const { show, toggle, type: passType } = usePasswordToggle();
+  const axiosPublic = useAxiosPublic();
   const { createNewUser, updateUserInfo } = useAuthValue();
   const [error, setError] = useState("");
   const [preview, setPreview] = useState("");
   const [imageLoading, setImageLoading] = useState(false);
+  const [uploadPercent, setUploadPercent] = useState(0);
   const nav = useNavigate();
   const {
     register,
@@ -31,6 +33,13 @@ const Register = () => {
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    setError("");
+
+    if (file.size > 2 * 1024 * 1024) return setError("Image must be under 2MB");
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/webp", "image/png"];
+    if (!allowedTypes.includes(file?.type))
+      return setError("Only JPG, PNG, or WEBP images are allowed");
     const formData = new FormData();
     formData.append("file", file);
     formData.append(
@@ -38,15 +47,23 @@ const Register = () => {
       import.meta.env.VITE_CLOUDINARY_PRESET_NAME
     );
     setImageLoading(true);
+    setPreview(URL.createObjectURL(file));
+
     try {
-      const { data: cloudRes } = await axios.post(
+      const { data: cloudRes } = await axiosPublic.post(
         `https://api.cloudinary.com/v1_1/${
           import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
         }/image/upload`,
-        formData
+        formData,
+        {
+          onUploadProgress: (e) => {
+            const percent = Math.round((e.loaded * 100) / e.total);
+            setUploadPercent(percent);
+          },
+        }
       );
-      if (!cloudRes?.url) return toast.error("Image Upload failed");
-      setPreview(cloudRes.url);
+      if (!cloudRes?.secure_url) return toast.error("Image Upload failed");
+      setPreview(cloudRes.secure_url);
     } catch (err) {
       console.log(err);
       setError(err.message);
@@ -56,15 +73,37 @@ const Register = () => {
   };
 
   const onsubmit = async ({ name, email, password }) => {
+    if (!preview) return toast.error(error);
+    setImageLoading(true);
     try {
       const { user } = await createNewUser(email, password);
       await updateUserInfo(name, preview);
       console.log(user);
+      const userInfo = {
+        email,
+        name,
+        photoURL: preview,
+        role: "user",
+        createdAt: new Date().toISOString(),
+        lastLoggedIn: new Date().toISOString(),
+      };
+      const { data } = await axiosPublic.post(`/users`, userInfo);
+      if (data?.exists) {
+        toast.info("Welcome Back !");
+      } else {
+        toast.success(`Welcome ${name} !`, {
+          autoClose: 1400,
+        });
+      }
+
       reset();
       nav("/");
+      console.log(data);
     } catch (err) {
       console.log(err);
       setError(err?.message);
+    } finally {
+      setImageLoading(false);
     }
   };
 
@@ -189,7 +228,7 @@ const Register = () => {
 
           <fieldset className="fieldset">
             <legend className="fieldset-legend">
-              {imageLoading ? "Uploading" : "Upload"} Profile Picture
+              {imageLoading ? "Uploading" : "Choose"} Profile Picture
             </legend>
             <input
               accept="image/*"
@@ -201,10 +240,26 @@ const Register = () => {
             <label className="label">Max size 2MB</label>
           </fieldset>
 
-          <button disabled={isSubmitting} className="btn btn-primary mt-4">
-            {isSubmitting ? "Creating Account" : "Signup"}
+          {imageLoading && (
+            <progress
+              className="progress progress-primary"
+              value={uploadPercent}
+              max="100"
+            />
+          )}
+
+          <button
+            disabled={isSubmitting || imageLoading || !preview}
+            className="btn btn-primary mt-4"
+          >
+            {imageLoading
+              ? "Uploading Image"
+              : isSubmitting
+              ? "Creating Account"
+              : "Signup"}
           </button>
         </fieldset>
+
         <p>
           Already have an Account,{" "}
           <Link className="link link-primary" to="/login">
@@ -226,7 +281,7 @@ const Register = () => {
           />
         </motion.div>
       )}
-      <SocialLogin></SocialLogin>
+      <SocialLogin from="/"></SocialLogin>
     </div>
   );
 };

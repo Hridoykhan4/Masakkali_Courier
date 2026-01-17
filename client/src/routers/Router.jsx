@@ -12,6 +12,9 @@ import MyParcels from "../pages/Dashboard/User/MyParcels/MyParcels";
 import Payment from "../pages/Dashboard/User/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/User/PaymentHistory/PaymentHistory";
 import TrackParcel from "../pages/Dashboard/User/TrackParcel/TrackParcel";
+import BeARider from "../pages/Dashboard/Rider/BeARider/BeARider";
+import PendingRiders from "../pages/Dashboard/Rider/PendingRiders/PendingRiders";
+import ActiveRiders from "../pages/Dashboard/Rider/ActiveRiders/ActiveRiders";
 
 const Router = createBrowserRouter([
   {
@@ -31,6 +34,14 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <SendParcel></SendParcel>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "beARider",
+        element: (
+          <PrivateRoute>
+            <BeARider></BeARider>
           </PrivateRoute>
         ),
       },
@@ -74,6 +85,14 @@ const Router = createBrowserRouter([
         path: "track",
         Component: TrackParcel,
       },
+      {
+        path: 'pendingRiders',
+        element: <PendingRiders></PendingRiders>
+      },
+      {
+        path: 'activeRiders',
+        element: <ActiveRiders></ActiveRiders>
+      }
     ],
   },
 ]);

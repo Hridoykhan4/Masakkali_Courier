@@ -1,18 +1,36 @@
 import { toast } from "react-toastify";
 import useAuthValue from "../../../hooks/useAuthValue";
 import { useNavigate } from "react-router";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { useState } from "react";
 
 const SocialLogin = ({ from }) => {
   const { loginByGoogle } = useAuthValue();
+  const [loading, setLoading] = useState(false);
+
   const nav = useNavigate();
+  const axiosPublic = useAxiosPublic();
   const handleGoogleSignin = async () => {
+    if (loading) return;
+    setLoading(true);
     try {
-      await loginByGoogle();
+      const { user } = await loginByGoogle();
+      const userInfo = {
+        email: user?.email,
+        name: user?.displayName,
+        photoURL: user?.photoURL,
+        role: "user",
+        createdAt: new Date().toISOString(),
+        lastLoggedIn: new Date().toISOString(),
+      };
+      await axiosPublic.post("/users", userInfo);
       toast.success("Logged in successfully!");
       nav(from, { replace: true });
     } catch (err) {
       console.log(err);
-      toast.error("Logging failed!");
+      toast.error("Google login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -20,6 +38,7 @@ const SocialLogin = ({ from }) => {
     <div className="text-center">
       <div className="divider">OR</div>
       <button
+        aria-label="Login with Google"
         onClick={handleGoogleSignin}
         className="btn btn-secondary text-neutral border-[#e5e5e5]"
       >
@@ -50,7 +69,7 @@ const SocialLogin = ({ from }) => {
             ></path>
           </g>
         </svg>
-        Login with Google
+        {loading ? "Signing in..." : "Login with Google"}
       </button>
     </div>
   );
