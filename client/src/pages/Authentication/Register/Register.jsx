@@ -1,6 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import usePasswordToggle from "../../../hooks/usePasswordToggle";
 import useAuthValue from "../../../hooks/useAuthValue";
 import { useState } from "react";
@@ -18,6 +18,8 @@ const Register = () => {
   const [imageLoading, setImageLoading] = useState(false);
   const [uploadPercent, setUploadPercent] = useState(0);
   const nav = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from || "/";
   const {
     register,
     reset,
@@ -44,7 +46,7 @@ const Register = () => {
     formData.append("file", file);
     formData.append(
       "upload_preset",
-      import.meta.env.VITE_CLOUDINARY_PRESET_NAME
+      import.meta.env.VITE_CLOUDINARY_PRESET_NAME,
     );
     setImageLoading(true);
     setPreview(URL.createObjectURL(file));
@@ -60,7 +62,7 @@ const Register = () => {
             const percent = Math.round((e.loaded * 100) / e.total);
             setUploadPercent(percent);
           },
-        }
+        },
       );
       if (!cloudRes?.secure_url) return toast.error("Image Upload failed");
       setPreview(cloudRes.secure_url);
@@ -97,7 +99,7 @@ const Register = () => {
       }
 
       reset();
-      nav("/");
+      nav(from, { replace: true });
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -252,11 +254,7 @@ const Register = () => {
             disabled={isSubmitting || imageLoading || !preview}
             className="btn btn-primary mt-4"
           >
-            {imageLoading
-              ? "Uploading Image"
-              : isSubmitting
-              ? "Creating Account"
-              : "Signup"}
+            {isSubmitting ? "Creating Account" : "Signup"}
           </button>
         </fieldset>
 

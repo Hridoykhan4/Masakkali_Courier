@@ -1,17 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 
 const ActiveRiders = () => {
   const axiosSecure = useAxiosSecure();
   const [search, setSearch] = useState("");
-  const {
-    data: riders = [],
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: riders = [], isLoading } = useQuery({
     queryKey: ["active-riders"],
     queryFn: async () => {
       const res = await axiosSecure.get("/riders/active");
@@ -24,16 +19,6 @@ const ActiveRiders = () => {
       r.name.toLowerCase().includes(search.trim().toLowerCase()) ||
       r.phone.includes(search),
   );
-
-  const handleDeactivate = async (id) => {
-    try {
-      await axiosSecure.patch(`/riders/${id}/deactivate`);
-      toast.success("Rider deactivated");
-      refetch();
-    } catch {
-      toast.error("Failed to deactivate rider");
-    }
-  };
 
   if (isLoading) return <ErrorLoadingState isPending />;
   return (
@@ -55,7 +40,6 @@ const ActiveRiders = () => {
               <th>Bike</th>
               <th>Approved</th>
               <th>Status</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -77,15 +61,9 @@ const ActiveRiders = () => {
                 <td>{rider.bikeBrand}</td>
                 <td>{new Date(rider.reviewedAt).toLocaleDateString()}</td>
                 <td>
-                  <span className="badge badge-success">Active</span>
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDeactivate(rider._id)}
-                    className="btn btn-sm btn-error btn-outline"
-                  >
-                    Deactivate
-                  </button>
+                  <span className="badge badge-success text-base-content">
+                    Active
+                  </span>
                 </td>
               </tr>
             ))}

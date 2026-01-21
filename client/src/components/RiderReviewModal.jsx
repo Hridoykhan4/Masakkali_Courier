@@ -1,10 +1,11 @@
 import { toast } from "react-toastify";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useRef } from "react";
 
 const RiderReviewModal = ({ rider, onClose, refetch }) => {
+  let isProcessing = useRef(false);
   const axiosSecure = useAxiosSecure();
   const handleDecision = async (status) => {
-    let isProcessing = false;
     toast.info(
       ({ closeToast }) => (
         <div className="flex flex-col gap-3">
@@ -20,19 +21,22 @@ const RiderReviewModal = ({ rider, onClose, refetch }) => {
             </button>
             <button
               onClick={async () => {
-                if (isProcessing) return;
-                isProcessing = true;
+                if (isProcessing.current) return;
+                isProcessing.current = true;
                 try {
                   await axiosSecure.patch(`/riders/${rider._id}`, {
                     status,
-                    reviewedAt: new Date(),
                   });
                   toast.success(`Rider ${status}`);
                   onClose();
                   closeToast();
                   refetch();
-                } catch {
-                  toast.error("Action Failed");
+                } catch (err) {
+                  toast.error(err?.response?.data?.message || "Action Failed", {
+                    position: "top-right",
+                    autoClose: 1500,
+                  });
+                  isProcessing.current = false;
                 }
               }}
               className={`px-3 py-1 text-sm rounded-md text-white transition

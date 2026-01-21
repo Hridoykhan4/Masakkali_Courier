@@ -38,7 +38,6 @@ const CheckoutForm = () => {
     setErrorMessage(null);
     setProcessing(true);
     try {
-   
       //   Create Payment Intent
       const { data } = await axiosSecure.post("/create-payment-intent", {
         cost: parcel?.cost,
@@ -97,13 +96,12 @@ const CheckoutForm = () => {
     );
   }
 
-
   return (
     <form
       className="md:w-[60%] mx-auto border p-4 rounded-xl space-y-6"
       onSubmit={handleSubmit}
     >
-    <div className="bg-base-100 text-base-content shadow-md p-3 rounded text-sm">
+      <div className="bg-base-100 text-base-content shadow-md p-3 rounded text-sm">
         <p>
           Parcel Cost: <strong>${parcel?.cost}</strong>
         </p>

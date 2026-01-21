@@ -107,7 +107,7 @@ const Login = () => {
         </fieldset>
         <p>
           New to this Account,{" "}
-          <Link className="link link-primary" to="/register">
+          <Link state={{from}} className="link link-primary" to="/register">
             Sign Up
           </Link>
         </p>

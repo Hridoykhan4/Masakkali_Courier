@@ -4,11 +4,13 @@ import useAuthValue from "../../hooks/useAuthValue";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useScrollTo from "../../hooks/useScrollTo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 const SendParcel = () => {
   useScrollTo();
   const { user } = useAuthValue();
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
+  const nav = useNavigate()
   const { isPending, mutateAsync } = useMutation({
     mutationFn: async (parcel) => {
       const { data } = await axiosSecure.post("/parcels", parcel);
@@ -23,6 +25,7 @@ const SendParcel = () => {
           className: "font-medium text-lg tracking-wide",
           autoClose: 1500,
         });
+        nav(`/dashboard/myParcels`)
       }
     },
     onError: (error) => {

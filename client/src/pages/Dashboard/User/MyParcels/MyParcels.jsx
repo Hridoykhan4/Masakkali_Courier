@@ -70,7 +70,7 @@ const MyParcels = () => {
         closeOnClick: false,
         draggable: false,
         icon: false,
-      }
+      },
     );
   };
 
@@ -100,7 +100,6 @@ const MyParcels = () => {
               <th>Actions</th>
             </tr>
           </thead>
-
 
           <tbody>
             {myParcels.map((parcel, index) => (
@@ -154,7 +153,7 @@ const MyParcels = () => {
                 <td>
                   <span
                     className={`capitalize ${deliveryStatus(
-                      parcel?.delivery_status
+                      parcel?.delivery_status,
                     )}`}
                   >
                     {parcel.delivery_status.replace("-", " ")}
@@ -181,17 +180,19 @@ const MyParcels = () => {
                     </Link>
                   )}
 
-                  <button
-                    onClick={() => handleDeleteParcel(parcel?._id)}
-                    className="btn btn-xs btn-error"
-                    title="Delete Parcel"
-                  >
-                    {isDeleting && deletingId === parcel._id ? (
-                      <span className="loading loading-spinner loading-xs"></span>
-                    ) : (
-                      <FaTrash />
-                    )}
-                  </button>
+                  {parcel.payment_status === "unpaid" && (
+                    <button
+                      onClick={() => handleDeleteParcel(parcel?._id)}
+                      className="btn btn-xs btn-error"
+                      title="Delete Parcel"
+                    >
+                      {isDeleting && deletingId === parcel._id ? (
+                        <span className="loading loading-spinner loading-xs"></span>
+                      ) : (
+                        <FaTrash />
+                      )}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

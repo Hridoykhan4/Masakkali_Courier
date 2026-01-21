@@ -4,10 +4,11 @@ import { useSearchParams } from "react-router";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const STATUS_META = {
-  CREATED: "text-gray-500",
-  COLLECTED: "text-blue-500",
-  IN_TRANSIT: "text-indigo-500",
-  OUT_FOR_DELIVERY: "text-orange-500",
+  CREATED: "text-gray-400",
+  PAID: "text-blue-500",
+  ASSIGNED: "text-purple-500",
+  COLLECTED: "text-indigo-500",
+  IN_TRANSIT: "text-orange-500",
   DELIVERED: "text-green-600",
 };
 
@@ -33,130 +34,149 @@ const TrackParcel = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    if (!trackingId.trim()) return;
     setParams({ tid: trackingId });
   };
 
-  console.log(data);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }).format(new Date(dateString));
+  };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6">
-      {/* Search */}
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <input
-          value={trackingId}
-          onChange={(e) => setTrackingId(e.target.value)}
-          placeholder="Enter Tracking ID"
-          className="input input-bordered w-full"
-        />
-        <button className="btn btn-primary">Track</button>
-      </form>
+    <div className="max-w-4xl mx-auto p-4 space-y-8">
+      {/* Search Section */}
+      <section className="bg-base-200 p-6 rounded-2xl shadow-sm">
+        <h1 className="text-2xl font-bold mb-4 text-center">
+          Track Your Journey
+        </h1>
+        <form onSubmit={handleSearch} className="flex gap-2">
+          <input
+            value={trackingId}
+            onChange={(e) => setTrackingId(e.target.value)}
+            placeholder="Enter Tracking ID (e.g. TRK-123)"
+            className="input input-bordered w-full focus:input-primary"
+          />
+          <button className="btn btn-primary px-8">Track</button>
+        </form>
+        <div className="flex justify-center mt-2">
+          <button
+            className="btn btn-ghost btn-xs text-error"
+            onClick={() => {
+              setTrackingId("");
+              setParams({});
+            }}
+          >
+            Clear Search
+          </button>
+        </div>
+      </section>
 
-      <button
-        type="button"
-        className="btn"
-        onClick={() => {
-          setTrackingId("");
-          setParams({});
-        }}
-      >
-        Clear
-      </button>
+      {trackingId && isPending && (
+        <div className="loading loading-dots loading-lg block mx-auto"></div>
+      )}
 
-      {!trackingId && (
-        <div className="text-center text-gray-500 mt-10">
-          <p className="text-lg font-medium">Track Your Parcel</p>
-          <p className="text-sm">
-            Enter your tracking ID above to see delivery updates.
-          </p>
+      {trackingId && isError && (
+        <div className="alert alert-error shadow-lg">
+          <span>Error: Tracking ID not found or server error.</span>
         </div>
       )}
 
-      {/* 2️⃣ Loading */}
-      {trackingId && isPending && (
-        <p className="text-center">Loading tracking info...</p>
-      )}
-
-      {/* 3️⃣ Error */}
-      {trackingId && isError && (
-        <p className="text-center text-red-500">Invalid tracking ID</p>
-      )}
-
       {data && (
-        <>
-          {/* Parcel Summary */}
-          <div className="card bg-base-100 shadow">
-            <div className="card-body">
-              <h2 className="card-title">Parcel Summary</h2>
-
-              <div className="grid md:grid-cols-2 gap-3 text-sm">
-                <p>
-                  <strong>Tracking ID:</strong> {data.parcel.trackingId}
-                </p>
-                <p>
-                  <strong>Status:</strong>{" "}
-                  <span
-                    className={`font-semibold ${
-                      STATUS_META[data.parcel.delivery_status?.toUpperCase()]
-                    }`}
-                  >
-                    {data.parcel.delivery_status.replace("-", " ")}
-                  </span>
-                </p>
-                <p>
-                  <strong>Route:</strong> {data.parcel.senderRegion} →{" "}
-                  {data.parcel.receiverRegion}
-                </p>
-                <p>
-                  <strong>Type:</strong> {data.parcel.parcelType}
-                </p>
-                <p>
-                  <strong>Weight:</strong> {data.parcel.weight} kg
-                </p>
-                <p>
-                  <strong>Payment:</strong> {data.parcel.payment_status}
-                </p>
-                <p>
-                  <strong>Created:</strong>{" "}
-                  {new Date(data.parcel.creation_date).toLocaleString()}
-                </p>
+        <div className="grid lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
+          {/* Summary Card */}
+          <div className="lg:col-span-1 space-y-4">
+            <div className="card bg-base-100 border border-base-300 shadow-xl">
+              <div className="card-body p-5">
+                <h2 className="card-title text-sm uppercase text-gray-400">
+                  Parcel Summary
+                </h2>
+                <div className="space-y-3 mt-2">
+                  <div>
+                    <p className="text-xs text-gray-500">Current Status</p>
+                    <span
+                      className={`badge badge-ghost font-bold ${STATUS_META[data.parcel.delivery_status?.toUpperCase()]}`}
+                    >
+                      {data.parcel.delivery_status}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Estimated Delivery</p>
+                    <p className="font-medium">{data.parcel.receiverRegion}</p>
+                  </div>
+                  <div className="divider my-1"></div>
+                  <p className="text-xs">
+                    <strong>Weight:</strong> {data.parcel.weight}kg
+                  </p>
+                  <p className="text-xs">
+                    <strong>Payment:</strong>{" "}
+                    <span className="capitalize">
+                      {data.parcel.payment_status}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Tracking Timeline */}
-          <div className="card bg-base-100 shadow">
-            <div className="card-body">
-              <h2 className="card-title">Tracking History</h2>
+          {/* Timeline Section */}
+          <div className="lg:col-span-2">
+            <div className="card bg-base-100 border border-base-300 shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title mb-6">Tracking Updates</h2>
 
-              {data.trackingHistory.length === 0 && (
-                <p className="text-gray-500">No tracking updates yet.</p>
-              )}
-
-              <ul className="space-y-4">
-                {data.trackingHistory.map((track, idx) => (
-                  <li key={idx} className="flex gap-3">
-                    <span
-                      className={`mt-1 w-3 h-3 rounded-full ${
-                        STATUS_META[track.status]
-                      } bg-current`}
-                    ></span>
-
-                    <div>
-                      <p className="font-medium">
-                        {track.status.replace("_", " ")}
-                      </p>
-                      <p className="text-sm text-gray-500">{track.message}</p>
-                      <p className="text-xs text-gray-400">
-                        {new Date(track.createdAt).toLocaleString()}
-                        {track.location && ` • ${track.location}`}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                <ul className="timeline timeline-vertical timeline-compact">
+                  {data.trackingHistory.map((track, idx) => (
+                    <li key={idx}>
+                      {idx !== 0 && <hr className="bg-primary" />}
+                      <div className="timeline-middle">
+                        <div
+                          className={`rounded-full p-1 bg-primary text-white`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="timeline-end mb-10 ml-4">
+                        <time className="font-mono italic text-xs text-primary block mb-1">
+                          {formatDate(track.createdAt)}
+                        </time>
+                        <div className="text-lg font-black uppercase tracking-tight">
+                          {track.status}
+                        </div>
+                        <p className="text-gray-500 text-sm">{track.message}</p>
+                        {track.location && (
+                          <div className="badge badge-outline mt-2 text-xs opacity-70">
+                            📍 {track.location}
+                          </div>
+                        )}
+                      </div>
+                      {idx !== data.trackingHistory.length - 1 && <hr />}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

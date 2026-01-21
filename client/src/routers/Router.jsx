@@ -12,9 +12,18 @@ import MyParcels from "../pages/Dashboard/User/MyParcels/MyParcels";
 import Payment from "../pages/Dashboard/User/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/User/PaymentHistory/PaymentHistory";
 import TrackParcel from "../pages/Dashboard/User/TrackParcel/TrackParcel";
-import BeARider from "../pages/Dashboard/Rider/BeARider/BeARider";
-import PendingRiders from "../pages/Dashboard/Rider/PendingRiders/PendingRiders";
-import ActiveRiders from "../pages/Dashboard/Rider/ActiveRiders/ActiveRiders";
+import BeARider from "../pages/Dashboard/User/BeARider/BeARider";
+import PendingRiders from "../pages/Dashboard/Admin/PendingRiders/PendingRiders";
+import ActiveRiders from "../pages/Dashboard/Admin/ActiveRiders/ActiveRiders";
+import MakeAdmin from "../pages/Dashboard/Admin/MakeAdmin/MakeAdmin";
+import AdminRoute from "./AdminRoute";
+import Forbidden from "../pages/Dashboard/Forbidden/Forbidden";
+import AssignRider from "../pages/Dashboard/Admin/AssignRider/AssignRider";
+import RiderRoute from "./RiderRoute";
+import PendingDeliveries from "../pages/Dashboard/Rider/PendingDeliveries/PendingDeliveries";
+import CompletedDeliveries from "../pages/Dashboard/Rider/CompletedDeliveries/CompletedDeliveries";
+import MyEarnings from "../pages/Dashboard/Rider/MyEarnings/MyEarnings";
+import UserRoute from "./UserRoute";
 
 const Router = createBrowserRouter([
   {
@@ -33,7 +42,9 @@ const Router = createBrowserRouter([
         path: "sendParcel",
         element: (
           <PrivateRoute>
-            <SendParcel></SendParcel>
+            <UserRoute>
+              <SendParcel></SendParcel>
+            </UserRoute>
           </PrivateRoute>
         ),
       },
@@ -41,7 +52,9 @@ const Router = createBrowserRouter([
         path: "beARider",
         element: (
           <PrivateRoute>
-            <BeARider></BeARider>
+            <UserRoute>
+              <BeARider></BeARider>
+            </UserRoute>
           </PrivateRoute>
         ),
       },
@@ -85,14 +98,70 @@ const Router = createBrowserRouter([
         path: "track",
         Component: TrackParcel,
       },
+      /* Admin routes */
       {
-        path: 'pendingRiders',
-        element: <PendingRiders></PendingRiders>
+        path: "pendingRiders",
+        element: (
+          <AdminRoute>
+            <PendingRiders></PendingRiders>
+          </AdminRoute>
+        ),
       },
       {
-        path: 'activeRiders',
-        element: <ActiveRiders></ActiveRiders>
-      }
+        path: "activeRiders",
+        element: (
+          <AdminRoute>
+            <ActiveRiders></ActiveRiders>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "makeAdmin",
+        element: (
+          <AdminRoute>
+            <MakeAdmin></MakeAdmin>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "assign-rider",
+        element: (
+          <AdminRoute>
+            <AssignRider></AssignRider>
+          </AdminRoute>
+        ),
+      },
+      /* Rider Router */
+      {
+        path: "pendingDeliveries",
+        element: (
+          <RiderRoute>
+            <PendingDeliveries></PendingDeliveries>
+          </RiderRoute>
+        ),
+      },
+      {
+        path: "completedDeliveries",
+        element: (
+          <RiderRoute>
+            <CompletedDeliveries></CompletedDeliveries>
+          </RiderRoute>
+        ),
+      },
+      {
+        path: "myEarnings",
+        element: (
+          <RiderRoute>
+            <MyEarnings></MyEarnings>
+          </RiderRoute>
+        ),
+      },
+
+      /* Forbidden */
+      {
+        path: "forbidden",
+        element: <Forbidden></Forbidden>,
+      },
     ],
   },
 ]);
