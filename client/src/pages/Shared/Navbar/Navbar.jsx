@@ -155,7 +155,7 @@ const Navbar = ({ fromAuth }) => {
                 referrerPolicy="no-referrer"
                 src={user?.photoURL}
                 alt="User avatar"
-                className="w-8 h-8 rounded-full"
+                className="w-8 h-8 rounded-full object-cover"
               />
               <span className={`badge badge-sm ${roleBadgeClass}`}>{role}</span>
             </div>
@@ -203,7 +203,7 @@ const Navbar = ({ fromAuth }) => {
                       >
                         <img
                           referrerPolicy="no-referrer"
-                          className="w-10 h-10 rounded-full"
+                          className="w-10 h-10 rounded-full object-cover"
                           src={user.photoURL || "/avatar.png"}
                           alt=""
                         />

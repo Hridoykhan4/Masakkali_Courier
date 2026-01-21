@@ -114,7 +114,7 @@ const TrackParcel = () => {
                   </div>
                   <div className="divider my-1"></div>
                   <p className="text-xs">
-                    <strong>Weight:</strong> {data.parcel.weight}kg
+                    <strong>Weight:</strong> {data.parcel.weight} kg
                   </p>
                   <p className="text-xs">
                     <strong>Payment:</strong>{" "}

@@ -261,7 +261,6 @@ async function run() {
           .toArray();
         res.send(parcels);
       } catch (err) {
-        console.error(err);
         res.status(500).send({ message: "Failed to load rider tasks" });
       }
     });
@@ -270,8 +269,7 @@ async function run() {
       try {
         const email = req.tokenEmail;
         const rider = await ridersCollection.findOne({ email });
-        console.log("Token email:", req.tokenEmail);
-        console.log("Rider from DB:", rider);
+
         if (!rider) {
           return res.status(404).send({ message: "Rider not found" });
         }
@@ -280,14 +278,13 @@ async function run() {
 
         const deliveries = await parcelCollection
           .find({
-            rider_id:  ,
+            rider_id: riderIdString,
             delivery_status: {
               $in: ["delivered", "delivered-to-service-center"],
             },
           })
           .sort({ delivered_at: -1 })
           .toArray();
-
 
         res.send({
           success: true,
@@ -318,7 +315,6 @@ async function run() {
           })
           .toArray();
 
-        console.log(deliveries);
 
         const now = new Date();
         const startOfWeek = new Date(now);
@@ -528,8 +524,8 @@ async function run() {
         const options = { sort: { creation_date: -1 } };
         const parcels = await parcelCollection.find(query, options).toArray();
         res.send(parcels);
-      } catch (err) {
-        console.log(err);
+      } catch {
+     
       }
     });
 
@@ -555,7 +551,7 @@ async function run() {
           weight,
           type: parcelType,
         });
-        console.log(frontendCost, actualCost.total);
+      
         if (frontendCost !== actualCost.total) {
           return res.status(400).json({
             message: "Parcel cost mismatch. Please refresh and try again.",
@@ -569,7 +565,6 @@ async function run() {
         );
         res.status(201).send(await parcelCollection.insertOne(req?.body));
       } catch (err) {
-        console.log(err);
         res.status(500).send({ message: "Failed to create parcel" });
       }
     });

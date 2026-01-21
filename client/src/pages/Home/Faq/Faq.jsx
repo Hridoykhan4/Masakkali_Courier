@@ -3,36 +3,37 @@ import { motion } from "framer-motion";
 
 const faqData = [
   {
-    id: 1,
-    title: "How long does delivery usually take?",
-    desc: "Inside major cities like Dhaka, delivery typically takes 24–48 hours. Nationwide deliveries usually arrive within 48–72 hours depending on the destination.",
+    title: "Express & Standard Delivery",
+    description:
+      "We deliver parcels within 24–72 hours in Dhaka, Chittagong, Sylhet, Khulna, and Rajshahi. Express delivery available in Dhaka within 4–6 hours from pick-up to drop-off.",
   },
   {
-    id: 2,
-    title: "Do you offer Cash on Delivery (COD)?",
-    desc: "Yes, we provide 100% Cash on Delivery service across Bangladesh. Collected payments are securely transferred to merchants on a regular schedule.",
+    title: "Nationwide Delivery",
+    description:
+      "We deliver parcels nationwide with home delivery in every district, ensuring your products reach customers within 48–72 hours.",
   },
   {
-    id: 3,
-    title: "How can I track my parcel?",
-    desc: "Once your parcel is booked, you will receive a tracking ID. Use this ID on our website to get real-time updates on your shipment status.",
+    title: "Fulfillment Solution",
+    description:
+      "We also offer customized service with inventory management support, online order processing, packaging, and after sales support.",
   },
   {
-    id: 4,
-    title: "What items are restricted for delivery?",
-    desc: "Illegal goods, fragile items without proper packaging, flammable materials, and perishable food items are not allowed for delivery.",
+    title: "Cash on Home Delivery",
+    description:
+      "100% cash on delivery anywhere in Bangladesh with guaranteed safety of your product.",
   },
   {
-    id: 5,
-    title: "What happens if a delivery fails?",
-    desc: "If a delivery attempt fails, we retry based on our policy. In case of repeated failure, the parcel is returned to the sender through our return service.",
+    title: "Corporate Service / Contract In Logistics",
+    description:
+      "Customized corporate services which includes warehouse and inventory management support.",
   },
   {
-    id: 6,
-    title: "Do you provide corporate or bulk delivery services?",
-    desc: "Yes, we offer customized logistics solutions for SMEs and corporate clients, including bulk shipments, warehouse support, and dedicated account management.",
+    title: "Parcel Return",
+    description:
+      "Through our reverse logistics facility we allow end customers to return or exchange their products with online business merchants.",
   },
 ];
+
 
 const containerVariants = {
   hidden: {},
