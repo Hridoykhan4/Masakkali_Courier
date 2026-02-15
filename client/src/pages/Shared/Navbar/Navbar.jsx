@@ -105,7 +105,7 @@ const Navbar = ({ fromAuth }) => {
         : "badge-primary";
 
   return (
-    <nav className="sticky top-0 z-50 bg-base-100/80 backdrop-blur-md border-b border-base-200">
+    <nav className="sticky top-0 z-9999 bg-base-100/80 backdrop-blur-md border-b border-base-200">
       <div className="navbar justify-between  px-4 ">
         <div className="">
           <MasakkaliLogo />

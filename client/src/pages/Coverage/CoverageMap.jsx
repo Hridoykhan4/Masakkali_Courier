@@ -5,8 +5,7 @@ import L from "leaflet";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
@@ -56,43 +55,50 @@ const CoverageMap = ({ coverageData = [] }) => {
       />
 
       {/* 🗺️ Map */}
-      <div className="h-112.5 rounded-xl overflow-hidden shadow-md">
+      <div className="h-112.5 rounded-2xl overflow-hidden shadow-xl border border-base-300 relative z-10">
         <MapContainer
           center={[23.685, 90.3563]}
           zoom={7}
-          scrollWheelZoom={false}
+          // --- MOBILE OPTIMIZATION ---
+          scrollWheelZoom={false} // Prevents accidental zooming while scrolling page
+          dragging={L.Browser.mobile ? false : true} // Disables drag on mobile so users can scroll past it
+          tap={false} // Fixes double-tap issues on mobile
           className="h-full w-full"
+          style={{ zIndex: 1 }} // Force low z-index
         >
           <TileLayer
-            attribution="&copy; OpenStreetMap contributors"
+            attribution="&copy; OpenStreetMap"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {/* ✈️ Fly controller */}
           <FlyToDistrict district={matchedDistrict} />
 
-          {/* 📌 Markers */}
-          {coverageData.map((district) => (
+          {coverageData.map((dist) => (
             <Marker
-              key={district.district}
-              position={[district.latitude, district.longitude]}
-              ref={(ref) => (markerRefs.current[district.district] = ref)}
+              key={dist.district}
+              position={[dist.latitude, dist.longitude]}
+              ref={(ref) => (markerRefs.current[dist.district] = ref)}
             >
               <Popup>
-                <div className="space-y-1">
-                  <h3 className="font-semibold text-lg">{district.district}</h3>
-                  <p className="text-sm">Region: {district.region}</p>
-                  <p className="text-sm">
-                    Covered Areas: {district.covered_area.join(", ")}
-                  </p>
-                  <p className="text-xs font-medium text-green-600">
-                    Status: {district.status}
-                  </p>
+                <div className="p-1">
+                  <h3 className="font-bold text-primary">{dist.district}</h3>
+                  <p className="text-xs text-gray-600 italic">{dist.region}</p>
+                  <div className="mt-2 text-xs">
+                    <span className="font-semibold text-gray-700">Areas:</span>{" "}
+                    {dist.covered_area.slice(0, 3).join(", ")}...
+                  </div>
                 </div>
               </Popup>
             </Marker>
           ))}
         </MapContainer>
+
+        {/* Helper for mobile users */}
+        {L.Browser.mobile && (
+          <div className="absolute bottom-2 right-2 z-401 bg-white/80 px-2 py-1 rounded text-[10px] pointer-events-none">
+            Use two fingers to move map
+          </div>
+        )}
       </div>
     </section>
   );

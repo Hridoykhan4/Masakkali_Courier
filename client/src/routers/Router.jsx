@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
 
-// Layouts (Loaded immediately as they are shared wrappers)
+// Layouts (Loaded immediately)
 import RootLayout from "../layouts/RootLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -11,6 +11,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import RiderRoute from "./RiderRoute";
 import UserRoute from "./UserRoute";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 // Lazy Loaded Pages
 // --- Public ---
@@ -189,6 +190,10 @@ const Router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '*',
+    element: <ErrorPage></ErrorPage>
+  }
 ]);
 
 export default Router;
