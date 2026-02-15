@@ -9,7 +9,7 @@ const PaymentHistory = () => {
     error,
   } = usePaymentHistory();
 
-  console.log(payments);
+  //console.log(payments);
 
   if (isPending || isError)
     return (

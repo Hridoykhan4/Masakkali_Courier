@@ -6,7 +6,6 @@ import Login from "../pages/Authentication/Login/Login";
 import Register from "../pages/Authentication/Register/Register";
 import Coverage from "../pages/Coverage/Coverage";
 import PrivateRoute from "./PrivateRoute";
-import SendParcel from "../pages/SendParcel/SendParcel";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MyParcels from "../pages/Dashboard/User/MyParcels/MyParcels";
 import Payment from "../pages/Dashboard/User/Payment/Payment";
@@ -24,6 +23,9 @@ import PendingDeliveries from "../pages/Dashboard/Rider/PendingDeliveries/Pendin
 import CompletedDeliveries from "../pages/Dashboard/Rider/CompletedDeliveries/CompletedDeliveries";
 import MyEarnings from "../pages/Dashboard/Rider/MyEarnings/MyEarnings";
 import UserRoute from "./UserRoute";
+import SendParcel from "../pages/Dashboard/User/SendParcel/SendParcel";
+import DashboardHome from "../pages/Dashboard/Shared/DashboardHome/DashboardHome";
+import Profile from "../pages/Dashboard/Shared/Profile/Profile";
 
 const Router = createBrowserRouter([
   {
@@ -83,8 +85,16 @@ const Router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        Component: DashboardHome,
+      },
+      {
         path: "myParcels",
         Component: MyParcels,
+      },
+      {
+        path: "profile",
+        Component: Profile,
       },
       {
         path: "payment/:id",

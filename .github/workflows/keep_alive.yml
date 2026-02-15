@@ -1,0 +1,15 @@
+name: MongoDB Keep Alive
+
+on:
+  schedule:
+    # This runs at 00:00 every Sunday
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # Allows you to run it manually to test
+
+jobs:
+  ping_server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit Health Endpoint
+        run: |
+          curl -I https://masakkali-server.vercel.app/health

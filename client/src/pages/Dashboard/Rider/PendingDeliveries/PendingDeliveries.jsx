@@ -16,6 +16,10 @@ const PendingDeliveries = () => {
       const res = await axiosSecure.get("/rider/tasks");
       return res.data;
     },
+    staleTime: 1000 * 30,
+    refetchInterval: 1000 * 30,
+    refetchOnWindowFocus: true
+
   });
   const pickupMutation = useMutation({
     mutationFn: (id) => axiosSecure.patch(`/parcels/${id}/pickup`),

@@ -1,8 +1,8 @@
 import { toast } from "react-toastify";
-import ParcelForm from "../../components/parcel/ParcelForm";
-import useAuthValue from "../../hooks/useAuthValue";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import useScrollTo from "../../hooks/useScrollTo";
+import ParcelForm from "../../../../components/parcel/ParcelForm";
+import useAuthValue from "../../../../hooks/useAuthValue";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import useScrollTo from "../../../../hooks/useScrollTo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 const SendParcel = () => {

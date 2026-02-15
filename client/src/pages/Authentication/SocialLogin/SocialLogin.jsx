@@ -27,7 +27,7 @@ const SocialLogin = ({ from }) => {
       toast.success("Logged in successfully!");
       nav(from, { replace: true });
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       toast.error("Google login failed. Please try again.");
     } finally {
       setLoading(false);

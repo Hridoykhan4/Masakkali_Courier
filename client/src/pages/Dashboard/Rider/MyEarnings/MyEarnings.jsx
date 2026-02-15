@@ -18,7 +18,7 @@ const MyEarnings = () => {
     },
   });
 
-  console.log(data);
+  //console.log(data);
 
   if (isLoading) return <div className="text-center">Loading earnings...</div>;
   if (isError)

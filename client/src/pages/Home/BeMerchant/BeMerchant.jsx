@@ -1,8 +1,11 @@
 import merchantImg from "../../../assets/location-merchant.png";
 import beMerchantBg from "../../../assets/be-a-merchant-bg.png";
 import { motion as Motion } from "framer-motion";
+import useUserRole from "../../../hooks/useUserRole";
+import { Link } from "react-router";
 
 const BeMerchant = () => {
+  const { role } = useUserRole();
   return (
     <Motion.section
       initial={{ opacity: 0 }}
@@ -73,13 +76,17 @@ const BeMerchant = () => {
               Become a Merchant
             </Motion.button>
 
-            <Motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn btn-outline text-neutral btn-primary rounded-full px-8"
-            >
-              Earn with Masakkali
-            </Motion.button>
+            {role === "rider" && (
+              <Link to="/beARider">
+                <Motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="btn btn-outline text-neutral btn-primary rounded-full px-8"
+                >
+                  Earn with Masakkali
+                </Motion.button>
+              </Link>
+            )}
           </Motion.div>
         </div>
       </div>

@@ -17,7 +17,7 @@ const Navbar = ({ fromAuth }) => {
   const { user, logOut } = useAuthValue();
   const { role } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
-  console.log(user);
+  //console.log(user);
   const navLinks = useMemo(() => {
     const links = [
       { label: "Home", to: "/" },

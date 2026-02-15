@@ -8,7 +8,7 @@ const Footer = () => {
         <p>
           Masakkali Courier Ltd.
           <br />
-          Providing reliable courier service since 2022
+          Providing reliable courier service since {new Date().getFullYear()}
         </p>
       </aside>
       <nav className="text-center ">

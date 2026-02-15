@@ -8,8 +8,10 @@ const admin = require("firebase-admin");
 const app = express();
 const port = process.env.PORT || 5000;
 const calculateParcelCost = require("./utils/calculateParcelCost");
-
-var serviceAccount = require("./firebase-admin-key.json");
+const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
+  "utf8",
+);
+const serviceAccount = JSON.parse(decoded);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -38,6 +40,8 @@ const client = new MongoClient(uri, {
   },
 });
 
+
+
 async function run() {
   try {
     const db = client.db("Masakkali");
@@ -47,6 +51,20 @@ async function run() {
     const trackingCollection = db.collection("tracking");
     const userCollection = db.collection("users");
     const ridersCollection = db.collection("riders");
+
+    app.get("/health", async (req, res) => {
+      try {
+        await db.command({ ping: 1 });
+
+        res.status(200).json({
+          status: "Alive",
+          database: "Connected to Masakkali",
+          timestamp: new Date().toISOString(),
+        });
+      } catch (error) {
+        res.status(500).json({ status: "Error", message: error.message });
+      }
+    });
 
     /* UTILITY FUNC */
 
@@ -315,7 +333,6 @@ async function run() {
           })
           .toArray();
 
-
         const now = new Date();
         const startOfWeek = new Date(now);
         startOfWeek.setDate(now.getDate() - now.getDay());
@@ -524,9 +541,7 @@ async function run() {
         const options = { sort: { creation_date: -1 } };
         const parcels = await parcelCollection.find(query, options).toArray();
         res.send(parcels);
-      } catch {
-     
-      }
+      } catch {}
     });
 
     app.get("/parcels/:id", verifyFBToken, async (req, res) => {
@@ -534,6 +549,83 @@ async function run() {
         await parcelCollection.findOne({ _id: new ObjectId(req.params.id) }),
       );
     });
+
+    /* AGGREGATE */
+    app.get("/parcels/delivery/status-count", async (req, res) => {
+      const pipeline = [
+        {
+          $group: {
+            _id: "$delivery_status",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            count: 1,
+            status: "$_id",
+          },
+        },
+      ];
+
+      const result = await parcelCollection.aggregate(pipeline).toArray();
+      res.send(result);
+    });
+
+    app.get("/admin/overview", async (req, res) => {
+      try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const [
+          totalUsers,
+          totalRiders,
+          totalParcels,
+          deliveredToday,
+          revenueToday,
+        ] = await Promise.all([
+          userCollection.countDocuments(),
+          ridersCollection.countDocuments({ status: "approved" }),
+          parcelCollection.countDocuments(),
+
+          parcelCollection.countDocuments({
+            delivery_status: "delivered",
+            delivered_at: { $gte: today },
+          }),
+
+          parcelCollection
+            .aggregate([
+              {
+                $match: {
+                  payment_status: "paid",
+                  creation_date: { $gte: today },
+                },
+              },
+              {
+                $group: {
+                  _id: null,
+                  total: { $sum: "$cost" },
+                },
+              },
+            ])
+            .toArray(),
+        ]);
+
+        res.send({
+          totalUsers,
+          totalRiders,
+          totalParcels,
+          deliveredToday,
+          revenueToday: revenueToday[0]?.total || 0,
+        });
+      } catch (err) {
+        res.status(500).send({ message: "Failed to load overview" });
+      }
+    });
+
+    /* AGGREGATE */
 
     app.post("/parcels", verifyFBToken, async (req, res) => {
       try {
@@ -551,7 +643,7 @@ async function run() {
           weight,
           type: parcelType,
         });
-      
+
         if (frontendCost !== actualCost.total) {
           return res.status(400).json({
             message: "Parcel cost mismatch. Please refresh and try again.",
@@ -805,7 +897,7 @@ async function run() {
     app.post("/payments", async (req, res) => {
       const { parcelId, email, amount, transactionId, paymentMethod, name } =
         req.body;
-      console.log(req.body);
+      //console.log(req.body);
       if (!parcelId || !email || !amount)
         return res
           .status(400)
@@ -877,9 +969,9 @@ async function run() {
       res.send(await reviewCollection.find().toArray());
     });
 
-    console.log(
+   /*  console.log(
       "Pinged your deployment. You successfully connected to MongoDB!",
-    );
+    ); */
   } finally {
     // await client.close();
   }

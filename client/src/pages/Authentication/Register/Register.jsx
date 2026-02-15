@@ -67,7 +67,7 @@ const Register = () => {
       if (!cloudRes?.secure_url) return toast.error("Image Upload failed");
       setPreview(cloudRes.secure_url);
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       setError(err.message);
     } finally {
       setImageLoading(false);
@@ -80,7 +80,7 @@ const Register = () => {
     try {
       const { user } = await createNewUser(email, password);
       await updateUserInfo(name, preview);
-      console.log(user);
+      //console.log(user);
       const userInfo = {
         email,
         name,
@@ -100,9 +100,9 @@ const Register = () => {
 
       reset();
       nav(from, { replace: true });
-      console.log(data);
+      //console.log(data);
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       setError(err?.message);
     } finally {
       setImageLoading(false);

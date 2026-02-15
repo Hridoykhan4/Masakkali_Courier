@@ -59,7 +59,7 @@ const CheckoutForm = () => {
         return;
       }
 
-      console.log(paymentIntent);
+      //console.log(paymentIntent);
 
       if (paymentIntent?.status === "succeeded") {
         const payment = {
@@ -72,7 +72,7 @@ const CheckoutForm = () => {
         };
 
         const { data } = await axiosSecure.post("/payments", payment);
-        console.log(data);
+        //console.log(data);
         if (data?.insertedId) {
           toast.success(data?.message || "Payment Success", {
             position: "top-right",
@@ -82,7 +82,7 @@ const CheckoutForm = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     } finally {
       setProcessing(false);
     }

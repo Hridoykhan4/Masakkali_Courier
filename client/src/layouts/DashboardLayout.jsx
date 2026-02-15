@@ -12,6 +12,7 @@ import {
 import {
   FaBoxOpen,
   FaCheckCircle,
+  FaHome,
   FaMotorcycle,
   FaStripe,
   FaTasks,
@@ -32,7 +33,7 @@ const DashboardLayout = () => {
 
   // Active Link Style Helper
   const navLinkClass = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-400 ${
       isActive
         ? "bg-primary text-primary-content font-bold shadow-md"
         : "hover:bg-base-300 text-base-content/80"
@@ -94,8 +95,14 @@ const DashboardLayout = () => {
               General
             </p>
             <li>
+              <NavLink end to="/dashboard" className={navLinkClass}>
+                <FaHome className="text-xl uppercase" />
+                {role.charAt(0).toUpperCase() + role.slice(1)} Home
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/dashboard/profile" className={navLinkClass}>
-                <HiOutlineUserCircle className="text-xl" />
+                <HiOutlineUserCircle className="text-xl " />
                 Profile
               </NavLink>
             </li>

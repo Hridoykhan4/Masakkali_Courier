@@ -26,8 +26,8 @@ const PendingRiders = () => {
           <tbody>
             <tr>
               <td colSpan="7" className="text-center py-6 font-semibold">
-                No pending rider applications !! 
-              </td> 
+                No pending rider applications !!
+              </td>
             </tr>
           </tbody>
         ) : (
