@@ -1,5 +1,4 @@
-import { motion as Motion } from "motion/react"; // Matches your package.json
-import Marquee from "react-fast-marquee";
+import { motion as Motion } from "motion/react";
 import logo1 from "../../../assets/brands/amazon.png";
 import logo2 from "../../../assets/brands/amazon_vector.png";
 import logo3 from "../../../assets/brands/casio.png";
@@ -10,40 +9,51 @@ import logo6 from "../../../assets/brands/start_people.png";
 const logos = [logo1, logo2, logo3, logo4, logo5, logo6];
 
 const ClientLogoMarquee = () => {
-  return (
-    /* FIX: Remove 'container-page' from the section. 
-       Use 'py-10' for tight, professional spacing instead of 'section-spacing'.
-    */
-    <section className="py-12 bg-base-200/50 border-y border-base-300 overflow-hidden">
-      <div className="container-page">
-        <Motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-center text-sm font-bold uppercase tracking-[0.2em] text-base-content/50 mb-10">
-            Trusted by Industry Giants
-          </h2>
+  // Triple the logos to ensure there are no gaps on ultra-wide screens
+  const duplicatedLogos = [...logos, ...logos, ...logos];
 
-          <Marquee
-            pauseOnHover
-            speed={40}
-            gradient={true}
-            gradientColor="var(--color-base-200)"
-            className="overflow-hidden"
+  return (
+    <section className="py-16 bg-base-100 overflow-hidden">
+      <div className="container-page">
+        <h2 className="text-center text-[10px] font-black uppercase tracking-[0.4em] text-base-content/30 mb-12">
+          Integrated with Global Logistics
+        </h2>
+
+        {/* The Masking Container */}
+        <div className="relative flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+          <Motion.div
+            className="flex flex-none gap-8 pr-8"
+            animate={{ x: ["0%", "-33.33%"] }} // Adjusted for tripled array
+            transition={{
+              ease: "linear",
+              duration: 30, // Slower is more professional for high-end look
+              repeat: Infinity,
+            }}
           >
-            {logos.map((logo, i) => (
-              <div key={i} className="flex bg-red-500 items-center justify-center px-12">
+            {duplicatedLogos.map((logo, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-center 
+                           w-40 h-20 md:w-52 md:h-24 
+                           bg-base-200/40 backdrop-blur-sm 
+                           border border-base-content/5 
+                           rounded-2xl p-6 transition-all duration-300 
+                           hover:bg-base-200 hover:border-base-content/10 group"
+              >
                 <img
                   src={logo}
                   alt="Brand Logo"
-                  className="h-8 md:h-10 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer"
+                  className="max-h-full w-auto object-contain 
+                             opacity-40 group-hover:opacity-100 
+                             transition-all duration-500 
+                             /* Theme balancing logic */
+                             brightness-0 dark:invert dark:brightness-200 
+                             grayscale group-hover:grayscale-0"
                 />
               </div>
             ))}
-          </Marquee>
-        </Motion.div>
+          </Motion.div>
+        </div>
       </div>
     </section>
   );

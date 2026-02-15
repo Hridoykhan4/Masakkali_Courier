@@ -1,44 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
-@plugin "daisyui"{
-    themes: light --default, dark;
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark;
 }
 /* LIGHT THEME */
+/* LIGHT THEME: Professional & Trustworthy */
 @plugin "daisyui/theme" {
   name: "light";
-  --color-primary: #16a34a;    
-  --color-secondary: #0ea5e9;    
-  --color-accent: #22c55e;
-  --color-neutral: #1f2937;
+  --color-primary: #0f172a; /* Deep Navy (Reliability) */
+  --color-secondary: #3b82f6; /* Modern Blue (Speed) */
+  --color-accent: #f59e0b; /* Amber (Urgency/Parcel focus) */
+  --color-neutral: #1e293b;
   --color-base-100: #ffffff;
-  --color-base-200: #f8fafc;
-  --color-base-content: #1f2937;
-  
+  --color-base-200: #f1f5f9; /* Soft Slate gray */
+  --color-base-content: #0f172a; /* Contrast text */
 }
 
-/* DARK THEME */
+/* DARK THEME: Sleek & Technical */
 @plugin "daisyui/theme" {
   name: "dark";
-  --color-primary: #CAEB66;     
-  --color-secondary: teal;
-  --color-accent: #84cc16;
-  --color-neutral: #111827;
-  --color-base-100: #020617;
-  --color-base-200: #020617;
-  --color-base-content: #e5e7eb;
+  --color-primary: #38bdf8; /* Sky Blue (Visibility) */
+  --color-secondary: #0ea5e9;
+  --color-accent: #fbbf24;
+  --color-neutral: #0f172a;
+  --color-base-100: #020617; /* Midnight Black */
+  --color-base-200: #0b1120; /* Deep Navy background */
+  --color-base-content: #f1f5f9;
 }
-.font-urbanist{
-    font-family: "Urbanist", sans-serif;
+.font-urbanist {
+  font-family: "Urbanist", sans-serif;
 }
 @layer components {
-  .container-page { 
+  .container-page {
     /* px-4 (mobile), px-8 (tablet), px-10 (desktop) */
     @apply max-w-7xl mx-auto px-4 md:px-8 lg:px-10;
-    width: 100%; 
+    width: 100%;
   }
 
   .section-spacing {
     /* Using padding (py) ensures background colors don't have white gaps */
-    @apply py-16 md:py-20 lg:py-24;
+    @apply py-16 md:py-20;
   }
 }

@@ -57,7 +57,7 @@ const item = {
 
 const HowItWorks = () => {
   return (
-    <section className="section-spacing  bg-base-100">
+    <section className="section-spacing container-page bg-base-100">
       <div>
         <Motion.div
           initial={{ opacity: 0, y: 20 }}
