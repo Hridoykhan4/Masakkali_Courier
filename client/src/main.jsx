@@ -1,21 +1,42 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import { RouterProvider } from "react-router";
-import Router from "./routers/Router.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AuthProvider from "./providers/AuthProvider.jsx";
 import { ToastContainer } from "react-toastify";
+import Router from "./routers/Router.jsx";
+import AuthProvider from "./providers/AuthProvider.jsx";
 import ThemeProvider from "./providers/ThemeProvider.jsx";
-const queryClient = new QueryClient();
+import "./index.css";
+
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, 
+      gcTime: 1000 * 60 * 30,
+      retry: 1,
+      refetchOnWindowFocus: false, 
+    },
+  },
+});
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ThemeProvider>
-          <ToastContainer />
-          <div className="font-urbanist">
-            <RouterProvider router={Router}></RouterProvider>
+          <ToastContainer position="top-center" autoClose={2000} />
+          <div className="font-urbanist antialiased">
+            {/* Suspense handles the loading state of your lazy-loaded pages */}
+            <Suspense
+              fallback={
+                <div className="h-screen flex items-center justify-center">
+                  Loading...
+                </div>
+              }
+            >
+              <RouterProvider router={Router} />
+            </Suspense>
           </div>
         </ThemeProvider>
       </AuthProvider>

@@ -1,51 +1,90 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
+
+// Layouts (Loaded immediately as they are shared wrappers)
 import RootLayout from "../layouts/RootLayout";
-import Home from "../pages/Home/Home/Home";
 import AuthLayout from "../layouts/AuthLayout";
-import Login from "../pages/Authentication/Login/Login";
-import Register from "../pages/Authentication/Register/Register";
-import Coverage from "../pages/Coverage/Coverage";
-import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
-import MyParcels from "../pages/Dashboard/User/MyParcels/MyParcels";
-import Payment from "../pages/Dashboard/User/Payment/Payment";
-import PaymentHistory from "../pages/Dashboard/User/PaymentHistory/PaymentHistory";
-import TrackParcel from "../pages/Dashboard/User/TrackParcel/TrackParcel";
-import BeARider from "../pages/Dashboard/User/BeARider/BeARider";
-import PendingRiders from "../pages/Dashboard/Admin/PendingRiders/PendingRiders";
-import ActiveRiders from "../pages/Dashboard/Admin/ActiveRiders/ActiveRiders";
-import MakeAdmin from "../pages/Dashboard/Admin/MakeAdmin/MakeAdmin";
+
+// Guard Components
+import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
-import Forbidden from "../pages/Dashboard/Forbidden/Forbidden";
-import AssignRider from "../pages/Dashboard/Admin/AssignRider/AssignRider";
 import RiderRoute from "./RiderRoute";
-import PendingDeliveries from "../pages/Dashboard/Rider/PendingDeliveries/PendingDeliveries";
-import CompletedDeliveries from "../pages/Dashboard/Rider/CompletedDeliveries/CompletedDeliveries";
-import MyEarnings from "../pages/Dashboard/Rider/MyEarnings/MyEarnings";
 import UserRoute from "./UserRoute";
-import SendParcel from "../pages/Dashboard/User/SendParcel/SendParcel";
-import DashboardHome from "../pages/Dashboard/Shared/DashboardHome/DashboardHome";
-import Profile from "../pages/Dashboard/Shared/Profile/Profile";
+
+// Lazy Loaded Pages
+// --- Public ---
+const Home = lazy(() => import("../pages/Home/Home/Home"));
+const Coverage = lazy(() => import("../pages/Coverage/Coverage"));
+const Login = lazy(() => import("../pages/Authentication/Login/Login"));
+const Register = lazy(
+  () => import("../pages/Authentication/Register/Register"),
+);
+
+// --- Shared Dashboard ---
+const DashboardHome = lazy(
+  () => import("../pages/Dashboard/Shared/DashboardHome/DashboardHome"),
+);
+const Profile = lazy(() => import("../pages/Dashboard/Shared/Profile/Profile"));
+const Forbidden = lazy(() => import("../pages/Dashboard/Forbidden/Forbidden"));
+
+// --- User Dashboard ---
+const MyParcels = lazy(
+  () => import("../pages/Dashboard/User/MyParcels/MyParcels"),
+);
+const SendParcel = lazy(
+  () => import("../pages/Dashboard/User/SendParcel/SendParcel"),
+);
+const Payment = lazy(() => import("../pages/Dashboard/User/Payment/Payment"));
+const PaymentHistory = lazy(
+  () => import("../pages/Dashboard/User/PaymentHistory/PaymentHistory"),
+);
+const TrackParcel = lazy(
+  () => import("../pages/Dashboard/User/TrackParcel/TrackParcel"),
+);
+const BeARider = lazy(
+  () => import("../pages/Dashboard/User/BeARider/BeARider"),
+);
+
+// --- Admin Dashboard ---
+const PendingRiders = lazy(
+  () => import("../pages/Dashboard/Admin/PendingRiders/PendingRiders"),
+);
+const ActiveRiders = lazy(
+  () => import("../pages/Dashboard/Admin/ActiveRiders/ActiveRiders"),
+);
+const MakeAdmin = lazy(
+  () => import("../pages/Dashboard/Admin/MakeAdmin/MakeAdmin"),
+);
+const AssignRider = lazy(
+  () => import("../pages/Dashboard/Admin/AssignRider/AssignRider"),
+);
+
+// --- Rider Dashboard ---
+const PendingDeliveries = lazy(
+  () => import("../pages/Dashboard/Rider/PendingDeliveries/PendingDeliveries"),
+);
+const CompletedDeliveries = lazy(
+  () =>
+    import("../pages/Dashboard/Rider/CompletedDeliveries/CompletedDeliveries"),
+);
+const MyEarnings = lazy(
+  () => import("../pages/Dashboard/Rider/MyEarnings/MyEarnings"),
+);
 
 const Router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout></RootLayout>,
+    element: <RootLayout />,
     children: [
-      {
-        index: true,
-        Component: Home,
-      },
-      {
-        path: "coverage",
-        Component: Coverage,
-      },
+      { index: true, element: <Home /> },
+      { path: "coverage", element: <Coverage /> },
       {
         path: "sendParcel",
         element: (
           <PrivateRoute>
             <UserRoute>
-              <SendParcel></SendParcel>
+              <SendParcel />
             </UserRoute>
           </PrivateRoute>
         ),
@@ -55,7 +94,7 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <UserRoute>
-              <BeARider></BeARider>
+              <BeARider />
             </UserRoute>
           </PrivateRoute>
         ),
@@ -64,56 +103,37 @@ const Router = createBrowserRouter([
   },
   {
     path: "/",
-    Component: AuthLayout,
+    element: <AuthLayout />,
     children: [
-      {
-        path: "login",
-        Component: Login,
-      },
-      {
-        path: "/register",
-        Component: Register,
-      },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
     ],
   },
   {
     path: "/dashboard",
     element: (
       <PrivateRoute>
-        <DashboardLayout></DashboardLayout>
+        <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
-      {
-        index: true,
-        Component: DashboardHome,
-      },
-      {
-        path: "myParcels",
-        Component: MyParcels,
-      },
-      {
-        path: "profile",
-        Component: Profile,
-      },
-      {
-        path: "payment/:id",
-        Component: Payment,
-      },
-      {
-        path: "paymentHistory",
-        Component: PaymentHistory,
-      },
-      {
-        path: "track",
-        Component: TrackParcel,
-      },
-      /* Admin routes */
+      // Shared
+      { index: true, element: <DashboardHome /> },
+      { path: "profile", element: <Profile /> },
+      { path: "forbidden", element: <Forbidden /> },
+
+      // User Specific
+      { path: "myParcels", element: <MyParcels /> },
+      { path: "payment/:id", element: <Payment /> },
+      { path: "paymentHistory", element: <PaymentHistory /> },
+      { path: "track", element: <TrackParcel /> },
+
+      // Admin Specific
       {
         path: "pendingRiders",
         element: (
           <AdminRoute>
-            <PendingRiders></PendingRiders>
+            <PendingRiders />
           </AdminRoute>
         ),
       },
@@ -121,7 +141,7 @@ const Router = createBrowserRouter([
         path: "activeRiders",
         element: (
           <AdminRoute>
-            <ActiveRiders></ActiveRiders>
+            <ActiveRiders />
           </AdminRoute>
         ),
       },
@@ -129,7 +149,7 @@ const Router = createBrowserRouter([
         path: "makeAdmin",
         element: (
           <AdminRoute>
-            <MakeAdmin></MakeAdmin>
+            <MakeAdmin />
           </AdminRoute>
         ),
       },
@@ -137,16 +157,17 @@ const Router = createBrowserRouter([
         path: "assign-rider",
         element: (
           <AdminRoute>
-            <AssignRider></AssignRider>
+            <AssignRider />
           </AdminRoute>
         ),
       },
-      /* Rider Router */
+
+      // Rider Specific
       {
         path: "pendingDeliveries",
         element: (
           <RiderRoute>
-            <PendingDeliveries></PendingDeliveries>
+            <PendingDeliveries />
           </RiderRoute>
         ),
       },
@@ -154,7 +175,7 @@ const Router = createBrowserRouter([
         path: "completedDeliveries",
         element: (
           <RiderRoute>
-            <CompletedDeliveries></CompletedDeliveries>
+            <CompletedDeliveries />
           </RiderRoute>
         ),
       },
@@ -162,15 +183,9 @@ const Router = createBrowserRouter([
         path: "myEarnings",
         element: (
           <RiderRoute>
-            <MyEarnings></MyEarnings>
+            <MyEarnings />
           </RiderRoute>
         ),
-      },
-
-      /* Forbidden */
-      {
-        path: "forbidden",
-        element: <Forbidden></Forbidden>,
       },
     ],
   },
