@@ -7,6 +7,7 @@ import Router from "./routers/Router.jsx";
 import AuthProvider from "./providers/AuthProvider.jsx";
 import ThemeProvider from "./providers/ThemeProvider.jsx";
 import "./index.css";
+import ErrorLoadingState from "./components/ErrorLoadingState.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,9 +29,7 @@ createRoot(document.getElementById("root")).render(
           <div className="font-urbanist antialiased">
             <Suspense
               fallback={
-                <div className="flex justify-center items-center min-h-50">
-                  <span className="loading loading-dots loading-lg text-primary"></span>
-                </div>
+                <ErrorLoadingState isPending={true}></ErrorLoadingState>
               }
             >
               <RouterProvider router={Router} />
