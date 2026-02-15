@@ -80,24 +80,21 @@ const icon = {
 
 const OurServices = () => {
   return (
-    <section className="py-16 bg-base-100">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="section-spacing bg-base-200/50 overflow-hidden">
+      <div className="container-page">
         <Motion.div
           className="text-center max-w-2xl mx-auto mb-12"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
           <p className="text-base-content/70">
-            Enjoy fast, reliable parcel delivery with real-time tracking and
-            zero hassle. From personal packages to business shipments — we
-            deliver on time, every time.
+            Enjoy fast, reliable parcel delivery with real-time tracking.
           </p>
         </Motion.div>
 
-     
+        {/* FIX: Removed 'border' class which was breaking the horizontal alignment */}
         <Motion.div
           className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
           variants={container}
@@ -109,20 +106,18 @@ const OurServices = () => {
             <Motion.div
               key={index}
               variants={card}
-              whileHover={{ y: -6 }}
-              className="card bg-base-200 shadow-sm hover:shadow-md transition"
+              whileHover={{ y: -8 }}
+              className="card bg-base-100 shadow-sm hover:shadow-md transition-all duration-300 border border-base-300/50"
             >
-              <div className="card-body">
+              <div className="card-body p-8">
                 <Motion.div
                   variants={icon}
-                  className="w-14 h-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-4"
+                  className="w-14 h-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-5"
                 >
                   {service.icon}
                 </Motion.div>
-
-                <h3 className="card-title text-lg">{service.title}</h3>
-
-                <p className="text-sm text-base-content/70">
+                <h3 className="text-xl font-bold mb-2">{service.title}</h3>
+                <p className="text-sm text-base-content/60 leading-relaxed">
                   {service.description}
                 </p>
               </div>

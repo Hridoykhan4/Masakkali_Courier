@@ -30,4 +30,15 @@
 .font-urbanist{
     font-family: "Urbanist", sans-serif;
 }
+@layer components {
+  .container-page { 
+    /* px-4 (mobile), px-8 (tablet), px-10 (desktop) */
+    @apply max-w-7xl mx-auto px-4 md:px-8 lg:px-10;
+    width: 100%; 
+  }
 
+  .section-spacing {
+    /* Using padding (py) ensures background colors don't have white gaps */
+    @apply py-16 md:py-20 lg:py-24;
+  }
+}

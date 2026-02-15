@@ -61,7 +61,7 @@ const itemVariants = {
 
 const Faq = () => {
   return (
-    <section className="mb-16 px-4">
+    <section className="section-spacing px-4">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -85,7 +85,7 @@ const Faq = () => {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
-        className="max-w-4xl mx-auto space-y-4"
+        className="container-page space-y-4"
       >
         {faqData.map((faq) => (
           <motion.div

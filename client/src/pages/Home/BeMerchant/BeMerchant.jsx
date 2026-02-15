@@ -21,7 +21,7 @@ const BeMerchant = () => {
         backgroundPosition: "center",
         backgroundSize: "cover",
       }}
-      className="relative hero overflow-hidden mb-16 py-20 rounded-3xl"
+      className="relative container-page hero overflow-hidden mb-16 section-spacing rounded-3xl"
     >
       {/* Soft Glow Accent */}
       <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/20 blur-3xl rounded-full"></div>

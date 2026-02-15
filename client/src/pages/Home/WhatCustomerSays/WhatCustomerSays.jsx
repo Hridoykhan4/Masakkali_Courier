@@ -72,8 +72,8 @@ const WhatCustomerSays = () => {
     );
 
   return (
-    <section className="bg-base-200/50 py-24 overflow-hidden">
-      <div className="container mx-auto px-4">
+    <section className="bg-base-200/50 section-spacing overflow-hidden">
+      <div className="container-page">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-16">
           <Motion.img
@@ -95,7 +95,7 @@ const WhatCustomerSays = () => {
 
         {/* Slider Container */}
         <div
-          className="relative max-w-4xl mx-auto"
+          className="relative container-page"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >

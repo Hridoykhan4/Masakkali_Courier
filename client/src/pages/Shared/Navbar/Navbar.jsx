@@ -106,7 +106,7 @@ const Navbar = ({ fromAuth }) => {
 
   return (
     <nav className="sticky top-0 z-9999 bg-base-100/80 backdrop-blur-md border-b border-base-200">
-      <div className="navbar justify-between  px-4 ">
+      <div className="navbar justify-between  container-page ">
         <div className="">
           <MasakkaliLogo />
         </div>

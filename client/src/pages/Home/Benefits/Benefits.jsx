@@ -31,8 +31,8 @@ const benefitsData = [
 
 const Benefits = () => {
   return (
-    <section className="py-16 bg-base-200">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="section-spacing bg-base-200 container-page">
+      <div>
         {/* Section Header */}
         <Motion.div
           className="text-center max-w-2xl mx-auto mb-12"
@@ -61,17 +61,17 @@ const Benefits = () => {
             >
               <div className="card-body">
                 <div className="flex flex-col md:flex-row items-center gap-6">
-                  {/* Left: Image */}
+                 
                   <img
                     src={benefit.image}
                     alt={benefit.title}
                     className="w-full md:w-48 h-40 object-contain"
                   />
 
-                  {/* Divider */}
+               
                   <div className="hidden md:block w-px bg-base-300 h-24" />
 
-                  {/* Right: Content */}
+           
                   <div className="flex-1 text-center md:text-left">
                     <h3 className="text-xl font-semibold mb-2">
                       {benefit.title}
