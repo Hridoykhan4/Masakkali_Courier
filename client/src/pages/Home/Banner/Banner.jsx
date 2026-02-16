@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaArrowRight,
@@ -122,7 +123,7 @@ const Banner = () => {
               alt="Banner"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/40 to-transparent" />
           </motion.div>
         </AnimatePresence>
       </div>
@@ -144,7 +145,7 @@ const Banner = () => {
                   {slides[index].accent}
                 </span>
 
-                <h1 className="text-5xl md:text-8xl font-black text-white leading-[1.0] tracking-tight whitespace-pre-line">
+                <h1 className="text-5xl md:text-8xl font-black text-white leading-none tracking-tight whitespace-pre-line">
                   {slides[index].title}
                 </h1>
 
@@ -199,7 +200,7 @@ const Banner = () => {
 
           {/* Social / Scroll indicator */}
           <div className="hidden lg:flex items-center gap-4">
-            <div className="h-[1px] w-20 bg-white/20" />
+            <div className="h-px w-20 bg-white/20" />
             <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">
               Moving Fast Since 2024
             </span>

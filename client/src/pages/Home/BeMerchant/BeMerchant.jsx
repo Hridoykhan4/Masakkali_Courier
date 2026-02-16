@@ -140,7 +140,7 @@ const BeMerchant = () => {
                 <img
                   src={merchantImg}
                   alt="Logistics Partnership"
-                  className="w-full max-w-[480px] mx-auto drop-shadow-2xl filter saturate-[1.1]"
+                  className="w-full max-w-120 mx-auto drop-shadow-2xl filter saturate-[1.1]"
                 />
               </Motion.div>
 
