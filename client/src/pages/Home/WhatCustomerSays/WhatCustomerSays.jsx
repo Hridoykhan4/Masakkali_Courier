@@ -12,15 +12,14 @@ const WhatCustomerSays = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
 
-const { data: reviews = [], isPending, isError, error } = useQuery({
-    queryKey: ["reviews-home"], // Changed key to avoid collisions
+
+const { data: reviews = [], isPending, isError } = useQuery({
+    queryKey: ["reviews-home"], 
     queryFn: async () => {
-      console.log("Fetching reviews from:", "/reviews"); // Debugging
       const { data } = await axiosPublic.get("/reviews");
-      console.log("Data Received:", data); // Check your console!
       return Array.isArray(data) ? data : [];
     },
-    staleTime: 0, // Force fresh data
+    staleTime: 0, 
     gcTime: 1000 * 60 * 5,
   });
 
@@ -50,7 +49,8 @@ const { data: reviews = [], isPending, isError, error } = useQuery({
     if (!sliderRef.current || !reviews?.length || isHovering) return;
     const interval = setInterval(() => handleNext(), 5000);
     return () => clearInterval(interval);
-  }, [reviews, isHovering, currentIndex]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviews, isHovering, currentIndex,]);
 
   if (isError) return (
     <div className="py-20 text-center text-error font-medium animate-bounce">
@@ -59,7 +59,7 @@ const { data: reviews = [], isPending, isError, error } = useQuery({
   );
 
   return (
-    <section className="bg-gradient-to-b from-base-100 to-base-200/50 section-spacing overflow-hidden">
+    <section className="bg-linear-to-b from-base-100 to-base-200/50 section-spacing overflow-hidden">
       <div className="container-page">
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-16">
@@ -70,7 +70,7 @@ const { data: reviews = [], isPending, isError, error } = useQuery({
             alt="Customers"
             className="mb-6 w-40 drop-shadow-2xl"
           />
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary">
             Voice of Our Community
           </h2>
           <div className="h-2 w-24 bg-primary rounded-full mb-8 shadow-lg shadow-primary/20"></div>

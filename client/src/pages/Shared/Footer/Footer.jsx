@@ -1,53 +1,118 @@
 import MasakkaliLogo from "../MasakkaliLogo/MasakkaliLogo";
+import {
+  FaTwitter,
+  FaYoutube,
+  FaFacebookF,
+  FaPaperPlane,
+} from "react-icons/fa";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="footer footer-horizontal footer-center flex justify-center items-center flex-col text-center bg-neutral text-neutral-content p-10">
-      <aside className="">
-          <MasakkaliLogo></MasakkaliLogo>
-        <p>
-          Masakkali Courier Ltd.
-          <br />
-          Providing reliable courier service since {new Date().getFullYear()}
-        </p>
-      </aside>
-      <nav className="text-center ">
-        <div className=" text-center flex-wrap flex gap-4">
-          <a>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              className="fill-current"
-            >
-              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-            </svg>
-          </a>
-          <a>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              className="fill-current"
-            >
-              <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-            </svg>
-          </a>
-          <a>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              className="fill-current"
-            >
-              <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-            </svg>
-          </a>
+    <footer className="bg-neutral text-neutral-content">
+      {/* Upper Footer: Newsletter & Brand */}
+      <div className="container-page py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Brand Identity */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="flex items-center gap-2">
+              <MasakkaliLogo />
+            </div>
+            <p className="text-neutral-content/70 max-w-xs leading-relaxed">
+              Redefining logistics with speed and precision. Providing reliable
+              door-to-door courier services since {currentYear}.
+            </p>
+            <div className="flex gap-4">
+              {[FaFacebookF, FaTwitter, FaYoutube].map((Icon, idx) => (
+                <motion.a
+                  key={idx}
+                  whileHover={{ y: -3, scale: 1.1 }}
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-primary hover:text-white transition-all cursor-pointer"
+                >
+                  <Icon size={18} />
+                </motion.a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h4 className="text-white font-black text-sm uppercase tracking-widest">
+                Company
+              </h4>
+              <ul className="space-y-2 text-neutral-content/60 text-sm font-medium">
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  About Us
+                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  Our Coverage
+                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  Careers
+                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  Privacy Policy
+                </li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-white font-black text-sm uppercase tracking-widest">
+                Support
+              </h4>
+              <ul className="space-y-2 text-neutral-content/60 text-sm font-medium">
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  Help Center
+                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  Track Parcel
+                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  API Docs
+                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">
+                  Contact Us
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Newsletter Section */}
+          <div className="lg:col-span-4 space-y-4">
+            <h4 className="text-white font-black text-sm uppercase tracking-widest">
+              Stay Updated
+            </h4>
+            <p className="text-neutral-content/60 text-sm">
+              Join our newsletter for logistics insights and offers.
+            </p>
+            <div className="relative mt-4">
+              <input
+                type="email"
+                placeholder="email@example.com"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 focus:outline-none focus:border-primary transition-all text-sm"
+              />
+              <button className="absolute right-2 top-2 bottom-2 bg-primary text-white px-5 rounded-xl flex items-center justify-center hover:opacity-90 transition-all">
+                <FaPaperPlane size={14} />
+              </button>
+            </div>
+          </div>
         </div>
-      </nav>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-white/5 py-8">
+        <div className="container-page flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest opacity-40">
+          <p>© {currentYear} Masakkali Courier Ltd. All Rights Reserved.</p>
+          <div className="flex gap-8">
+            <span>Terms of Service</span>
+            <span>Security</span>
+            <span>Cookies</span>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 };
