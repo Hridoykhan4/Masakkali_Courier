@@ -102,7 +102,7 @@ const { data: reviews = [], isPending, isError, error } = useQuery({
             {isPending ? (
               /* Skeleton Loader for 10X Feel */
               [...Array(1)].map((_, i) => (
-                <div key={i} className="min-w-full h-[400px] bg-base-300 animate-pulse rounded-[3rem]"></div>
+                <div key={i} className="min-w-full h-100 bg-base-300 animate-pulse rounded-[3rem]"></div>
               ))
             ) : (
               (reviews || []).map((item) => (
@@ -141,7 +141,7 @@ const { data: reviews = [], isPending, isError, error } = useQuery({
                           {item?.userName}
                         </h4>
                         <div className="flex items-center gap-2">
-                          <span className="badge badge-primary badge-sm font-bold uppercase tracking-tighter p-3">Verified Merchant</span>
+                          <span className="bg-primary badge-sm font-bold uppercase tracking-tighter rounded-xl text-center px-3 py-2">Verified Merchant</span>
                         </div>
                       </div>
                       <div className="hidden sm:block text-right">
