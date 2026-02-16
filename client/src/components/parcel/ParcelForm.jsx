@@ -133,7 +133,7 @@ const ParcelForm = ({
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.3, ease: "easeInOut", duration: 0.9 }}
-      className="max-w-6xl mx-auto p-4"
+      className="container-page section-spacing"
     >
       <div className="card bg-base-100 shadow-xl">
         {showModal && costBreakdown && (

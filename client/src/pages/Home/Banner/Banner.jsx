@@ -1,98 +1,212 @@
 import { useState, useEffect } from "react";
-// eslint-disable-next-line no-unused-vars
+import { Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaArrowRight,
+  FaBoxOpen,
+  FaMotorcycle,
+  FaChartLine,
+  FaUserPlus,
+} from "react-icons/fa";
+import useAuthValue from "../../../hooks/useAuthValue";
+import useUserRole from "../../../hooks/useUserRole";
 
-// Import your images here as you did before
+// Images
 import img1 from "../../../assets/banner/banner1.webp";
 import img2 from "../../../assets/banner/banner2.webp";
 import img3 from "../../../assets/banner/banner3.webp";
 
-const images = [img1, img2, img3];
+const slides = [
+  {
+    image: img1,
+    title: "Fast & Reliable \n Courier Service",
+    subtitle: "Delivering trust, speed, and safety across the country.",
+    accent: "Masakkali Express",
+  },
+  {
+    image: img2,
+    title: "Smart Logistics \n For Your Business",
+    subtitle:
+      "Empowering merchants with real-time tracking and seamless delivery.",
+    accent: "Merchant Pro",
+  },
+  {
+    image: img3,
+    title: "Doorstep Delivery \n Within 24 Hours",
+    subtitle:
+      "Your packages are in safe hands. We value your time like our own.",
+    accent: "Urban Swift",
+  },
+];
 
 const Banner = () => {
   const [index, setIndex] = useState(0);
+  const { user } = useAuthValue();
+  const { role } = useUserRole();
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    }, 5000);
+      setIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
 
-  return (
-    <div className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden bg-black">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={index}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0"
+  // 🚀 Logic to decide which "Boom" buttons to show
+  const renderActions = () => {
+    if (!user) {
+      return (
+        <>
+          <Link
+            to="/login"
+            className="btn btn-primary btn-lg px-8 rounded-2xl gap-3 shadow-xl shadow-primary/20"
+          >
+            Get Started <FaArrowRight />
+          </Link>
+          <Link
+            to="/register"
+            className="btn btn-outline btn-lg px-8 rounded-2xl border-white/30 text-white hover:bg-white hover:text-black backdrop-blur-md"
+          >
+            Join Masakkali <FaUserPlus />
+          </Link>
+        </>
+      );
+    }
+
+    if (role === "admin") {
+      return (
+        <Link
+          to="/dashboard"
+          className="btn btn-error btn-lg px-10 rounded-2xl gap-3 text-white shadow-xl shadow-error/20"
         >
-          <motion.img
-            src={images[index]}
-            alt="Banner"
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.2 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 5, ease: "easeOut" }}
-          />
+          Admin Console <FaChartLine />
+        </Link>
+      );
+    }
 
-          <div className="absolute inset-0 bg-black/50" />
+    if (role === "rider") {
+      return (
+        <Link
+          to="/dashboard"
+          className="btn btn-info btn-lg px-10 rounded-2xl gap-3 text-white shadow-xl shadow-info/20"
+        >
+          Current Deliveries <FaMotorcycle />
+        </Link>
+      );
+    }
 
-          <div className="absolute inset-0 flex items-center justify-center px-6 md:px-16">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              className="max-w-xl text-center text-white space-y-4"
-            >
-              <motion.h2
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-3xl md:text-6xl font-bold"
-              >
-                Fast & Reliable <br /> Courier Service
-              </motion.h2>
+    return (
+      <Link
+        to="/sendParcel"
+        className="btn btn-primary btn-lg px-10 rounded-2xl gap-3 shadow-xl shadow-primary/20"
+      >
+        Send a Parcel <FaBoxOpen />
+      </Link>
+    );
+  };
 
-              <motion.p
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-sm md:text-lg text-gray-200"
-              >
-                Delivering trust, speed, and safety across the country.
-              </motion.p>
+  return (
+    <section className="relative w-full h-[80vh] md:h-[95vh] overflow-hidden bg-neutral">
+      {/* 1. CINEMATIC BACKGROUND */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 1.15 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
+            className="absolute inset-0"
+          >
+            <img
+              src={slides[index].image}
+              alt="Banner"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
+      {/* 2. DYNAMIC CONTENT LAYER */}
+      <div className="relative z-10 h-full flex items-center">
+        <div className="container-page w-full">
+          <div className="max-w-4xl space-y-8">
+            <AnimatePresence mode="wait">
               <motion.div
-                variants={{
-                  hidden: { opacity: 0, scale: 0.8 },
-                  visible: { opacity: 1, scale: 1 },
-                }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              ></motion.div>
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6"
+              >
+                <span className="inline-block px-5 py-2 rounded-full bg-white/10 border border-white/20 text-primary text-[11px] font-black uppercase tracking-[0.5em] backdrop-blur-xl">
+                  {slides[index].accent}
+                </span>
+
+                <h1 className="text-5xl md:text-8xl font-black text-white leading-[1.0] tracking-tight whitespace-pre-line">
+                  {slides[index].title}
+                </h1>
+
+                <p className="text-lg md:text-2xl text-white/60 max-w-xl font-light leading-relaxed">
+                  {slides[index].subtitle}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* PERSISTENT ACTION PORTAL (Outside Text AnimatePresence for stability) */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 1 }}
+              className="flex flex-wrap items-center gap-4 pt-4"
+            >
+              {renderActions()}
             </motion.div>
           </div>
-        </motion.div>
-      </AnimatePresence>
-
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {images.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIndex(i)}
-            className={`h-2 transition-all duration-300 rounded-full ${
-              index === i ? "w-8 bg-white" : "w-2 bg-white/50"
-            }`}
-          />
-        ))}
+        </div>
       </div>
-    </div>
+
+      {/* 3. NEXT-GEN PROGRESS NAV */}
+      <div className="absolute bottom-12 left-0 right-0 z-20">
+        <div className="container-page flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className="group flex flex-col gap-3"
+              >
+                <div className="relative w-16 h-1 bg-white/10 overflow-hidden rounded-full">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: index === i ? "100%" : "0%" }}
+                    transition={{
+                      duration: index === i ? 8 : 0.5,
+                      ease: "linear",
+                    }}
+                    className="absolute inset-0 bg-primary shadow-[0_0_15px_rgba(var(--p),0.5)]"
+                  />
+                </div>
+                <span
+                  className={`text-[10px] font-black tracking-widest transition-all duration-300 ${index === i ? "text-primary" : "text-white/20"}`}
+                >
+                  0{i + 1}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Social / Scroll indicator */}
+          <div className="hidden lg:flex items-center gap-4">
+            <div className="h-[1px] w-20 bg-white/20" />
+            <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">
+              Moving Fast Since 2024
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

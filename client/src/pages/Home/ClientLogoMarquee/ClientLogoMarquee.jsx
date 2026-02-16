@@ -1,12 +1,12 @@
 import { motion as Motion } from "motion/react";
 import logo1 from "../../../assets/brands/amazon.png";
-import logo2 from "../../../assets/brands/amazon_vector.png";
+import logo2 from "../../../assets/brands/sports.webp";
 import logo3 from "../../../assets/brands/casio.png";
-import logo4 from "../../../assets/brands/randstad.png";
+import logo4 from "../../../assets/brands/download.jfif";
 import logo5 from "../../../assets/brands/star.png";
-import logo6 from "../../../assets/brands/start_people.png";
+import logo6 from "../../../assets/brands/airbnb.jfif";
 
-const logos = [logo1, logo2, logo3, logo4, logo5, logo6];
+const logos = [logo1, logo2,   logo3, logo4,  logo5, logo6];
 
 const ClientLogoMarquee = () => {
   // Triple the logos to ensure there are no gaps on ultra-wide screens
@@ -20,7 +20,7 @@ const ClientLogoMarquee = () => {
         </h2>
 
         {/* The Masking Container */}
-        <div className="relative flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+        <div className="relative flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)">
           <Motion.div
             className="flex flex-none gap-8 pr-8"
             animate={{ x: ["0%", "-33.33%"] }} // Adjusted for tripled array
