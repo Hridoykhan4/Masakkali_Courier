@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Import your images here as you did before
-import img1 from "../../../assets/banner/banner1.png";
-import img2 from "../../../assets/banner/banner2.png";
-import img3 from "../../../assets/banner/banner3.png";
+import img1 from "../../../assets/banner/banner1.webp";
+import img2 from "../../../assets/banner/banner2.webp";
+import img3 from "../../../assets/banner/banner3.webp";
 
 const images = [img1, img2, img3];
 

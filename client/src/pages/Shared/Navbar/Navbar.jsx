@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router";
 import { HiOutlineBars4 } from "react-icons/hi2";
 import { IoCloseOutline } from "react-icons/io5";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { FaMoon, FaSun, FaSignOutAlt, FaColumns } from "react-icons/fa";
 import { useState, useMemo, useEffect } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,103 +17,127 @@ const Navbar = ({ fromAuth }) => {
   const { user, logOut } = useAuthValue();
   const { role } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
-  //console.log(user);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect for premium glass look
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navLinks = useMemo(() => {
     const links = [
       { label: "Home", to: "/" },
       { label: "Coverage", to: "/coverage" },
     ];
-
     if (role === "user") {
       links.push(
         { label: "Be a Rider", to: "/beARider" },
         { label: "Send Parcel", to: "/sendParcel" },
       );
     }
-
-    if (user) links.push({ label: "Dashboard", to: "/dashboard" });
-
     return links;
-  }, [role, user]);
+  }, [role]);
 
   const handleLogout = async () => {
     try {
       await logOut();
-      toast.success("See you soon!");
+      toast.success("Logged out successfully!", {
+        icon: "🚀",
+        theme: theme === "light" ? "light" : "dark",
+      });
       setIsOpen(false);
     } catch {
-      toast.error("Logout failed. Try again.");
+      toast.error("Logout failed. Please try again.");
     }
   };
-
   const confirmLogout = () => {
     toast.info(
       ({ closeToast }) => (
-        <div className="p-1">
-          <p className="font-medium mb-3">Sign out from Masakkali?</p>
+        <div className="flex flex-col gap-3 p-1">
+          <div className="flex items-center gap-2">
+            {/* Using DaisyUI classes ensures theme compliance */}
+            <div className="p-2 bg-error/20 rounded-full text-error">
+              <FaSignOutAlt size={14} />
+            </div>
+            <p className="font-bold text-sm text-base-content">
+              Exit Masakkali?
+            </p>
+          </div>
+          <p className="text-xs text-base-content/70">
+            Are you sure you want to sign out of your session?
+          </p>
           <div className="flex justify-end gap-2">
-            <button onClick={closeToast} className="btn btn-ghost btn-xs">
-              Cancel
+            <button
+              onClick={closeToast}
+              className="btn btn-ghost btn-xs text-base-content"
+            >
+              Stay
             </button>
             <button
               onClick={() => {
                 handleLogout();
                 closeToast();
               }}
-              className="btn btn-error btn-xs text-white"
+              className="btn btn-error btn-xs text-white px-4"
             >
               Logout
             </button>
           </div>
         </div>
       ),
-      { autoClose: false, icon: false, position: "top-center" },
+      {
+        position: "top-center",
+        autoClose: false,
+        theme: theme === "dark" ? "dark" : "light", // CRITICAL FIX
+        className:
+          "border border-base-content/10 shadow-2xl rounded-2xl backdrop-blur-md bg-base-100/90",
+        icon: false,
+      },
     );
   };
 
+  // Close mobile menu on Esc key
   useEffect(() => {
     const handler = (e) => e.key === "Escape" && setIsOpen(false);
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const menuVariants = {
-    closed: { opacity: 0, scale: 0.95, y: -20 },
-    open: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { staggerChildren: 0.08 },
-    },
-  };
-
-  const itemVariants = {
-    closed: { opacity: 0, x: -10 },
-    open: { opacity: 1, x: 0 },
-  };
-
   const navLinkStyle = ({ isActive }) =>
-    `relative px-3 py-2 transition-all duration-300 ${
-      isActive ? "text-primary font-semibold" : "text-base-content/80"
-    } hover:text-primary`;
+    `relative py-2 text-sm font-bold tracking-wide uppercase transition-all duration-300 ${
+      isActive ? "text-primary" : "text-base-content/70 hover:text-primary"
+    }`;
 
-  const roleBadgeClass =
-    role === "admin"
-      ? "badge-error"
-      : role === "rider"
-        ? "badge-info"
-        : "badge-primary";
+  const roleBadgeColor = {
+    admin: "bg-error/10 text-error border-error/20",
+    rider: "bg-info/10 text-info border-info/20",
+    user: "bg-primary/10 text-primary border-primary/20",
+  }[role || "user"];
 
   return (
-    <nav className="sticky top-0 z-9999 bg-base-100/80 backdrop-blur-md border-b border-base-200">
-      <div className="navbar justify-between  container-page ">
-        <div className="">
+    <nav
+      className={`sticky top-0 z-100 w-full transition-all duration-500 ${
+        scrolled
+          ? "bg-base-100/70 backdrop-blur-xl border-b border-base-content/5 py-2"
+          : "bg-transparent py-4"
+      }`}
+    >
+      <div className="container-page flex items-center justify-between">
+        {/* --- Logo Area --- */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="shrink-0"
+        >
           <MasakkaliLogo />
-        </div>
+        </motion.div>
 
-        <div className="flex ms-auto items-center gap-2">
+        {/* --- Desktop Navigation --- */}
+        <div className="hidden lg:flex items-center gap-8">
           {!fromAuth && (
-            <ul className="hidden lg:flex menu menu-horizontal items-center gap-1">
+            <ul className="flex items-center gap-6">
               {navLinks.map((link) => (
                 <li key={link.to}>
                   <NavLink to={link.to} className={navLinkStyle}>
@@ -121,9 +145,9 @@ const Navbar = ({ fromAuth }) => {
                       <>
                         {link.label}
                         {isActive && (
-                          <motion.div
-                            layoutId="activeTab"
-                            className="absolute bottom-0 left-3 right-3 h-0.5 bg-primary"
+                          <motion.span
+                            layoutId="navUnderline"
+                            className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full"
                           />
                         )}
                       </>
@@ -131,151 +155,176 @@ const Navbar = ({ fromAuth }) => {
                   </NavLink>
                 </li>
               ))}
-
-              <li className="ml-2">
-                {user ? (
-                  <button
-                    onClick={confirmLogout}
-                    className="btn btn-ghost btn-sm"
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <Link to="/login" className="btn btn-primary btn-sm px-6">
-                    Login
-                  </Link>
-                )}
-              </li>
             </ul>
           )}
 
-          {user && (
-            <div className="hidden lg:flex items-center gap-2 ml-2">
-              <img
-                referrerPolicy="no-referrer"
-                src={user?.photoURL}
-                alt="User avatar"
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <span className={`badge badge-sm ${roleBadgeClass}`}>{role}</span>
-            </div>
-          )}
+          {/* --- Desktop Action Area --- */}
+          <div className="flex items-center gap-4 border-l border-base-content/10 pl-6">
+            <button
+              onClick={toggleTheme}
+              className="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 transition-colors"
+            >
+              {theme === "light" ? (
+                <FaMoon size={18} />
+              ) : (
+                <FaSun size={18} className="text-yellow-400" />
+              )}
+            </button>
 
-          {/* -------- Theme Toggle -------- */}
-          <button
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="btn btn-ghost btn-circle"
-          >
-            {theme === "light" ? (
-              <FaMoon className="text-lg" />
+            {user ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/dashboard"
+                  className="group flex items-center gap-3 p-1 pr-3 rounded-full hover:bg-base-200 transition-all"
+                >
+                  <div className="relative">
+                    <img
+                      src={
+                        user?.photoURL || "https://i.ibb.co/mJR9Qxc/user.png"
+                      }
+                      alt="Profile"
+                      className="w-9 h-9 rounded-full object-cover border-2 border-primary/20 group-hover:border-primary transition-colors"
+                    />
+                    <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+                    </span>
+                  </div>
+                  <div className="hidden xl:block">
+                    <p className="text-xs font-black uppercase leading-none mb-1">
+                      Dashboard
+                    </p>
+                    <span
+                      className={`text-[10px] px-2 py-0.5 rounded-md border font-bold uppercase ${roleBadgeColor}`}
+                    >
+                      {role}
+                    </span>
+                  </div>
+                </Link>
+                <button
+                  onClick={confirmLogout}
+                  className="btn btn-ghost btn-circle btn-sm text-error hover:bg-error/10 transition-colors"
+                >
+                  <FaSignOutAlt size={18} />
+                </button>
+              </div>
             ) : (
-              <FaSun className="text-lg text-yellow-400" />
+              <Link
+                to="/login"
+                className="btn btn-primary btn-sm px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
+              >
+                Login
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* --- Mobile Controls --- */}
+        <div className="flex lg:hidden items-center gap-2">
+          <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
+            {theme === "light" ? (
+              <FaMoon />
+            ) : (
+              <FaSun className="text-yellow-400" />
             )}
           </button>
-
-          {/* -------- Mobile Toggle -------- */}
           {!fromAuth && (
-            <div className="lg:hidden relative">
-              <button
-                aria-label="Toggle navigation menu"
-                aria-expanded={isOpen}
-                onClick={() => setIsOpen(!isOpen)}
-                className="btn btn-ghost btn-circle text-2xl"
-              >
-                {isOpen ? <IoCloseOutline /> : <HiOutlineBars4 />}
-              </button>
-
-              <AnimatePresence>
-                {isOpen && (
-                  <motion.ul
-                    initial="closed"
-                    animate="open"
-                    exit="closed"
-                    variants={menuVariants}
-                    className="absolute right-0 mt-2 w-64 p-4 bg-base-100 rounded-2xl shadow-xl border border-base-200"
-                  >
-                    {/* User Info */}
-                    {user && (
-                      <motion.div
-                        variants={itemVariants}
-                        className="flex items-center gap-3 mb-3"
-                      >
-                        <img
-                          referrerPolicy="no-referrer"
-                          className="w-10 h-10 rounded-full object-cover"
-                          src={user.photoURL || "/avatar.png"}
-                          alt=""
-                        />
-                        <div>
-                          <p className="font-medium">
-                            {user.displayName || "User"}
-                          </p>
-                          <span className={`badge badge-sm ${roleBadgeClass}`}>
-                            {role}
-                          </span>
-                        </div>
-                      </motion.div>
-                    )}
-
-                    <div className="divider my-2" />
-
-                    {navLinks.map((link) => (
-                      <motion.li key={link.to} variants={itemVariants}>
-                        <NavLink
-                          to={link.to}
-                          onClick={() => setIsOpen(false)}
-                          className={({ isActive }) =>
-                            `block p-3 rounded-xl transition ${
-                              isActive
-                                ? "text-primary font-semibold"
-                                : "text-base-content/80 hover:bg-base-200"
-                            }`
-                          }
-                        >
-                          {link.label}
-                        </NavLink>
-                      </motion.li>
-                    ))}
-
-                    <div className="divider my-2" />
-
-                    <motion.li variants={itemVariants}>
-                      {user ? (
-                        <button
-                          onClick={confirmLogout}
-                          className="btn btn-error btn-block btn-sm text-white"
-                        >
-                          Logout
-                        </button>
-                      ) : (
-                        <Link
-                          to="/login"
-                          onClick={() => setIsOpen(false)}
-                          className="btn btn-primary btn-block btn-sm"
-                        >
-                          Login
-                        </Link>
-                      )}
-                    </motion.li>
-                  </motion.ul>
-                )}
-              </AnimatePresence>
-            </div>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="btn btn-ghost btn-circle text-2xl z-110"
+            >
+              {isOpen ? <IoCloseOutline /> : <HiOutlineBars4 />}
+            </button>
           )}
         </div>
       </div>
 
-      {/* -------- Mobile Backdrop -------- */}
+      {/* --- Mobile Menu Drawer --- */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/20 z-40 lg:hidden"
-          />
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-base-300/60 backdrop-blur-sm lg:hidden z-101"
+            />
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-screen w-70 bg-base-100 shadow-2xl z-102 p-6 lg:hidden"
+            >
+              <div className="mt-12 space-y-6">
+                {user && (
+                  <div className="flex items-center gap-4 p-4 bg-base-200 rounded-2xl">
+                    <img
+                      src={user.photoURL}
+                      className="w-12 h-12 rounded-full border-2 border-primary"
+                      alt=""
+                    />
+                    <div>
+                      <h4 className="font-bold truncate w-32">
+                        {user.displayName}
+                      </h4>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded border font-bold ${roleBadgeColor}`}
+                      >
+                        {role}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-2">
+                  {navLinks.map((link) => (
+                    <NavLink
+                      key={link.to}
+                      to={link.to}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) =>
+                        `p-4 rounded-xl font-bold flex items-center justify-between ${isActive ? "bg-primary text-primary-content" : "hover:bg-base-200"}`
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
+                  ))}
+                  {user && (
+                    <NavLink
+                      to="/dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="p-4 rounded-xl font-bold flex items-center gap-3 hover:bg-base-200"
+                    >
+                      <FaColumns /> Dashboard
+                    </NavLink>
+                  )}
+                </div>
+
+                <div className="absolute bottom-10 left-6 right-6">
+                  {user ? (
+                    <button
+                      onClick={confirmLogout} // Trigger the confirmation toast
+                      className="btn btn-error btn-block text-white rounded-xl shadow-lg shadow-error/20"
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <Link
+                      to="/login"
+                      onClick={() => setIsOpen(false)}
+                      className="btn btn-primary btn-block rounded-xl"
+                    >
+                      Login
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>

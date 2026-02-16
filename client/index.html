@@ -2,58 +2,42 @@
 <html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/src/assets/logo.png" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masakkali Courier | Fast & Reliable</title>
     
-    <title>Masakkali Courier | Fast & Reliable Delivery Service</title>
-    <meta name="title" content="Masakkali Courier | Fast & Reliable Delivery Service" />
-    <meta name="description" content="Masakkali provides lightning-fast courier and parcel delivery services. Track your parcels in real-time with our advanced logistics dashboard." />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://masakkali-courier.web.app" />
-    <meta property="og:title" content="Masakkali Courier | Reliable Logistics" />
-    <meta property="og:description" content="Send parcels across the country with ease. Real-time tracking, rider assignments, and secure payments." />
-    <meta property="og:image" content="/src/assets/logo.png" />
-
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="Masakkali Courier" />
-    <meta property="twitter:description" content="Fastest delivery service in the region." />
-    <meta property="twitter:image" content="/src/assets/logo.png" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
       #initial-loader {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: #020617;
-        z-index: 9999;
-        transition: opacity 0.5s ease;
+        position: fixed; inset: 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; background-color: #020617;
+        z-index: 9999; transition: opacity 0.5s ease;
       }
-      .loader-logo {
-        width: 80px;
-        animation: pulse 2s infinite ease-in-out;
-      }
-      @keyframes pulse {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.1); opacity: 0.7; }
-      }
+      .loader-logo { width: 80px; animation: pulse 2s infinite ease-in-out; }
+      @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
     </style>
   </head>
   <body>
-    <div id="root">
-      <div id="initial-loader"> 
-        <img src="/src/assets/logo.png" alt="Masakkali Logo" class="loader-logo" />
-        <p style="font-family: 'Urbanist', sans-serif; margin-top: 1rem; color: #570df8; font-weight: 600; letter-spacing: 2px;">MASAKKALI</p>
-      </div>
+    <div id="initial-loader"> 
+      <img src="/logo.png" alt="Logo" class="loader-logo" />
+      <p style="font-family: 'Urbanist'; margin-top: 1rem; color: #570df8; letter-spacing: 2px; font-weight: 600;">MASAKKALI</p>
     </div>
 
+    <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      window.addEventListener('load', () => {
+        const loader = document.getElementById('initial-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.remove(), 500);
+        }
+      });
+    </script>
   </body>
 </html>
