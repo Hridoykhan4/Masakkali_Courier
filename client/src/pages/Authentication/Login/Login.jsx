@@ -1,118 +1,127 @@
 import { useForm } from "react-hook-form";
-import usePasswordToggle from "../../../hooks/usePasswordToggle";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router";
-import SocialLogin from "../SocialLogin/SocialLogin";
-import useAuthValue from "../../../hooks/useAuthValue";
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
 import { toast } from "react-toastify";
+import usePasswordToggle from "../../../hooks/usePasswordToggle";
+import useAuthValue from "../../../hooks/useAuthValue";
+import SocialLogin from "../SocialLogin/SocialLogin";
+
 const Login = () => {
   const { signInUser } = useAuthValue();
   const { show, toggle, type: passType } = usePasswordToggle();
   const nav = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
+
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onsubmit = async ({ email, password }) => {
+  const onSubmit = async ({ email, password }) => {
     try {
       const { user } = await signInUser(email, password);
-      reset();
       nav(from, { replace: true });
-      toast.success(`Welcome Back ${user?.displayName || ""}`, {
-        position: "top-left",
-        autoClose: 1500,
-      });
+      toast.success(`Welcome back, ${user?.displayName || "User"}!`);
     } catch (err) {
       toast.error(
         err?.code === "auth/invalid-credential"
-          ? "Invalid email or password"
-          : "Login failed. Please try again."
+          ? "Invalid Credentials"
+          : "Login Failed",
       );
     }
   };
 
   return (
-    <div>
-      <form
-        onSubmit={handleSubmit(onsubmit)}
-        className="card-body shadow-xl border rounded border-white/40"
-      >
-        <h2 className="text-2xl font-semibold">Login</h2>
-        <p className="text-sm text-gray-500">Welcome back! Please sign in.</p>
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-4xl font-black italic tracking-tighter uppercase mb-2">
+          Login
+        </h2>
+        <div className="h-1 w-12 bg-primary rounded-full" />
+      </div>
 
-        <fieldset className="fieldset">
-          <label htmlFor="email" className="label">
-            Email
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase opacity-40 ml-4">
+            Email Address
           </label>
-          <input
-            id="email"
-            {...register("email", {
-              required: `Must fill email`,
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Enter valid Email",
-              },
-            })}
-            type="email"
-            className="input w-full"
-            placeholder="Email"
-          />
-          {errors?.email && (
-            <p className="text-red-600 font-semibold">
-              {errors?.email?.message}
+          <div className="relative">
+            <FaEnvelope className="absolute left-5 top-1/2 -translate-y-1/2 opacity-20 text-xs" />
+            <input
+              {...register("email", { required: "Email is required" })}
+              type="email"
+              placeholder="name@example.com"
+              className="input input-bordered w-full pl-12 rounded-2xl h-14 font-semibold focus:ring-2 ring-primary/20 transition-all"
+            />
+          </div>
+          {errors.email && (
+            <p className="text-xs text-error font-bold ml-4">
+              {errors.email.message}
             </p>
           )}
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase opacity-40 ml-4">
+            Password
+          </label>
           <div className="relative">
-            <label htmlFor="password" className="label">
-              Password
-            </label>
+            <FaLock className="absolute left-5 top-1/2 -translate-y-1/2 opacity-20 text-xs" />
             <input
-              id="password"
+              {...register("password", { required: "Password is required" })}
               type={passType}
-              {...register("password", {
-                required: "Password must be filled",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-              className="input w-full"
-              placeholder="***Password"
+              placeholder="••••••••"
+              className="input input-bordered w-full pl-12 pr-12 rounded-2xl h-14 font-semibold"
             />
             <button
-              aria-label={show ? "Hide password" : "Show password"}
-              onClick={toggle}
               type="button"
-              className="btn btn-sm absolute right-3 bottom-1  btn-outline"
+              onClick={toggle}
+              className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40 hover:opacity-100 transition-opacity"
             >
-              {show ? <FaEyeSlash /> : <FaEye></FaEye>}
+              {show ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
-          {errors?.password && (
-            <p className="text-red-600 font-semibold">
-              {errors?.password?.message}
-            </p>
-          )}
-          <div>
-            <a className="link link-hover">Forgot password?</a>
-          </div>
-          <button disabled={isSubmitting} className="btn btn-primary mt-4">
-            {isSubmitting ? "Logging in" : "Login"}
-          </button>
-        </fieldset>
-        <p>
-          New to this Account,{" "}
-          <Link state={{from}} className="link link-primary" to="/register">
-            Sign Up
+        </div>
+
+        <div className="text-right">
+          <Link
+            to="/forgot-password"
+            size="xs"
+            className="text-xs font-bold text-primary hover:underline"
+          >
+            Forgot Password?
           </Link>
-        </p>
+        </div>
+
+        <button
+          disabled={isSubmitting}
+          className="btn btn-primary w-full h-14 rounded-2xl text-lg font-black italic tracking-widest shadow-xl shadow-primary/20"
+        >
+          {isSubmitting ? (
+            <span className="loading loading-spinner" />
+          ) : (
+            "SECURE LOGIN"
+          )}
+        </button>
       </form>
-      <SocialLogin from={from}></SocialLogin>
+
+      <div className="divider text-[10px] font-black uppercase opacity-20">
+        Or Continue With
+      </div>
+      <SocialLogin from={from} />
+
+      <p className="text-center text-sm font-medium opacity-60">
+        New to Masakkali?{" "}
+        <Link
+          to="/register"
+          state={{ from }}
+          className="text-primary font-black hover:underline italic"
+        >
+          Create Account
+        </Link>
+      </p>
     </div>
   );
 };

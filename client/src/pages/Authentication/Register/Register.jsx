@@ -1,285 +1,208 @@
 import { useForm, useWatch } from "react-hook-form";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router";
-import usePasswordToggle from "../../../hooks/usePasswordToggle";
-import useAuthValue from "../../../hooks/useAuthValue";
+import { Link, useNavigate } from "react-router";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaCamera,
+  FaCheckCircle,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { useState } from "react";
-import SocialLogin from "../SocialLogin/SocialLogin";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
-// eslint-disable-next-line no-unused-vars
-import { motion } from "motion/react";
+import Lottie from "lottie-react";
+import useAuthValue from "../../../hooks/useAuthValue";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import usePasswordToggle from "../../../hooks/usePasswordToggle";
+
 const Register = () => {
-  const { show, toggle, type: passType } = usePasswordToggle();
-  const axiosPublic = useAxiosPublic();
   const { createNewUser, updateUserInfo } = useAuthValue();
-  const [error, setError] = useState("");
+  const axiosPublic = useAxiosPublic();
+  const { show, toggle, type: passType } = usePasswordToggle();
   const [preview, setPreview] = useState("");
   const [imageLoading, setImageLoading] = useState(false);
-  const [uploadPercent, setUploadPercent] = useState(0);
   const nav = useNavigate();
-  const location = useLocation();
-  const from = location?.state?.from || "/";
+
   const {
     register,
-    reset,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
   } = useForm();
-  const password = useWatch({
-    control,
-    name: "password",
-    defaultValue: "",
-  });
+  const password = useWatch({ control, name: "password", defaultValue: "" });
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setError("");
 
-    if (file.size > 2 * 1024 * 1024) return setError("Image must be under 2MB");
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/webp", "image/png"];
-    if (!allowedTypes.includes(file?.type))
-      return setError("Only JPG, PNG, or WEBP images are allowed");
     const formData = new FormData();
     formData.append("file", file);
     formData.append(
       "upload_preset",
       import.meta.env.VITE_CLOUDINARY_PRESET_NAME,
     );
-    setImageLoading(true);
-    setPreview(URL.createObjectURL(file));
 
+    setImageLoading(true);
     try {
-      const { data: cloudRes } = await axiosPublic.post(
-        `https://api.cloudinary.com/v1_1/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/image/upload`,
+      const { data } = await axiosPublic.post(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData,
-        {
-          onUploadProgress: (e) => {
-            const percent = Math.round((e.loaded * 100) / e.total);
-            setUploadPercent(percent);
-          },
-        },
       );
-      if (!cloudRes?.secure_url) return toast.error("Image Upload failed");
-      setPreview(cloudRes.secure_url);
+      setPreview(data.secure_url);
     } catch (err) {
-      //console.log(err);
-      setError(err.message);
+      toast.error("Image upload failed");
     } finally {
       setImageLoading(false);
     }
   };
 
-  const onsubmit = async ({ name, email, password }) => {
-    if (!preview) return toast.error(error);
-    setImageLoading(true);
+  const onRegister = async ({ name, email, password }) => {
+    if (!preview) return toast.warning("Please upload a profile picture");
     try {
-      const { user } = await createNewUser(email, password);
+      await createNewUser(email, password);
       await updateUserInfo(name, preview);
-      //console.log(user);
+
       const userInfo = {
-        email,
         name,
+        email,
         photoURL: preview,
         role: "user",
-        createdAt: new Date().toISOString(),
-        lastLoggedIn: new Date().toISOString(),
+        createdAt: new Date(),
       };
-      const { data } = await axiosPublic.post(`/users`, userInfo);
-      if (data?.exists) {
-        toast.info("Welcome Back !");
-      } else {
-        toast.success(`Welcome ${name} !`, {
-          autoClose: 1400,
-        });
-      }
+      await axiosPublic.post("/users", userInfo);
 
-      reset();
-      nav(from, { replace: true });
-      //console.log(data);
+      toast.success("Account Created!");
+      nav("/");
     } catch (err) {
-      //console.log(err);
-      setError(err?.message);
-    } finally {
-      setImageLoading(false);
+      toast.error(err.message);
     }
   };
 
   return (
-    <div>
-      <form
-        onSubmit={handleSubmit(onsubmit)}
-        className="card-body shadow-xl border rounded border-white/40"
-      >
-        <h2 className="text-2xl font-semibold ">Register Now ! ! </h2>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-4xl font-black italic tracking-tighter uppercase mb-2">
+          Sign Up
+        </h2>
+        <div className="h-1 w-12 bg-primary rounded-full" />
+      </div>
 
-        <fieldset className="fieldset">
-          <label htmlFor="name" className="label">
-            Name
+      <form onSubmit={handleSubmit(onRegister)} className="space-y-4">
+        {/* Profile Upload */}
+        <div className="flex justify-center mb-6">
+          <label className="relative group cursor-pointer">
+            <div className="w-24 h-24 rounded-3xl overflow-hidden bg-base-200 border-2 border-dashed border-primary/30 flex items-center justify-center ring-4 ring-base-100 shadow-xl">
+              {preview ? (
+                <img src={preview} className="w-full h-full object-cover" />
+              ) : (
+                <FaCamera className="text-2xl opacity-20" />
+              )}
+              {imageLoading && (
+                <div className="absolute inset-0 bg-base-100/80 flex items-center justify-center">
+                  <span className="loading loading-spinner text-primary" />
+                </div>
+              )}
+            </div>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="hidden"
+              accept="image/*"
+            />
+            <div className="absolute -bottom-2 -right-2 bg-primary text-white p-2 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+              <FaCamera size={12} />
+            </div>
           </label>
-          <input
-            id="name"
-            {...register("name", {
-              required: `Must fill name`,
-            })}
-            type="text"
-            className="input w-full"
-            placeholder="Name"
-          />
-          {errors?.name && (
-            <p className="text-red-600 font-semibold">
-              {errors?.name?.message}
-            </p>
-          )}
+        </div>
 
-          <label htmlFor="email" className="label">
-            Email
-          </label>
-          <input
-            id="email"
-            {...register("email", {
-              required: `Must fill email`,
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Enter valid Email",
-              },
-            })}
-            type="email"
-            className="input w-full"
-            placeholder="Email"
-          />
-          {errors?.email && (
-            <p className="text-red-600 font-semibold">
-              {errors?.email?.message}
-            </p>
-          )}
-
-          <div className="relative">
-            <label htmlFor="password" className="label">
-              Password
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase opacity-40 ml-4">
+              Full Name
             </label>
             <input
-              id="password"
+              {...register("name", { required: true })}
+              className="input input-bordered w-full rounded-2xl h-12"
+              placeholder="John Doe"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase opacity-40 ml-4">
+              Email
+            </label>
+            <input
+              {...register("email", { required: true })}
+              className="input input-bordered w-full rounded-2xl h-12"
+              placeholder="john@example.com"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-[10px] font-black uppercase opacity-40 ml-4">
+            Set Password
+          </label>
+          <div className="relative">
+            <input
               type={passType}
-              {...register("password", {
-                required: "Password must be filled",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-                validate: {
-                  hasLowercase: (value) =>
-                    /[a-z]/.test(value) ||
-                    "Must contain at least one lowercase letter",
-                  hasUppercase: (value) =>
-                    /[A-Z]/.test(value) ||
-                    "Must contain at least one uppercase letter",
-                  hasNumber: (value) =>
-                    /\d/.test(value) || "Must contain at least one number",
-                },
-              })}
-              className="input w-full"
-              placeholder="***Password"
+              {...register("password", { required: true, minLength: 6 })}
+              className="input input-bordered w-full rounded-2xl h-12 pr-12"
+              placeholder="••••••••"
             />
             <button
-              onClick={toggle}
               type="button"
-              className="btn btn-sm absolute right-3 bottom-1  btn-outline"
+              onClick={toggle}
+              className="absolute right-4 top-1/2 -translate-y-1/2 opacity-30"
             >
-              {show ? <FaEyeSlash /> : <FaEye></FaEye>}
+              {show ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
+        </div>
+
+        {/* Password Requirements UI */}
+        <AnimatePresence>
           {password.length > 0 && (
-            <ul className="text-sm mt-2">
-              <li
-                className={
-                  /[a-z]/.test(password) ? "text-green-500" : "text-gray-400"
-                }
-              >
-                At least one lowercase letter
-              </li>
-              <li
-                className={
-                  /[A-Z]/.test(password) ? "text-green-500" : "text-gray-400"
-                }
-              >
-                At least one uppercase letter
-              </li>
-              <li
-                className={
-                  /\d/.test(password) ? "text-green-500" : "text-gray-400"
-                }
-              >
-                At least one number
-              </li>
-              <li
-                className={
-                  password.length >= 6 ? "text-green-500" : "text-gray-400"
-                }
-              >
-                At least 6 characters
-              </li>
-            </ul>
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              className="grid grid-cols-2 gap-2 px-4 py-2 bg-base-200/50 rounded-2xl"
+            >
+              {[
+                { label: "6+ Char", met: password.length >= 6 },
+                { label: "Uppercase", met: /[A-Z]/.test(password) },
+                { label: "Lowercase", met: /[a-z]/.test(password) },
+                { label: "Number", met: /\d/.test(password) },
+              ].map((req, i) => (
+                <div
+                  key={i}
+                  className={`flex items-center gap-2 text-[10px] font-bold ${req.met ? "text-success" : "opacity-30"}`}
+                >
+                  <FaCheckCircle /> {req.label}
+                </div>
+              ))}
+            </motion.div>
           )}
+        </AnimatePresence>
 
-          {error && <p className="text-red-600 font-semibold">{error}</p>}
-
-          <fieldset className="fieldset">
-            <legend className="fieldset-legend">
-              {imageLoading ? "Uploading" : "Choose"} Profile Picture
-            </legend>
-            <input
-              accept="image/*"
-              disabled={imageLoading}
-              onChange={handleFileChange}
-              type="file"
-              className="file-input"
-            />
-            <label className="label">Max size 2MB</label>
-          </fieldset>
-
-          {imageLoading && (
-            <progress
-              className="progress progress-primary"
-              value={uploadPercent}
-              max="100"
-            />
-          )}
-
-          <button
-            disabled={isSubmitting || imageLoading || !preview}
-            className="btn btn-primary mt-4"
-          >
-            {isSubmitting ? "Creating Account" : "Signup"}
-          </button>
-        </fieldset>
-
-        <p>
-          Already have an Account,{" "}
-          <Link className="link link-primary" to="/login">
-            Login
-          </Link>
-        </p>
-      </form>
-      {preview && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          className="flex mt-6 justify-center pb-4"
+        <button
+          disabled={isSubmitting || imageLoading}
+          className="btn btn-primary w-full h-14 rounded-2xl text-lg font-black italic tracking-widest shadow-xl shadow-primary/20 mt-4"
         >
-          <img
-            src={preview}
-            alt="Preview"
-            className="w-24 h-24 rounded-lg object-cover border border-gray-200 shadow-md"
-          />
-        </motion.div>
-      )}
-      <SocialLogin from="/"></SocialLogin>
+          {isSubmitting ? "CREATING..." : "START JOURNEY"}
+        </button>
+      </form>
+
+      <p className="text-center text-sm font-medium opacity-60">
+        Already have an account?{" "}
+        <Link
+          to="/login"
+          className="text-primary font-black hover:underline italic"
+        >
+          Sign In
+        </Link>
+      </p>
     </div>
   );
 };
