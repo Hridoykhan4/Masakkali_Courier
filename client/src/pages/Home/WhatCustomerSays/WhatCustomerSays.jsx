@@ -75,7 +75,7 @@ const WhatCustomerSays = () => {
           
           <h2 className="text-5xl md:text-7xl font-black text-base-content tracking-tight italic leading-[0.9] mb-8">
             TRUSTED BY <br />
-            <span className="text-outline-sm text-transparent">LOGISTICS </span> 
+            <span className="text-outline-sm text-secondary">LOGISTICS </span> 
             EXPERTS
           </h2>
           

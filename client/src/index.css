@@ -1,6 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
+@theme {
+  /* Fixes the "unknown utility" error by mapping the variable to the font family */
+  --font-urbanist: "Urbanist", sans-serif;
+  
+  /* Smooth transitions for theme switching */
+  --transition-delay-theme: 300ms;
+}
+
 @plugin "daisyui" {
   themes: light --default, dark;
 }
@@ -10,15 +18,15 @@
 */
 @plugin "daisyui/theme" {
   name: "light";
-  --color-primary: #0f172a;          /* Deep Navy */
-  --color-primary-content: #ffffff;  /* White text on Navy */
-  --color-secondary: #3b82f6;        /* Electric Blue */
+  --color-primary: #0f172a;           /* Deep Navy */
+  --color-primary-content: #ffffff;   /* White text on Navy */
+  --color-secondary: #3b82f6;         /* Electric Blue */
   --color-secondary-content: #ffffff;
-  --color-accent: #f59e0b;           /* Amber */
+  --color-accent: #f59e0b;            /* Amber */
   --color-accent-content: #ffffff;
   --color-neutral: #334155;
   --color-base-100: #ffffff;
-  --color-base-200: #f1f5f9;         /* Subtle elevation */
+  --color-base-200: #f1f5f9;          /* Subtle elevation */
   --color-base-300: #e2e8f0;
   --color-base-content: #0f172a;
 
@@ -31,15 +39,15 @@
 */
 @plugin "daisyui/theme" {
   name: "dark";
-  --color-primary: #38bdf8;          /* Sky Blue */
-  --color-primary-content: #020617;  /* Deep Navy text for contrast */
+  --color-primary: #38bdf8;           /* Sky Blue */
+  --color-primary-content: #020617;   /* Deep Navy text for contrast */
   --color-secondary: #60a5fa;
   --color-secondary-content: #020617;
   --color-accent: #fbbf24;
   --color-accent-content: #020617;
   --color-neutral: #1e293b;
-  --color-base-100: #020617;         /* True Dark */
-  --color-base-200: #0b1120;         /* Card Background */
+  --color-base-100: #020617;          /* True Dark */
+  --color-base-200: #0b1120;          /* Card Background */
   --color-base-300: #1e293b;
   --color-base-content: #f1f5f9;
 }
@@ -49,7 +57,7 @@
     overflow-y: scroll;
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
-    @apply font-urbanist;
+    font-family: var(--font-urbanist); /* Use the variable directly here */
   }
 
   body {
@@ -60,7 +68,7 @@
 
   /* CUSTOM SCROLLBAR (Matches Logistics Theme) */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
     @apply bg-base-200;
@@ -82,41 +90,49 @@
   }
 
   .section-spacing {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-10 md:py-16 lg:py-20;
   }
 
-  /* THE "IDENTITY" BUTTONS 
-     These use semantic variables to ensure readability 
-  */
+  /* THE "IDENTITY" BUTTONS */
   
-  /* Primary Action: Conversion/Money */
+  /* Primary Action: Conversion/Money (e.g., Send Parcel, Register) */
   .btn-main {
-    @apply btn rounded-2xl font-black italic uppercase tracking-[0.1em] transition-all duration-500 border-none;
+    @apply btn rounded-2xl font-black italic uppercase tracking-[0.1em] transition-all duration-500 border-none h-auto py-4;
     @apply bg-primary text-primary-content shadow-xl shadow-primary/20;
     @apply hover:scale-[1.03] hover:shadow-2xl hover:shadow-primary/30 active:scale-95;
   }
 
-  /* Secondary Action: Information/Navigation */
+  /* Secondary Action: Info/Rider Tasks (e.g., Be a Rider, View Details) */
   .btn-info {
-    @apply btn rounded-2xl font-bold tracking-tight transition-all duration-500 border-none;
+    @apply btn rounded-2xl font-bold tracking-tight transition-all duration-500 border-none h-auto py-4;
     @apply bg-secondary text-secondary-content shadow-lg shadow-secondary/15;
-    @apply hover:bg-secondary/90 hover:translate-y-[-2px] active:translate-y-0;
+    @apply hover:bg-secondary/90 hover:-translate-y-0.5 active:translate-y-0;
   }
 
   /* High-Alert/Attention: Tracking/Promos */
   .btn-highlight {
-    @apply btn rounded-2xl font-black italic uppercase transition-all duration-500 border-none;
+    @apply btn rounded-2xl font-black italic uppercase transition-all duration-500 border-none h-auto py-4;
     @apply bg-accent text-accent-content shadow-lg shadow-accent/20;
     @apply hover:brightness-110 hover:shadow-accent/40;
   }
 
-  /* GLASSMORPHISM CARD (For logistics status cards) */
+  /* GLASSMORPHISM CARD (For logistics status cards and modals) */
   .glass-card {
     @apply bg-base-100/60 backdrop-blur-xl border border-base-content/5 shadow-2xl;
   }
+
+  /* LOGISTICS SKELETON (For loading states) */
+  .skeleton-box {
+    @apply bg-base-300 animate-pulse rounded-2xl;
+  }
 }
 
-/* HELPER CLASS */
+/* Utilities */
 .font-urbanist {
-  font-family: "Urbanist", sans-serif;
+  font-family: var(--font-urbanist);
+}
+
+/* Typography Polish */
+h1, h2, h3, h4 {
+  @apply tracking-tighter;
 }

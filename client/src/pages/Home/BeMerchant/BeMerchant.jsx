@@ -1,76 +1,11 @@
 import merchantImg from "../../../assets/location-merchant.png";
 import beMerchantBg from "../../../assets/be-a-merchant-bg.png";
 import { motion as Motion } from "motion/react";
-import useUserRole from "../../../hooks/useUserRole";
-import useAuthValue from "../../../hooks/useAuthValue";
-import { Link } from "react-router";
-import {
-  FaHandshake,
-  FaMotorcycle,
-  FaArrowRight,
-  FaChartLine,
-  FaBoxOpen,
-} from "react-icons/fa";
+import ActionPortal from "../../../components/shared/ActionPortal";
+import { FaHandshake } from "react-icons/fa";
 
 const BeMerchant = () => {
-  const { role } = useUserRole();
-  const { user } = useAuthValue();
 
-  // 🚀 Logic to decide which "Semantic" buttons to show
-  const renderActions = () => {
-    // 1. Guest View (Conversion Focus)
-    if (!user) {
-      return (
-        <>
-          <Link to="/register" className="btn-main btn-lg px-10 gap-2">
-            Start Shipping <FaArrowRight />
-          </Link>
-          <Link
-            to="/login"
-            className="btn btn-lg rounded-2xl px-10 border-base-content/10 hover:bg-base-content/5 transition-all duration-300"
-          >
-            Login to Account
-          </Link>
-        </>
-      );
-    }
-
-    // 2. Admin View (Management Focus)
-    if (role === "admin") {
-      return (
-        <Link
-          to="/dashboard/activeRiders"
-          className="btn-main btn-lg px-10 gap-2"
-        >
-          Manage Fleet <FaChartLine />
-        </Link>
-      );
-    }
-
-    // 3. Rider View (Earnings/Operations Focus)
-    if (role === "rider") {
-      return (
-        <Link
-          to="/dashboard/pendingDeliveries"
-          className="btn-info btn-lg px-10 gap-2"
-        >
-          View Deliveries <FaMotorcycle />
-        </Link>
-      );
-    }
-
-    // 4. User/Merchant View (Action Focus)
-    return (
-      <div className="flex flex-wrap gap-4">
-        <Link to="/sendParcel" className="btn-main btn-lg px-10 gap-2">
-          Send a Parcel <FaBoxOpen />
-        </Link>
-        <Link to="/beARider" className="btn-info btn-lg px-10 gap-2">
-          <FaMotorcycle /> Earn as a Rider
-        </Link>
-      </div>
-    );
-  };
 
   return (
     <section className="section-spacing bg-base-100 transition-colors duration-500 overflow-hidden">
@@ -115,7 +50,7 @@ const BeMerchant = () => {
               </p>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                {renderActions()}
+                <ActionPortal variant="default" />
               </div>
             </div>
 
