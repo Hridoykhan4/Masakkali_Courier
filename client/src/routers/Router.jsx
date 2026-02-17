@@ -15,6 +15,7 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import ErrorLoadingState from "../components/ErrorLoadingState";
 
 // Helper: Standardized Loading Wrapper
+// eslint-disable-next-line no-unused-vars
 const Loadable = (Component) => (props) => (
   <Suspense fallback={<ErrorLoadingState isPending={true} />}>
     <Component {...props} />

@@ -12,12 +12,7 @@ const ActionPortal = ({ variant = "default" }) => {
   const { user } = useAuthValue();
   const { role } = useUserRole();
 
-  /**
-   * 📱 RESPONSIVE STRATEGY:
-   * 1. btn-md on mobile (48px height) -> btn-lg on desktop (64px height)
-   * 2. w-full on mobile -> w-auto on desktop
-   * 3. px-6 on mobile -> px-10 on desktop (prevents text overflow)
-   */
+  // utilizing your @layer components from index.css
   const sharedClasses =
     "btn-md md:btn-lg px-6 md:px-10 gap-2 w-full sm:w-auto justify-center flex items-center";
 
@@ -32,8 +27,8 @@ const ActionPortal = ({ variant = "default" }) => {
           to="/login"
           className={`btn rounded-2xl transition-all duration-300 ${sharedClasses} ${
             variant === "banner"
-              ? "text-white border-white/20 hover:bg-white/10 backdrop-blur-md"
-              : "text-base-content hover:bg-base-content/5 border-base-content/10 bg-transparent"
+              ? "bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-primary-content"
+              : "btn-ghost border-base-content/10"
           }`}
         >
           Login to Account

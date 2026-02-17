@@ -54,7 +54,7 @@ const StatBadge = ({ stat, statLabel, color }) => (
     >
       {stat}
     </span>
-    <span className="text-xs font-semibold uppercase tracking-widest text-white/40 leading-tight max-w-[80px]">
+    <span className="text-xs font-semibold uppercase tracking-widest  leading-tight max-w-[80px]">
       {statLabel}
     </span>
   </motion.div>

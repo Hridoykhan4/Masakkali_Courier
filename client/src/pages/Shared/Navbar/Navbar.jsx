@@ -18,7 +18,6 @@ const Navbar = ({ fromAuth }) => {
   const { role } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  // Handle scroll effect for premium glass look
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
