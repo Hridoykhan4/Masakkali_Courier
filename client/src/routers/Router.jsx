@@ -25,6 +25,9 @@ const Loadable = (Component) => (props) => (
 const Home = lazy(() => import("../pages/Home/Home/Home"));
 const Coverage = lazy(() => import("../pages/Coverage/Coverage"));
 const Login = lazy(() => import("../pages/Authentication/Login/Login"));
+const ForgetPassword = lazy(
+  () => import("../pages/Authentication/ForgetPassword/ForgetPassword"),
+);
 const Register = lazy(
   () => import("../pages/Authentication/Register/Register"),
 );
@@ -110,6 +113,10 @@ const Router = createBrowserRouter([
     children: [
       { path: "login", element: React.createElement(Loadable(Login)) },
       { path: "register", element: React.createElement(Loadable(Register)) },
+      {
+        path: "forgot-password",
+        element: React.createElement(Loadable(ForgetPassword)),
+      },
     ],
   },
   {

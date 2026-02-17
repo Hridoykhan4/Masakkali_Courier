@@ -18,7 +18,6 @@ const Navbar = ({ fromAuth }) => {
   const { role } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
   // Handle scroll effect for premium glass look
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -182,6 +181,7 @@ const Navbar = ({ fromAuth }) => {
                       src={
                         user?.photoURL || "https://i.ibb.co/mJR9Qxc/user.png"
                       }
+                      referrerPolicy="no-referrer"
                       alt="Profile"
                       className="w-9 h-9 rounded-full object-cover border-2 border-primary/20 group-hover:border-primary transition-colors"
                     />
@@ -264,6 +264,7 @@ const Navbar = ({ fromAuth }) => {
                   <div className="flex items-center gap-4 p-4 bg-base-200 rounded-2xl">
                     <img
                       src={user.photoURL}
+                      referrerPolicy="no-referrer"
                       className="w-12 h-12 rounded-full border-2 border-primary"
                       alt=""
                     />

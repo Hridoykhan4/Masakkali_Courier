@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import customerImg from "../../../assets/customer-top.png";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import { motion as Motion } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import reviewQuote from "../../../assets/reviewQuote.png";
 import { useEffect, useRef, useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaStar, FaQuoteLeft } from "react-icons/fa";
 
 const WhatCustomerSays = () => {
   const axiosPublic = useAxiosPublic();
@@ -12,15 +12,12 @@ const WhatCustomerSays = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
 
-
-const { data: reviews = [], isPending, isError } = useQuery({
-    queryKey: ["reviews-home"], 
+  const { data: reviews = [], isPending, isError } = useQuery({
+    queryKey: ["reviews-home"],
     queryFn: async () => {
       const { data } = await axiosPublic.get("/reviews");
       return Array.isArray(data) ? data : [];
     },
-    staleTime: 0, 
-    gcTime: 1000 * 60 * 5,
   });
 
   const scrollToSelector = (index) => {
@@ -47,108 +44,104 @@ const { data: reviews = [], isPending, isError } = useQuery({
 
   useEffect(() => {
     if (!sliderRef.current || !reviews?.length || isHovering) return;
-    const interval = setInterval(() => handleNext(), 5000);
+    const interval = setInterval(() => handleNext(), 6000);
     return () => clearInterval(interval);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reviews, isHovering, currentIndex,]);
+  }, [reviews, isHovering, currentIndex]);
 
-  if (isError) return (
-    <div className="py-20 text-center text-error font-medium animate-bounce">
-      ⚠️ Failed to sync community voices.
-    </div>
-  );
+  if (isError) return null;
 
   return (
-    <section className="bg-linear-to-b from-base-100 to-base-200/50 section-spacing overflow-hidden">
-      <div className="container-page">
-        {/* Header Section */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <Motion.img
-            initial={{ y: -20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            src={customerImg}
-            alt="Customers"
-            className="mb-6 w-40 drop-shadow-2xl"
-          />
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary">
-            Voice of Our Community
+    <section className="bg-base-100 section-spacing overflow-hidden relative">
+      {/* Subtle Background Text for Luxury Feel */}
+      <div className="absolute top-20 left-1/2 -translate-x-1/2 text-[15vw] font-black opacity-[0.02] whitespace-nowrap pointer-events-none select-none">
+        TESTIMONIALS
+      </div>
+
+      <div className="container-page relative z-10">
+        {/* Header Section: Sophisticated & High-Contrast */}
+        <div className="max-w-4xl mx-auto text-center mb-20">
+          <Motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 text-primary text-xs font-black tracking-[0.3em] uppercase mb-6 border border-primary/10"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Real Stories
+          </Motion.div>
+          
+          <h2 className="text-5xl md:text-7xl font-black text-base-content tracking-tight italic leading-[0.9] mb-8">
+            TRUSTED BY <br />
+            <span className="text-outline-sm text-transparent">LOGISTICS </span> 
+            EXPERTS
           </h2>
-          <div className="h-2 w-24 bg-primary rounded-full mb-8 shadow-lg shadow-primary/20"></div>
-          <p className="max-w-2xl text-base-content/70 text-lg font-medium">
-            Discover why thousands of merchants trust Masakkali for their daily logistics.
+          
+          <p className="text-xl text-base-content/50 font-medium max-w-xl mx-auto leading-relaxed">
+            The backbone of Masakkali isn't our fleet, it's the 
+            <span className="text-base-content font-bold italic"> merchant success stories </span> 
+            we build every single day.
           </p>
         </div>
 
-        {/* Slider Section */}
+        {/* Slider Wrapper */}
         <div 
-          className="relative group px-4 md:px-0"
+          className="relative max-w-5xl mx-auto"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          {/* Custom Nav Buttons */}
-          <div className="hidden md:block">
-            <button onClick={handlePrev} className="absolute -left-16 top-1/2 -translate-y-1/2 btn btn-circle btn-lg border-none bg-base-100 shadow-2xl hover:bg-primary hover:text-white transition-all duration-500 z-20">
-              <FaChevronLeft size={24} />
+          {/* Minimalist Side Nav */}
+          <div className="absolute -inset-x-20 top-1/2 -translate-y-1/2 hidden lg:flex justify-between pointer-events-none">
+            <button onClick={handlePrev} className="pointer-events-auto p-4 text-base-content/20 hover:text-primary transition-colors">
+              <FaChevronLeft size={40} strokeWidth={1} />
             </button>
-            <button onClick={handleNext} className="absolute -right-16 top-1/2 -translate-y-1/2 btn btn-circle btn-lg border-none bg-base-100 shadow-2xl hover:bg-primary hover:text-white transition-all duration-500 z-20">
-              <FaChevronRight size={24} />
+            <button onClick={handleNext} className="pointer-events-auto p-4 text-base-content/20 hover:text-primary transition-colors">
+              <FaChevronRight size={40} strokeWidth={1} />
             </button>
           </div>
 
           <div
             ref={sliderRef}
-            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-6"
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
           >
             {isPending ? (
-              /* Skeleton Loader for 10X Feel */
-              [...Array(1)].map((_, i) => (
-                <div key={i} className="min-w-full h-100 bg-base-300 animate-pulse rounded-[3rem]"></div>
-              ))
+               <div className="min-w-full h-80 bg-base-200 animate-pulse rounded-[3rem]" />
             ) : (
-              (reviews || []).map((item) => (
-                <div key={item._id} className="snap-center min-w-full py-4">
-                  <div className="bg-base-100 border border-base-300/30 p-8 md:p-16 rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] relative overflow-hidden group/card hover:shadow-primary/10 transition-shadow duration-700">
+              reviews.map((item) => (
+                <div key={item._id} className="snap-center min-w-full px-4">
+                  <div className="bg-base-200/40 border border-base-content/5 p-10 md:p-20 rounded-[4rem] relative group/card transition-all duration-500 hover:bg-base-200/60">
                     
-                    {/* Background Accent */}
-                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl group-hover/card:bg-primary/10 transition-colors"></div>
+                    <FaQuoteLeft className="text-6xl text-primary/10 absolute top-12 left-12" />
 
-                    <img src={reviewQuote} className="absolute top-10 right-12 w-20 opacity-10 pointer-events-none" alt="Quote" />
-
-                    {/* Ratings with fixed key mapping */}
-                    <div className="flex gap-1.5 text-warning mb-8">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar
-                          key={i}
-                          size={22}
-                          fill={i < Math.floor(item.ratings || 5) ? "currentColor" : "none"}
-                          className="drop-shadow-sm stroke-current"
-                        />
-                      ))}
-                    </div>
-
-                    <blockquote className="text-2xl md:text-4xl font-semibold leading-snug italic text-base-content tracking-tight mb-12">
-                      “{item?.review}”
-                    </blockquote>
-
-                    <div className="flex items-center gap-6 pt-10 border-t border-base-200">
-                      <div className="avatar">
-                        <div className="w-16 md:w-20 rounded-2xl rotate-3 group-hover/card:rotate-0 transition-transform duration-500 ring-4 ring-primary/10">
-                          <img src={item?.user_photoURL || "https://i.ibb.co/mJR9Qxc/user.png"} alt={item?.userName} />
-                        </div>
+                    <div className="relative z-10">
+                      <div className="flex gap-1 text-primary mb-10">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar key={i} size={18} fill={i < Math.floor(item.ratings || 5) ? "currentColor" : "none"} className="stroke-current" />
+                        ))}
                       </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl md:text-2xl font-black text-base-content mb-1">
-                          {item?.userName}
-                        </h4>
-                        <div className="flex items-center gap-2">
-                          <span className="bg-primary badge-sm font-bold uppercase tracking-tighter rounded-xl text-center px-3 py-2">Verified Merchant</span>
+
+                      <blockquote className="text-2xl md:text-4xl font-bold leading-tight text-base-content tracking-tight mb-16 italic">
+                        “{item?.review}”
+                      </blockquote>
+
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 pt-10 border-t border-base-content/5">
+                        <div className="flex items-center gap-5">
+                          <img 
+                            src={item?.user_photoURL || "https://i.ibb.co/mJR9Qxc/user.png"} 
+                            className="w-16 h-16 rounded-2xl object-cover grayscale group-hover/card:grayscale-0 transition-all duration-500 shadow-xl"
+                            alt={item?.userName} 
+                          />
+                          <div>
+                            <h4 className="text-xl font-black uppercase italic leading-none">{item?.userName}</h4>
+                            <span className="text-[10px] font-black tracking-widest text-primary uppercase">Verified Merchant</span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="hidden sm:block text-right">
-                        <p className="text-xs font-bold text-base-content/30 uppercase tracking-[0.2em]">Registered</p>
-                        <p className="font-bold text-base-content/60">
-                          {new Date(item?.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                        </p>
+                        
+                        <div className="px-6 py-2 rounded-full bg-base-content/5 text-[10px] font-black uppercase tracking-widest opacity-40 self-start md:self-auto">
+                          Partner since {new Date(item?.date).getFullYear()}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -157,22 +150,22 @@ const { data: reviews = [], isPending, isError } = useQuery({
             )}
           </div>
 
-          {/* Luxury Navigation Dots */}
-          <div className="flex justify-center gap-3 mt-12">
+          {/* Luxury Dot Progress */}
+          <div className="flex justify-center gap-4 mt-16">
             {reviews.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => scrollToSelector(idx)}
-                className={`transition-all duration-500 rounded-full ${
-                  currentIndex === idx ? "w-12 bg-primary shadow-lg shadow-primary/40" : "w-3 bg-base-300 hover:bg-base-content/20"
-                } h-3`}
+                className={`h-1 transition-all duration-700 rounded-full ${
+                  currentIndex === idx ? "w-16 bg-primary" : "w-4 bg-base-content/10"
+                }`}
               />
             ))}
           </div>
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `.no-scrollbar::-webkit-scrollbar { display: none; }` }} />
+      <style>{`.no-scrollbar::-webkit-scrollbar { display: none; } .text-outline-sm { -webkit-text-stroke: 1px currentColor; }`}</style>
     </section>
   );
 };
