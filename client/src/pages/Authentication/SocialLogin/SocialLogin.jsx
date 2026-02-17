@@ -3,6 +3,7 @@ import useAuthValue from "../../../hooks/useAuthValue";
 import { useNavigate } from "react-router";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useState } from "react";
+import { FaGoogle } from "react-icons/fa";
 
 const SocialLogin = ({ from }) => {
   const { loginByGoogle } = useAuthValue();
@@ -10,6 +11,7 @@ const SocialLogin = ({ from }) => {
 
   const nav = useNavigate();
   const axiosPublic = useAxiosPublic();
+
   const handleGoogleSignin = async () => {
     if (loading) return;
     setLoading(true);
@@ -24,53 +26,49 @@ const SocialLogin = ({ from }) => {
         lastLoggedIn: new Date().toISOString(),
       };
       await axiosPublic.post("/users", userInfo);
-      toast.success("Logged in successfully!");
+      toast.success("Identity Verified");
       nav(from, { replace: true });
     } catch (err) {
-      //console.log(err);
-      toast.error("Google login failed. Please try again.");
+      toast.error("Authentication Failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="text-center">
-      <div className="divider">OR</div>
+    <div className="w-full pt-2">
       <button
-        aria-label="Login with Google"
         onClick={handleGoogleSignin}
-        className="btn btn-secondary text-neutral border-[#e5e5e5]"
+        disabled={loading}
+        className="group relative w-full h-14 flex items-center justify-center gap-4 
+                   bg-base-200 hover:bg-base-300 
+                   text-base-content border border-base-content/10 
+                   rounded-2xl transition-all duration-300 
+                   hover:border-primary/40 active:scale-[0.98]"
       >
-        <svg
-          aria-label="Google logo"
-          width="16"
-          height="16"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
-        >
-          <g>
-            <path d="m0 0H512V512H0" fill="#fff"></path>
-            <path
-              fill="#34a853"
-              d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
-            ></path>
-            <path
-              fill="#4285f4"
-              d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
-            ></path>
-            <path
-              fill="#fbbc02"
-              d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
-            ></path>
-            <path
-              fill="#ea4335"
-              d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
-            ></path>
-          </g>
-        </svg>
-        {loading ? "Signing in..." : "Login with Google"}
+        {/* Subtle Inner Glow - Adaptive to Theme */}
+        <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+
+        <div className="relative flex items-center gap-3">
+          <FaGoogle
+            className={`text-lg transition-transform duration-500 ${loading ? "animate-spin" : "group-hover:rotate-[12deg]"}`}
+          />
+          <span className="text-xs font-black italic tracking-[0.2em] uppercase">
+            {loading ? "Authenticating..." : "Continue with Google"}
+          </span>
+        </div>
+
+        {/* Minimalist Accents */}
+        <div className="absolute top-3 right-4 w-1 h-1 rounded-full bg-primary/20 group-hover:bg-primary transition-colors" />
       </button>
+
+      <div className="mt-6 flex items-center gap-4 opacity-20">
+        <div className="h-[1px] grow bg-current" />
+        <span className="text-[9px] font-bold uppercase tracking-widest">
+          Secure Gateway
+        </span>
+        <div className="h-[1px] grow bg-current" />
+      </div>
     </div>
   );
 };

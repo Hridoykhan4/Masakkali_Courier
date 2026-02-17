@@ -983,5 +983,5 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Bistro is running on PORT: ${port}`);
+  console.log(`Masakkali is flying on PORT: ${port}`);
 });

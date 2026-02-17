@@ -1,7 +1,8 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import { Link } from "react-router";
+// 1. Stable light player import
+import lottieLight from "lottie-web/build/player/lottie_light";
 
-// Lazy load the player so it doesn't slow down the main bundle
 const Lottie = lazy(() => import("lottie-react"));
 
 const ErrorPage = () => {
@@ -17,22 +18,23 @@ const ErrorPage = () => {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-base-100 p-6 text-center">
       <div className="max-w-md w-full">
-        {/* Suspense handles the Lottie library loading state */}
         <Suspense
           fallback={
             <div className="h-72 flex items-center justify-center">
-              Loading Animation...
+              Loading...
             </div>
           }
         >
           {animationData ? (
             <Lottie
               animationData={animationData}
+              // 2. Pass the light engine here to stop the 'Activity' error
+              lottieObj={lottieLight}
               loop={true}
               className="h-72 w-full mx-auto"
             />
           ) : (
-            <div className="h-72" /> // Spacer while JSON is fetching
+            <div className="h-72" />
           )}
         </Suspense>
 

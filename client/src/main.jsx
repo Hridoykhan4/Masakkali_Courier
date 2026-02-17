@@ -1,4 +1,5 @@
-import { StrictMode, Suspense } from "react";
+// main.jsx
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,7 +8,6 @@ import Router from "./routers/Router.jsx";
 import AuthProvider from "./providers/AuthProvider.jsx";
 import ThemeProvider from "./providers/ThemeProvider.jsx";
 import "./index.css";
-import ErrorLoadingState from "./components/ErrorLoadingState.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,13 +27,8 @@ createRoot(document.getElementById("root")).render(
         <ThemeProvider>
           <ToastContainer position="top-center" autoClose={2000} />
           <div className="font-urbanist antialiased">
-            <Suspense
-              fallback={
-                <ErrorLoadingState isPending={true}></ErrorLoadingState>
-              }
-            >
-              <RouterProvider router={Router} />
-            </Suspense>
+            {/* Suspense is moved inside the Router elements for better UX */}
+            <RouterProvider router={Router} />
           </div>
         </ThemeProvider>
       </AuthProvider>
