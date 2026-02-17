@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaArrowRight,
   FaBoxOpen,
   FaMotorcycle,
   FaChartLine,
-  FaUserPlus,
 } from "react-icons/fa";
 import useAuthValue from "../../../hooks/useAuthValue";
 import useUserRole from "../../../hooks/useUserRole";
@@ -52,22 +50,19 @@ const Banner = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 🚀 Logic to decide which "Boom" buttons to show
+  // 🚀 Logic to decide which "Semantic" buttons to show
   const renderActions = () => {
     if (!user) {
       return (
         <>
-          <Link
-            to="/login"
-            className="btn btn-primary btn-lg px-8 rounded-2xl gap-3 shadow-xl shadow-primary/20"
-          >
-            Get Started <FaArrowRight />
+          <Link to="/register" className="btn-main btn-lg px-10 gap-2">
+            Start Shipping <FaArrowRight />
           </Link>
           <Link
-            to="/register"
-            className="btn btn-outline btn-lg px-8 rounded-2xl border-white/30 text-white hover:bg-white hover:text-black backdrop-blur-md"
+            to="/login"
+            className="btn btn-lg rounded-2xl px-10 border-white/20 text-white hover:bg-white/10 backdrop-blur-md transition-all duration-300"
           >
-            Join Masakkali <FaUserPlus />
+            Login to Account
           </Link>
         </>
       );
@@ -76,10 +71,10 @@ const Banner = () => {
     if (role === "admin") {
       return (
         <Link
-          to="/dashboard"
-          className="btn btn-error btn-lg px-10 rounded-2xl gap-3 text-white shadow-xl shadow-error/20"
+          to="/dashboard/activeRiders"
+          className="btn-main btn-lg px-10 gap-2"
         >
-          Admin Console <FaChartLine />
+          Manage Fleet <FaChartLine />
         </Link>
       );
     }
@@ -87,21 +82,23 @@ const Banner = () => {
     if (role === "rider") {
       return (
         <Link
-          to="/dashboard"
-          className="btn btn-info btn-lg px-10 rounded-2xl gap-3 text-white shadow-xl shadow-info/20"
+          to="/dashboard/pendingDeliveries"
+          className="btn-info btn-lg px-10 gap-2"
         >
-          Current Deliveries <FaMotorcycle />
+          View Deliveries <FaMotorcycle />
         </Link>
       );
     }
 
     return (
-      <Link
-        to="/sendParcel"
-        className="btn btn-primary btn-lg px-10 rounded-2xl gap-3 shadow-xl shadow-primary/20"
-      >
-        Send a Parcel <FaBoxOpen />
-      </Link>
+      <div className="flex flex-wrap gap-4">
+        <Link to="/sendParcel" className="btn-main btn-lg px-10 gap-2">
+          Send a Parcel <FaBoxOpen />
+        </Link>
+        <Link to="/beARider" className="btn-info btn-lg px-10 gap-2">
+          <FaMotorcycle /> Earn as a Rider
+        </Link>
+      </div>
     );
   };
 
@@ -123,7 +120,8 @@ const Banner = () => {
               alt="Banner"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/40 to-transparent" />
+            {/* Professional Gradient Overlay for Text Readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
           </motion.div>
         </AnimatePresence>
       </div>
@@ -135,17 +133,17 @@ const Banner = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.8 }}
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 30 }}
+                transition={{ duration: 0.8, ease: "circOut" }}
                 className="space-y-6"
               >
                 <span className="inline-block px-5 py-2 rounded-full bg-white/10 border border-white/20 text-primary text-[11px] font-black uppercase tracking-[0.5em] backdrop-blur-xl">
                   {slides[index].accent}
                 </span>
 
-                <h1 className="text-5xl md:text-8xl font-black text-white leading-none tracking-tight whitespace-pre-line">
+                <h1 className="text-5xl md:text-8xl font-black text-white leading-[1.1] tracking-tight whitespace-pre-line">
                   {slides[index].title}
                 </h1>
 
@@ -155,11 +153,11 @@ const Banner = () => {
               </motion.div>
             </AnimatePresence>
 
-            {/* PERSISTENT ACTION PORTAL (Outside Text AnimatePresence for stability) */}
+            {/* PERSISTENT ACTION PORTAL */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
               className="flex flex-wrap items-center gap-4 pt-4"
             >
               {renderActions()}
@@ -176,9 +174,9 @@ const Banner = () => {
               <button
                 key={i}
                 onClick={() => setIndex(i)}
-                className="group flex flex-col gap-3"
+                className="group flex flex-col gap-3 text-left"
               >
-                <div className="relative w-16 h-1 bg-white/10 overflow-hidden rounded-full">
+                <div className="relative w-16 md:w-24 h-1 bg-white/10 overflow-hidden rounded-full">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: index === i ? "100%" : "0%" }}
@@ -186,11 +184,13 @@ const Banner = () => {
                       duration: index === i ? 8 : 0.5,
                       ease: "linear",
                     }}
-                    className="absolute inset-0 bg-primary shadow-[0_0_15px_rgba(var(--p),0.5)]"
+                    className="absolute inset-0 bg-primary"
                   />
                 </div>
                 <span
-                  className={`text-[10px] font-black tracking-widest transition-all duration-300 ${index === i ? "text-primary" : "text-white/20"}`}
+                  className={`text-[10px] font-black tracking-widest transition-all duration-300 ${
+                    index === i ? "text-primary" : "text-white/20"
+                  }`}
                 >
                   0{i + 1}
                 </span>
@@ -198,11 +198,10 @@ const Banner = () => {
             ))}
           </div>
 
-          {/* Social / Scroll indicator */}
           <div className="hidden lg:flex items-center gap-4">
             <div className="h-px w-20 bg-white/20" />
             <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">
-              Moving Fast Since 2024
+              Est. 2024 • Global Logistics
             </span>
           </div>
         </div>

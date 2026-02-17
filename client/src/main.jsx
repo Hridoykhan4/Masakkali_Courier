@@ -25,9 +25,14 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ThemeProvider>
-          <ToastContainer position="top-center" autoClose={2000} />
+          <ToastContainer
+            position="top-left"
+            autoClose={2000}
+            limit={3}
+            theme="auto"
+            stacked
+          />
           <div className="font-urbanist antialiased">
-            {/* Suspense is moved inside the Router elements for better UX */}
             <RouterProvider router={Router} />
           </div>
         </ThemeProvider>

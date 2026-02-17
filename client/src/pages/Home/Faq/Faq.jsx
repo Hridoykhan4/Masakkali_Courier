@@ -1,5 +1,4 @@
 import { useState } from "react";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaPlus,
@@ -71,12 +70,18 @@ const FaqItem = ({ faq, isOpen, toggle }) => {
         className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
       >
         <span
-          className={`text-base md:text-lg font-black tracking-tight transition-colors ${isOpen ? "text-primary" : "text-base-content"}`}
+          className={`text-base md:text-lg font-black tracking-tight transition-colors ${
+            isOpen ? "text-primary" : "text-base-content"
+          }`}
         >
           {faq.title}
         </span>
         <div
-          className={`shrink-0 ml-4 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? "bg-primary text-white rotate-180" : "bg-base-content/5 text-base-content/30"}`}
+          className={`shrink-0 ml-4 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 ${
+            isOpen
+              ? "bg-primary text-primary-content rotate-180"
+              : "bg-base-content/5 text-base-content/30"
+          }`}
         >
           {isOpen ? <FaMinus size={12} /> : <FaPlus size={12} />}
         </div>
@@ -108,7 +113,7 @@ const Faq = () => {
 
   return (
     <section className="section-spacing relative overflow-hidden bg-base-100">
-      {/* Background Decorative Element */}
+      {/* Background Decor */}
       <div className="absolute top-0 right-0 w-150 h-150 bg-primary/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/3 z-0" />
 
       <div className="container-page relative z-10">
@@ -123,23 +128,22 @@ const Faq = () => {
               <FaShieldAlt /> 100% Secure Logistics
             </motion.div>
 
-            <motion.h2 className="text-5xl md:text-7xl font-black text-base-content leading-[0.9] tracking-tighter mb-8">
+            <h2 className="text-5xl md:text-7xl font-black text-base-content leading-[0.9] tracking-tighter mb-8">
               Frequently <br />
-              <span className="text-primary font-outline-2">
-                Asked Questions
-              </span>
-            </motion.h2>
+              <span className="text-primary">Asked Questions</span>
+            </h2>
 
-            <motion.p className="text-lg text-base-content/50 font-medium max-w-sm mb-10 leading-relaxed">
+            <p className="text-lg text-base-content/50 font-medium max-w-sm mb-10 leading-relaxed">
               Can't find what you're looking for? Our support team is available
               24/7.
-            </motion.p>
+            </p>
 
+            {/* Using btn-main for the high-level action */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setIsModalOpen(true)}
-              className="btn btn-primary btn-lg rounded-2xl px-10 gap-3 shadow-xl shadow-primary/20 border-none"
+              className="btn-main btn-lg px-10 gap-3"
             >
               <FaHeadset /> Contact Support
             </motion.button>
@@ -159,7 +163,7 @@ const Faq = () => {
         </div>
       </div>
 
-      {/* --- SMART MODAL --- */}
+      {/* --- SMART CONTACT MODAL --- */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
@@ -171,79 +175,78 @@ const Faq = () => {
               className="absolute inset-0 bg-base-100/60 backdrop-blur-xl"
             />
 
+            {/* Applied glass-card class here */}
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 30 }}
-              className="relative w-full max-w-lg bg-base-200 border border-base-content/10 p-8 md:p-12 rounded-[3.5rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.3)]"
+              className="relative w-full max-w-lg glass-card p-8 md:p-12 rounded-[3.5rem]"
             >
-              {/* ✨ POLISHED CLOSE BUTTON (RIGHT SIDE) */}
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-6 right-6 w-12 h-12 rounded-full flex items-center justify-center bg-base-100 border border-base-content/5 text-base-content/40 hover:text-primary hover:border-primary/50 hover:scale-110 transition-all active:scale-95 shadow-sm"
+                className="absolute top-6 right-6 w-12 h-12 rounded-full flex items-center justify-center bg-base-100 border border-base-content/5 text-base-content/40 hover:text-primary hover:border-primary/50 hover:scale-110 transition-all shadow-sm"
               >
                 <FaTimes size={18} />
               </button>
 
-              <div className="mb-10 pr-8">
+              <div className="mb-10">
                 <h3 className="text-4xl font-black mb-2 tracking-tight">
                   Hello,{" "}
                   <span className="text-primary">
                     {user?.displayName?.split(" ")[0] || "Friend"}!
                   </span>
                 </h3>
-                <p className="text-base-content/50 font-medium">
+                <p className="text-base-content/50 font-medium italic">
                   {role === "rider"
-                    ? "Having trouble with a route?"
+                    ? "Need help with your route?"
                     : "How can we assist your business today?"}
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="grid gap-4">
+                {/* Hotlines using btn-main/info logic */}
                 <a
                   href="tel:+880123456789"
-                  className="flex items-center gap-6 p-6 rounded-4xl bg-primary text-white hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+                  className="btn-main h-auto py-6 flex items-center justify-start gap-6 px-8 rounded-4xl"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
+                  <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl">
                     <FaPhoneAlt />
                   </div>
-                  <div>
-                    <p className="font-black text-xl">Instant Hotline</p>
-                    <p className="text-[10px] opacity-70 font-bold uppercase tracking-widest">
+                  <div className="text-left lowercase italic first-letter:uppercase">
+                    <p className="font-black text-xl">Hotline</p>
+                    <p className="text-[10px] opacity-70 tracking-widest uppercase">
                       Priority Support
                     </p>
                   </div>
                 </a>
 
+                {/* WhatsApp using btn-info (Blue) */}
                 <a
                   href="https://wa.me/880123456789"
-                  className="flex items-center gap-6 p-6 rounded-4xl bg-base-100 border border-base-content/5 hover:border-success/50 transition-all group"
+                  className="btn-info h-auto py-6 flex items-center justify-start gap-6 px-8 rounded-4xl"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-success/10 text-success flex items-center justify-center text-2xl group-hover:bg-success group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl">
                     <FaWhatsapp />
                   </div>
-                  <div>
-                    <p className="font-black text-xl text-base-content">
-                      WhatsApp
-                    </p>
-                    <p className="text-[10px] text-base-content/40 font-bold uppercase tracking-widest">
-                      Fast Chat
+                  <div className="text-left italic">
+                    <p className="font-black text-xl">WhatsApp</p>
+                    <p className="text-[10px] opacity-70 tracking-widest uppercase">
+                      Fast Response
                     </p>
                   </div>
                 </a>
 
+                {/* Email using standard interaction */}
                 <a
                   href="mailto:support@masakkali.com"
-                  className="flex items-center gap-6 p-6 rounded-4xl bg-base-100 border border-base-content/5 hover:border-info/50 transition-all group"
+                  className="btn btn-ghost border border-base-content/10 h-auto py-6 flex items-center justify-start gap-6 px-8 rounded-4xl group"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-info/10 text-info flex items-center justify-center text-2xl group-hover:bg-info group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-base-content/5 flex items-center justify-center text-xl group-hover:bg-primary group-hover:text-primary-content transition-colors">
                     <FaEnvelope />
                   </div>
-                  <div>
-                    <p className="font-black text-xl text-base-content">
-                      Email Us
-                    </p>
-                    <p className="text-[10px] text-base-content/40 font-bold uppercase tracking-widest">
+                  <div className="text-left italic">
+                    <p className="font-black text-xl">Email Us</p>
+                    <p className="text-[10px] opacity-40 tracking-widest uppercase">
                       Inquiries
                     </p>
                   </div>
