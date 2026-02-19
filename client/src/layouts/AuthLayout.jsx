@@ -12,26 +12,27 @@ const AuthLayout = () => {
   const isLogin = pathname.includes("login");
 
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col overflow-x-hidden selection:bg-primary selection:text-white">
-      <Navbar fromAuth={true} />
+    <div className="min-h-screen bg-base-200 flex flex-col selection:bg-primary selection:text-white">
+      <div className="sticky top-0 z-100">
+        <Navbar fromAuth={true} />
+      </div>
 
       <main className="flex-1 flex items-center justify-center p-4 md:p-10">
         <div className="w-full max-w-6xl bg-base-100 rounded-[3.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden border border-base-content/5 flex flex-col lg:flex-row">
-          {/* Animation Side: Dynamic Order & Smooth Transitions */}
           <motion.div
             key={isLogin ? "login-side" : "reg-side"}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`lg:w-1/2 p-12 flex flex-col justify-center items-center bg-primary/[0.03] transition-colors duration-500 ${
+            className={`lg:w-1/2 p-12 flex flex-col justify-center items-center bg-primary/3 transition-colors duration-500 ${
               isLogin ? "lg:order-last" : "lg:order-first"
             }`}
           >
-            <div className="w-full max-w-[420px] relative">
+            <div className="w-full max-w-105 relative">
               {/* Decorative Glow */}
               <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full" />
 
               <Lottie
-                animationData={isLogin ? loginAnim : registerAnim} // Changed from path to animationData
+                animationData={isLogin ? loginAnim : registerAnim} 
                 className="relative z-10 w-full drop-shadow-[0_20px_20px_rgba(0,0,0,0.15)]"
                 loop={true}
               />
@@ -41,7 +42,7 @@ const AuthLayout = () => {
               <h1 className="text-4xl font-black italic tracking-tighter uppercase leading-none">
                 {isLogin ? "Welcome Back" : "Join the Fleet"}
               </h1>
-              <p className="text-sm font-medium opacity-50 max-w-[280px] mx-auto leading-relaxed">
+              <p className="text-sm font-medium opacity-50 max-w-70 mx-auto leading-relaxed">
                 {isLogin
                   ? "Your parcels are waiting. Log in to keep the gears turning."
                   : "Bangladesh's fastest delivery network is one click away."}

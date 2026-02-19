@@ -569,27 +569,7 @@ const Coverage = () => {
               <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-l from-base-200/40 to-transparent" />
             </div>
 
-            {/* Top-left: live badge */}
-            <div className="absolute top-4 left-4 z-20">
-              <div
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl backdrop-blur-md border border-white/10"
-                style={{
-                  background:
-                    "color-mix(in srgb, var(--color-base-100) 88%, transparent)",
-                }}
-              >
-                <Motion.span
-                  animate={{ opacity: [1, 0.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: color }}
-                />
-                <span className="text-[10px] font-black uppercase tracking-widest opacity-50">
-                  Interactive Map
-                </span>
-              </div>
-            </div>
-
+           
             {/* Top-right: zone count — updates with search */}
             <AnimatePresence mode="wait">
               <Motion.div
@@ -598,7 +578,7 @@ const Coverage = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -8, scale: 0.92 }}
                 transition={{ duration: 0.28 }}
-                className="absolute top-4 right-4 z-20"
+                className="absolute top-3 right-8 z-20"
               >
                 <div
                   className="flex items-center gap-2 px-3.5 py-2 rounded-xl backdrop-blur-md border font-black text-[11px]"

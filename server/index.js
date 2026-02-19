@@ -40,8 +40,6 @@ const client = new MongoClient(uri, {
   },
 });
 
-
-
 async function run() {
   try {
     const db = client.db("Masakkali");
@@ -296,7 +294,9 @@ async function run() {
 
         const riderIdString = rider._id.toString();
         console.log(riderIdString);
-        console.log(await parcelCollection.find({rider_id: riderIdString}).toArray());
+        console.log(
+          await parcelCollection.find({ rider_id: riderIdString }).toArray(),
+        );
         const deliveries = await parcelCollection
           .find({
             rider_id: riderIdString,
@@ -306,7 +306,7 @@ async function run() {
           })
           .sort({ delivered_at: -1 })
           .toArray();
-          console.log(deliveries);
+        console.log(deliveries);
         res.send({
           success: true,
           data: deliveries,
@@ -577,56 +577,60 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/admin/overview", async (req, res) => {
-      try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+   app.get("/admin/overview", async (req, res) => {
+     try {
+       const now = new Date();
+       // Create an ISO string for the start of today (e.g., "2026-02-19T00:00:00.000Z")
+       const todayStart = new Date(now.setUTCHours(0, 0, 0, 0)).toISOString();
 
-        const [
-          totalUsers,
-          totalRiders,
-          totalParcels,
-          deliveredToday,
-          revenueToday,
-        ] = await Promise.all([
-          userCollection.countDocuments(),
-          ridersCollection.countDocuments({ status: "approved" }),
-          parcelCollection.countDocuments(),
+       const [
+         totalUsers,
+         totalRiders,
+         totalParcels,
+         deliveredToday,
+         revenueToday,
+       ] = await Promise.all([
+         userCollection.countDocuments(),
+         ridersCollection.countDocuments({ status: "approved" }),
+         parcelCollection.countDocuments(),
 
-          parcelCollection.countDocuments({
-            delivery_status: "delivered",
-            delivered_at: { $gte: today },
-          }),
+         // Fix 1: Match String to String
+         parcelCollection.countDocuments({
+           delivery_status: "delivered",
+           delivered_at: { $gte: todayStart },
+         }),
 
-          parcelCollection
-            .aggregate([
-              {
-                $match: {
-                  payment_status: "paid",
-                  creation_date: { $gte: today },
-                },
-              },
-              {
-                $group: {
-                  _id: null,
-                  total: { $sum: "$cost" },
-                },
-              },
-            ])
-            .toArray(),
-        ]);
+         // Fix 2: Match String to String in Aggregate
+         parcelCollection
+           .aggregate([
+             {
+               $match: {
+                 payment_status: "paid",
+                 creation_date: { $gte: todayStart },
+               },
+             },
+             {
+               $group: {
+                 _id: null,
+                 total: { $sum: "$cost" },
+               },
+             },
+           ])
+           .toArray(),
+       ]);
 
-        res.send({
-          totalUsers,
-          totalRiders,
-          totalParcels,
-          deliveredToday,
-          revenueToday: revenueToday[0]?.total || 0,
-        });
-      } catch (err) {
-        res.status(500).send({ message: "Failed to load overview" });
-      }
-    });
+       res.send({
+         totalUsers,
+         totalRiders,
+         totalParcels,
+         deliveredToday,
+         revenueToday: revenueToday[0]?.total || 0,
+       });
+     } catch (err) {
+       console.error(err);
+       res.status(500).send({ message: "Failed to load overview" });
+     }
+   });
 
     /* AGGREGATE */
 
@@ -972,7 +976,7 @@ async function run() {
       res.send(await reviewCollection.find().toArray());
     });
 
-   /*  console.log(
+    /*  console.log(
       "Pinged your deployment. You successfully connected to MongoDB!",
     ); */
   } finally {
