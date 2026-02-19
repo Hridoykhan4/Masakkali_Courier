@@ -82,7 +82,7 @@ const MyParcels = () => {
             Track, manage, and pay for your deliveries across the Masakkali network in real-time.
           </p>
           <div className="mt-8 flex gap-3 relative z-10">
-            <Link to="/dashboard/send-parcel" className="btn btn-primary rounded-2xl px-8 font-black italic uppercase">
+            <Link to="/sendParcel" className="btn btn-primary rounded-2xl px-8 font-black italic uppercase">
               Send a Parcel
             </Link>
           </div>

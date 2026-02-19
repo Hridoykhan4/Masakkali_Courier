@@ -29,7 +29,6 @@ createRoot(document.getElementById("root")).render(
             position="top-left"
             autoClose={2000}
             limit={3}
-            theme="auto"
             stacked
           />
           <div className="font-urbanist antialiased">
