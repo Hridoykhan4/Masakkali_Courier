@@ -292,8 +292,11 @@ async function run() {
           return res.status(404).send({ message: "Rider not found" });
         }
 
-        const riderIdString = rider._id.toString();
+        console.log(rider);
 
+        const riderIdString = rider._id.toString();
+        console.log(riderIdString);
+        console.log(await parcelCollection.find({rider_id: riderIdString}).toArray());
         const deliveries = await parcelCollection
           .find({
             rider_id: riderIdString,
@@ -303,7 +306,7 @@ async function run() {
           })
           .sort({ delivered_at: -1 })
           .toArray();
-
+          console.log(deliveries);
         res.send({
           success: true,
           data: deliveries,

@@ -29,6 +29,8 @@ const CompletedDeliveries = () => {
     },
   });
 
+
+
   const { mutate: cashoutParcel, isPending } = useMutation({
     mutationFn: async (parcelId) => {
       const res = await axiosSecure.patch(`/parcels/${parcelId}/cashout`);
@@ -93,7 +95,13 @@ const CompletedDeliveries = () => {
       </div>
     );
 
-  const totalEarning = deliveries.reduce((sum, d) => sum + (d.earning || 0), 0);
+ const totalEarning = deliveries.reduce((sum, d) => {
+  // Defensive check: Ensure we handle cases where earning might be a string or undefined
+  const amount = typeof d.earning === 'number' ? d.earning : parseFloat(d.earning || 0);
+  return sum + amount;
+}, 0);
+
+console.log(totalEarning);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-12">
