@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import usePasswordToggle from "../../../hooks/usePasswordToggle";
 import useAuthValue from "../../../hooks/useAuthValue";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import useTheme from "../../../hooks/useTheme";
 
 const Login = () => {
   const { signInUser } = useAuthValue();
+  const {theme} = useTheme()
   const { show, toggle, type: passType } = usePasswordToggle();
   const nav = useNavigate();
   const location = useLocation();
@@ -23,7 +25,9 @@ const Login = () => {
     try {
       const { user } = await signInUser(email, password);
       nav(from, { replace: true });
-      toast.success(`Welcome back, ${user?.displayName || "User"}!`);
+      toast.success(`Welcome back, ${user?.displayName || "User"}!`, {
+         theme: theme === "light" ? "light" : "dark",
+      });
     } catch (err) {
       toast.error(
         err?.code === "auth/invalid-credential"

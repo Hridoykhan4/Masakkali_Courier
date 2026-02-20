@@ -28,6 +28,7 @@ const Navbar = ({ fromAuth }) => {
     const links = [
       { label: "Home", to: "/" },
       { label: "Coverage", to: "/coverage" },
+      { label: "About", to: "/about" },
     ];
     if (role === "user") {
       links.push(
@@ -55,7 +56,6 @@ const Navbar = ({ fromAuth }) => {
       ({ closeToast }) => (
         <div className="flex flex-col gap-3 p-1">
           <div className="flex items-center gap-2">
-            {/* Using DaisyUI classes ensures theme compliance */}
             <div className="p-2 bg-error/20 rounded-full text-error">
               <FaSignOutAlt size={14} />
             </div>
@@ -88,7 +88,7 @@ const Navbar = ({ fromAuth }) => {
       {
         position: "top-center",
         autoClose: false,
-        theme: theme === "dark" ? "dark" : "light", // CRITICAL FIX
+        theme: theme === "dark" ? "dark" : "light",
         className:
           "border border-base-content/10 shadow-2xl rounded-2xl backdrop-blur-md bg-base-100/90",
         icon: false,
@@ -116,7 +116,7 @@ const Navbar = ({ fromAuth }) => {
 
   return (
     <nav
-      className={`sticky top-0 z-100  w-full transition-all duration-500 ${
+      className={`sticky top-0 z-100 w-full transition-all duration-500 ${
         scrolled
           ? "bg-base-100/70 backdrop-blur-xl border-b border-base-content/5 py-2"
           : "bg-transparent py-4"
