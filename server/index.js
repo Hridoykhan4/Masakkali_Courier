@@ -577,60 +577,83 @@ async function run() {
       res.send(result);
     });
 
-   app.get("/admin/overview", async (req, res) => {
-     try {
-       const now = new Date();
-       // Create an ISO string for the start of today (e.g., "2026-02-19T00:00:00.000Z")
-       const todayStart = new Date(now.setUTCHours(0, 0, 0, 0)).toISOString();
+app.get("/admin/overview", async (req, res) => {
+  try {
+    // 1. Get the start and end of "Today" in Bangladesh Time
+    const now = new Date();
 
-       const [
-         totalUsers,
-         totalRiders,
-         totalParcels,
-         deliveredToday,
-         revenueToday,
-       ] = await Promise.all([
-         userCollection.countDocuments(),
-         ridersCollection.countDocuments({ status: "approved" }),
-         parcelCollection.countDocuments(),
+    // Create a date object set to 00:00:00 in BD time
+    const startOfToday = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
+    );
+    startOfToday.setHours(0, 0, 0, 0);
 
-         // Fix 1: Match String to String
-         parcelCollection.countDocuments({
-           delivery_status: "delivered",
-           delivered_at: { $gte: todayStart },
-         }),
+    const endOfToday = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
+    );
+    endOfToday.setHours(23, 59, 59, 999);
 
-         // Fix 2: Match String to String in Aggregate
-         parcelCollection
-           .aggregate([
-             {
-               $match: {
-                 payment_status: "paid",
-                 creation_date: { $gte: todayStart },
-               },
-             },
-             {
-               $group: {
-                 _id: null,
-                 total: { $sum: "$cost" },
-               },
-             },
-           ])
-           .toArray(),
-       ]);
+    // 2. For the String fields (creation_date), we still need the YYYY-MM-DD string
+    const bdDateStr = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Dhaka",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(now);
 
-       res.send({
-         totalUsers,
-         totalRiders,
-         totalParcels,
-         deliveredToday,
-         revenueToday: revenueToday[0]?.total || 0,
-       });
-     } catch (err) {
-       console.error(err);
-       res.status(500).send({ message: "Failed to load overview" });
-     }
-   });
+    const todayRegex = new RegExp(`^${bdDateStr}`);
+
+    const [
+      totalUsers,
+      totalRiders,
+      totalParcels,
+      deliveredToday,
+      revenueToday,
+    ] = await Promise.all([
+      userCollection.countDocuments(),
+      ridersCollection.countDocuments({ status: "approved" }),
+      parcelCollection.countDocuments(),
+
+      // FIX: Use Date comparison for delivered_at because it is a Date Object
+      parcelCollection.countDocuments({
+        delivery_status: "delivered",
+        delivered_at: {
+          $gte: startOfToday,
+          $lte: endOfToday,
+        },
+      }),
+
+      // Keep Regex for creation_date because it is a String
+      parcelCollection
+        .aggregate([
+          {
+            $match: {
+              payment_status: "paid",
+              creation_date: { $regex: todayRegex },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: "$cost" },
+            },
+          },
+        ])
+        .toArray(),
+    ]);
+
+    res.send({
+      totalUsers,
+      totalRiders,
+      totalParcels,
+      deliveredToday,
+      revenueToday: revenueToday[0]?.total || 0,
+    });
+  } catch (err) {
+    console.error("Dashboard Error:", err);
+    res.status(500).send({ message: "Failed to load overview analytics" });
+  }
+});
 
     /* AGGREGATE */
 

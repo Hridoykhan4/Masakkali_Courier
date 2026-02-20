@@ -58,12 +58,20 @@
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
     font-family: var(--font-urbanist); /* Use the variable directly here */
+    max-width: 100%;
+  overflow-x: hidden;
+  /* Prevent 'pull-to-refresh' on mobile which can sometimes trigger horizontal shifts */
+  overscroll-behavior-x: none;
   }
 
   body {
     @apply bg-base-100 text-base-content transition-colors duration-300;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    max-width: 100%;
+  overflow-x: hidden;
+  /* Prevent 'pull-to-refresh' on mobile which can sometimes trigger horizontal shifts */
+  overscroll-behavior-x: none;
   }
 
   /* CUSTOM SCROLLBAR (Matches Logistics Theme) */

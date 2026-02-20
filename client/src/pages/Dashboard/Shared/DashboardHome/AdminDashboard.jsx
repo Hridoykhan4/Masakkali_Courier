@@ -214,6 +214,8 @@ const AdminDashboard = () => {
 
   if (isLoading) return <ErrorLoadingState isPending />;
 
+  console.log(overview);
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8 font-urbanist animate-in fade-in duration-500">
       {/* HEADER */}

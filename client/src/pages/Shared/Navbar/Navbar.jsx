@@ -116,7 +116,7 @@ const Navbar = ({ fromAuth }) => {
 
   return (
     <nav
-      className={`sticky top-0 z-100 w-full transition-all duration-500 ${
+      className={`sticky top-0 z-100  w-full transition-all duration-500 ${
         scrolled
           ? "bg-base-100/70 backdrop-blur-xl border-b border-base-content/5 py-2"
           : "bg-transparent py-4"
