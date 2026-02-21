@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from "react-router";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
 import Navbar from "../pages/Shared/Navbar/Navbar";
@@ -28,7 +29,6 @@ const AuthLayout = () => {
             }`}
           >
             <div className="w-full max-w-105 relative">
-              {/* Decorative Glow */}
               <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full" />
 
               <Lottie

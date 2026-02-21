@@ -3,7 +3,6 @@ import Banner from "../Banner/Banner";
 import HowItWorks from "../HowItWorks/HowItWorks";
 import ClientLogoMarquee from "../ClientLogoMarquee/ClientLogoMarquee";
 
-// Heavy sections lazy loaded automatically into their own chunks
 const OurServices = lazy(() => import("../Services/OurServices"));
 const Benefits = lazy(() => import("../Benefits/Benefits"));
 const BeMerchant = lazy(() => import("../BeMerchant/BeMerchant"));

@@ -13,6 +13,7 @@ import RiderRoute from "./RiderRoute";
 import UserRoute from "./UserRoute";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import ErrorLoadingState from "../components/ErrorLoadingState";
+import About from "../pages/About/About";
 
 // Helper: Standardized Loading Wrapper
 // eslint-disable-next-line no-unused-vars
@@ -22,7 +23,7 @@ const Loadable = (Component) => (props) => (
   </Suspense>
 );
 
-// --- Lazy Loaded Pages ---
+// --- Lazy Pages ---
 const Home = lazy(() => import("../pages/Home/Home/Home"));
 const Coverage = lazy(() => import("../pages/Coverage/Coverage"));
 const Login = lazy(() => import("../pages/Authentication/Login/Login"));
@@ -106,6 +107,10 @@ const Router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: 'about',
+        element: React.createElement(Loadable(About))
+      }
     ],
   },
   {

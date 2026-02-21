@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import ActionPortal from "../../../components/shared/ActionPortal";
 
@@ -54,13 +55,13 @@ const StatBadge = ({ stat, statLabel, color }) => (
     >
       {stat}
     </span>
-    <span className="text-xs font-semibold uppercase tracking-widest  leading-tight max-w-[80px]">
+    <span className="text-xs font-semibold uppercase tracking-widest  leading-tight max-w-20">
       {statLabel}
     </span>
   </motion.div>
 );
 
-// Animated grid lines for depth
+// Animated grid lines
 const GridLines = () => (
   <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
     {/* Vertical lines */}
