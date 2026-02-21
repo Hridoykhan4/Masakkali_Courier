@@ -156,7 +156,7 @@ const Navbar = ({ fromAuth }) => {
             </ul>
           )}
 
-          {/* --- Desktop Action Area --- */}
+          {/* --- Desktop Action --- */}
           <div className="flex items-center gap-4 border-l border-base-content/10 pl-6">
             <button
               onClick={toggleTheme}
@@ -181,7 +181,7 @@ const Navbar = ({ fromAuth }) => {
                         user?.photoURL || "https://i.ibb.co/mJR9Qxc/user.png"
                       }
                       referrerPolicy="no-referrer"
-                      alt="Profile"
+                      alt={user?.displayName}
                       className="w-9 h-9 rounded-full object-cover border-2 border-primary/20 group-hover:border-primary transition-colors"
                     />
                     <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
@@ -242,7 +242,6 @@ const Navbar = ({ fromAuth }) => {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -265,7 +264,7 @@ const Navbar = ({ fromAuth }) => {
                       src={user.photoURL}
                       referrerPolicy="no-referrer"
                       className="w-12 h-12 rounded-full border-2 border-primary"
-                      alt=""
+                      alt={user?.displayName}
                     />
                     <div>
                       <h4 className="font-bold truncate w-32">
@@ -307,7 +306,7 @@ const Navbar = ({ fromAuth }) => {
                 <div className="absolute bottom-10 left-6 right-6">
                   {user ? (
                     <button
-                      onClick={confirmLogout} // Trigger the confirmation toast
+                      onClick={confirmLogout} 
                       className="btn btn-error btn-block text-white rounded-xl shadow-lg shadow-error/20"
                     >
                       Logout
