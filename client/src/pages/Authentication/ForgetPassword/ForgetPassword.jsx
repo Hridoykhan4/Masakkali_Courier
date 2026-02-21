@@ -11,7 +11,6 @@ const ForgetPassword = () => {
   const handleReset = async (e) => {
     e.preventDefault();
     const email = e.target.email.value;
-    console.log(email);
     setLoading(true);
     try {
       await resetPassword(email);

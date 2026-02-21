@@ -4,11 +4,12 @@ import { useNavigate } from "react-router";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
+import useTheme from "../../../hooks/useTheme";
 
 const SocialLogin = ({ from }) => {
   const { loginByGoogle } = useAuthValue();
   const [loading, setLoading] = useState(false);
-
+  const {theme} = useTheme()
   const nav = useNavigate();
   const axiosPublic = useAxiosPublic();
 
@@ -26,9 +27,12 @@ const SocialLogin = ({ from }) => {
         lastLoggedIn: new Date().toISOString(),
       };
       await axiosPublic.post("/users", userInfo);
-      toast.success("Identity Verified");
+      toast.success(`Welcome ${user?.displayName || 'Sir !'}`, {
+         theme: theme === "light" ? "light" : "dark",
+      });
       nav(from, { replace: true });
     } catch (err) {
+      console.log(err);
       toast.error("Authentication Failed");
     } finally {
       setLoading(false);
@@ -51,7 +55,7 @@ const SocialLogin = ({ from }) => {
 
         <div className="relative flex items-center gap-3">
           <FaGoogle
-            className={`text-lg transition-transform duration-500 ${loading ? "animate-spin" : "group-hover:rotate-[12deg]"}`}
+            className={`text-lg transition-transform duration-500 ${loading ? "animate-spin" : "group-hover:rotate-12"}`}
           />
           <span className="text-xs font-black italic tracking-[0.2em] uppercase">
             {loading ? "Authenticating..." : "Continue with Google"}
@@ -63,11 +67,11 @@ const SocialLogin = ({ from }) => {
       </button>
 
       <div className="mt-6 flex items-center gap-4 opacity-20">
-        <div className="h-[1px] grow bg-current" />
+        <div className="h-px grow bg-current" />
         <span className="text-[9px] font-bold uppercase tracking-widest">
           Secure Gateway
         </span>
-        <div className="h-[1px] grow bg-current" />
+        <div className="h-px grow bg-current" />
       </div>
     </div>
   );
