@@ -12,7 +12,6 @@ const ActionPortal = ({ variant = "default" }) => {
   const { user } = useAuthValue();
   const { role } = useUserRole();
 
-  // utilizing your @layer components from index.css
   const sharedClasses =
     "btn-md md:btn-lg px-6 md:px-10 gap-2 w-full sm:w-auto justify-center flex items-center";
 

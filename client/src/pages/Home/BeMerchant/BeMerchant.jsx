@@ -5,8 +5,6 @@ import ActionPortal from "../../../components/shared/ActionPortal";
 import { FaHandshake } from "react-icons/fa";
 
 const BeMerchant = () => {
-
-
   return (
     <section className="section-spacing bg-base-100 transition-colors duration-500 overflow-hidden">
       <div className="container-page">
@@ -17,7 +15,7 @@ const BeMerchant = () => {
           viewport={{ once: true }}
           className="relative rounded-[2.5rem] glass-card overflow-hidden"
         >
-          {/* Background Mesh/Pattern Overlay */}
+          {/* Background Overlay */}
           <div
             className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.08] grayscale pointer-events-none"
             style={{
@@ -31,8 +29,9 @@ const BeMerchant = () => {
             {/* LEFT: TEXT CONTENT */}
             <div className="flex-1 text-center lg:text-left">
               <Motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.6 }}
                 whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.3em]"
               >
                 <FaHandshake className="text-sm" /> Masakkali Partnership
@@ -55,7 +54,7 @@ const BeMerchant = () => {
             </div>
 
             {/* RIGHT: IMAGE AREA */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative order-first lg:order-last">
               <Motion.div
                 animate={{ y: [0, -20, 0] }}
                 transition={{

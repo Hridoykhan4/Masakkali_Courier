@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import customerImg from "../../../assets/customer-top.png";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { motion as Motion, AnimatePresence } from "framer-motion";
-import reviewQuote from "../../../assets/reviewQuote.png";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaStar, FaQuoteLeft } from "react-icons/fa";
 
