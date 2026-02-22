@@ -162,7 +162,6 @@ const Register = () => {
           </div>
         </div>
 
-        {/* Password Requirements UI */}
         <AnimatePresence>
           {password.length > 0 && (
             <motion.div

@@ -32,7 +32,6 @@ const AuthLayout = () => {
           >
             <div className="w-full max-w-105 relative">
               <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full" />
-
               <Lottie
                 animationData={isLogin ? loginAnim : registerAnim}
                 className="relative z-10 w-full drop-shadow-[0_20px_20px_rgba(0,0,0,0.15)]"
