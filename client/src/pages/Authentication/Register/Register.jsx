@@ -10,9 +10,9 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
-import Lottie from "lottie-react";
 import useAuthValue from "../../../hooks/useAuthValue";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import usePasswordToggle from "../../../hooks/usePasswordToggle";
@@ -29,7 +29,7 @@ const Register = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm();
   const password = useWatch({ control, name: "password", defaultValue: "" });
 
@@ -52,6 +52,7 @@ const Register = () => {
       );
       setPreview(data.secure_url);
     } catch (err) {
+      console.log(err);
       toast.error("Image upload failed");
     } finally {
       setImageLoading(false);

@@ -9,7 +9,7 @@ import useTheme from "../../../hooks/useTheme";
 const SocialLogin = ({ from }) => {
   const { loginByGoogle } = useAuthValue();
   const [loading, setLoading] = useState(false);
-  const {theme} = useTheme()
+  const { theme } = useTheme();
   const nav = useNavigate();
   const axiosPublic = useAxiosPublic();
 
@@ -27,8 +27,8 @@ const SocialLogin = ({ from }) => {
         lastLoggedIn: new Date().toISOString(),
       };
       await axiosPublic.post("/users", userInfo);
-      toast.success(`Welcome ${user?.displayName || 'Sir !'}`, {
-         theme: theme === "light" ? "light" : "dark",
+      toast.success(`Welcome ${user?.displayName || "Sir !"}`, {
+        theme: theme === "light" ? "light" : "dark",
       });
       nav(from, { replace: true });
     } catch (err) {
@@ -50,7 +50,6 @@ const SocialLogin = ({ from }) => {
                    rounded-2xl transition-all duration-300 
                    hover:border-primary/40 active:scale-[0.98]"
       >
-        {/* Subtle Inner Glow - Adaptive to Theme */}
         <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
         <div className="relative flex items-center gap-3">

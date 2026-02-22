@@ -7,19 +7,21 @@ import Navbar from "../pages/Shared/Navbar/Navbar";
 // Direct imports for ZERO-delay rendering
 import loginAnim from "/public/animations/login.json";
 import registerAnim from "/public/animations/register.json";
+import useScrollTo from "../hooks/useScrollTo";
 
 const AuthLayout = () => {
+  useScrollTo()
   const { pathname } = useLocation();
   const isLogin = pathname.includes("login");
 
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-base-200  flex flex-col selection:bg-primary selection:text-white">
       <div className="sticky top-0 z-100">
         <Navbar fromAuth={true} />
       </div>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-10">
-        <div className="w-full max-w-6xl bg-base-100 rounded-[3.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden border border-base-content/5 flex flex-col lg:flex-row">
+      <main className="flex-1 container-page flex items-center justify-center p-4 md:p-10">
+        <div className="w-full bg-base-100 rounded-[3.5rem] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.1)] overflow-hidden border border-base-content/5 flex flex-col lg:flex-row">
           <motion.div
             key={isLogin ? "login-side" : "reg-side"}
             initial={{ opacity: 0 }}
@@ -32,7 +34,7 @@ const AuthLayout = () => {
               <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full" />
 
               <Lottie
-                animationData={isLogin ? loginAnim : registerAnim} 
+                animationData={isLogin ? loginAnim : registerAnim}
                 className="relative z-10 w-full drop-shadow-[0_20px_20px_rgba(0,0,0,0.15)]"
                 loop={true}
               />
