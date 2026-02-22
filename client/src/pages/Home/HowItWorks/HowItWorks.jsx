@@ -45,7 +45,7 @@ const steps = [
 
 // Connector line between cards (desktop only)
 const Connector = ({ color }) => (
-  <div className="hidden lg:flex items-center flex-shrink-0 w-8 mt-10">
+  <div className="hidden lg:flex items-center shrink-0 w-8 mt-10">
     <div className="relative w-full h-px" style={{ background: `${color}30` }}>
       <Motion.div
         className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
@@ -92,7 +92,7 @@ const StepCard = ({ step, index }) => {
 
       {/* Icon */}
       <div
-        className="relative w-12 h-12 rounded-2xl flex items-center justify-center text-lg mb-6 transition-transform duration-300 group-hover:scale-110 flex-shrink-0"
+        className="relative w-12 h-12 rounded-2xl flex items-center justify-center text-lg mb-6 transition-transform duration-300 group-hover:scale-110 shrink-0"
         style={{ background: `${step.color}18`, color: step.color }}
       >
         {step.icon}
@@ -141,7 +141,7 @@ const HowItWorks = () => {
           <Motion.span
             animate={{ scale: [1, 1.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
+            className="w-2 h-2 rounded-full bg-primary shrink-0"
           />
           <span className="text-[11px] font-black tracking-[0.3em] uppercase text-primary">
             Simple Process
@@ -201,13 +201,13 @@ const HowItWorks = () => {
           { val: "98%", label: "On-Time Rate", color: "#10b981" },
           { val: "50+", label: "Districts", color: "#fbbf24" },
           { val: "24/7", label: "Support", color: "#a78bfa" },
-        ].map((s, i) => (
+        ].map((s) => (
           <div
             key={s.label}
             className="flex items-center gap-3 px-5 py-4 rounded-2xl border border-base-content/5 bg-base-200/40"
           >
             <MdElectricBolt
-              className="flex-shrink-0 text-sm"
+              className="shrink-0 text-sm"
               style={{ color: s.color }}
             />
             <div>

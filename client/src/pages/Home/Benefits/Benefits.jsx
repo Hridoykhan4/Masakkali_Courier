@@ -46,7 +46,7 @@ const benefits = [
 const BenefitRow = ({ benefit, index }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const isEven = index % 2 !== 0; // alternates image side on desktop
+  const isEven = index % 2 !== 0; 
 
   return (
     <Motion.div
@@ -171,7 +171,7 @@ const Benefits = () => {
           <Motion.span
             animate={{ scale: [1, 1.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
+            className="w-2 h-2 rounded-full bg-primary shrink-0"
           />
           <span className="text-[11px] font-black tracking-[0.3em] uppercase text-primary">
             Why Choose Us

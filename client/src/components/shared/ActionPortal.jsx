@@ -61,7 +61,7 @@ const ActionPortal = ({ variant = "default" }) => {
     );
   }
 
-  // --- MERCHANT / STANDARD USER VIEW ---
+  // --- MERCHANT /  USER VIEW ---
   return (
     <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
       <Link to="/sendParcel" className={`btn-main ${sharedClasses}`}>

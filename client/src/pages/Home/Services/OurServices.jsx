@@ -110,7 +110,7 @@ const ServiceCard = ({ service, index }) => {
 
       {/* Icon */}
       <div
-        className="w-11 h-11 rounded-2xl flex items-center justify-center text-base mb-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+        className="w-11 h-11 rounded-2xl flex items-center justify-center text-base mb-5 shrink-0 transition-transform duration-300 group-hover:scale-110"
         style={{ background: `${service.color}16`, color: service.color }}
       >
         {service.icon}
@@ -160,7 +160,7 @@ const OurServices = () => {
             <Motion.span
               animate={{ scale: [1, 1.5, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
+              className="w-2 h-2 rounded-full bg-primary shrink-0"
             />
             <span className="text-[11px] font-black tracking-[0.3em] uppercase text-primary">
               What We Offer

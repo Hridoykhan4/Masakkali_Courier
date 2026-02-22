@@ -36,7 +36,7 @@ const slides = [
   },
 ];
 
-// Reusable animated number badge
+
 const StatBadge = ({ stat, statLabel, color }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -61,7 +61,7 @@ const StatBadge = ({ stat, statLabel, color }) => (
   </motion.div>
 );
 
-// Animated grid lines
+
 const GridLines = () => (
   <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
     {/* Vertical lines */}
@@ -141,6 +141,7 @@ const Banner = () => {
     setIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   }, []);
 
+
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(nextSlide, 6000);
@@ -156,7 +157,6 @@ const Banner = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* ─── BASE LAYER: theme-aware background ─── */}
       <div className="absolute inset-0 bg-base-100 z-0" />
 
       {/* ─── GRID LINES ─── */}
@@ -193,7 +193,7 @@ const Banner = () => {
       </div>
 
       {/* ─── MAIN LAYOUT ─── */}
-      <div className="relative z-10 container-page flex flex-col justify-between h-full min-h-[90vh] py-16 md:py-20">
+      <div className="relative z-10 container-page flex flex-col justify-between h-full min-h-[90vh] section-spacing">
         {/* TOP ROW: eyebrow + live indicator */}
         <div className="flex items-center justify-between w-full">
           <AnimatePresence mode="wait">
@@ -213,7 +213,7 @@ const Banner = () => {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="w-2 h-2 rounded-full flex-shrink-0"
+                className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: current.color }}
               />
               <span
@@ -396,7 +396,7 @@ const Banner = () => {
           animate={{ scaleX: 1, opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute bottom-0 left-0 right-0 h-[2px] origin-left z-20"
+          className="absolute bottom-0 left-0 right-0 h-0.5 origin-left z-20"
           style={{
             background: `linear-gradient(to right, ${current.color}, transparent)`,
           }}
