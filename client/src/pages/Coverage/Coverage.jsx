@@ -29,7 +29,7 @@ const Dot = ({ color, pulse }) => (
   <Motion.span
     animate={pulse ? { scale: [1, 1.6, 1], opacity: [1, 0.4, 1] } : {}}
     transition={{ duration: 2, repeat: Infinity }}
-    className="inline-block w-2 h-2 rounded-full flex-shrink-0"
+    className="inline-block w-2 h-2 rounded-full shrink-0"
     style={{ backgroundColor: color }}
   />
 );
@@ -299,7 +299,7 @@ const RiderPanel = ({ data, color }) => (
               <div className="flex items-center gap-2">
                 <MdElectricBolt
                   style={{ color }}
-                  className="text-xs flex-shrink-0"
+                  className="text-xs shrink-0"
                 />
                 <span className="text-xs font-bold">{item.district}</span>
               </div>
@@ -386,14 +386,14 @@ const Coverage = () => {
     <section className="relative container-page section-spacing overflow-hidden font-urbanist">
       {/* ── STATIC AMBIENT GLOWS (no AnimatePresence = lighter) ── */}
       <div
-        className="absolute -top-48 -right-40 w-[480px] h-[480px] rounded-full pointer-events-none"
+        className="absolute -top-48 -right-40 w-120 h-120 rounded-full pointer-events-none"
         style={{
           background: `radial-gradient(circle, ${color}10 0%, transparent 70%)`,
           filter: "blur(70px)",
         }}
       />
       <div
-        className="absolute -bottom-28 -left-20 w-[280px] h-[280px] rounded-full pointer-events-none"
+        className="absolute -bottom-28 -left-20 w-70 h-70 rounded-full pointer-events-none"
         style={{
           background: `radial-gradient(circle, ${color}07 0%, transparent 70%)`,
           filter: "blur(50px)",
@@ -452,7 +452,7 @@ const Coverage = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-2.5 w-full lg:w-auto lg:min-w-[270px]">
+          <div className="grid grid-cols-3 gap-2.5 w-full lg:w-auto lg:min-w-67.5">
             <StatCard
               value={stats.districts}
               label="Districts"
@@ -524,7 +524,7 @@ const Coverage = () => {
           >
             {/* Panel header */}
             <div
-              className="px-5 py-3.5 flex items-center justify-between border-b border-base-content/5 flex-shrink-0"
+              className="px-5 py-3.5 flex items-center justify-between border-b border-base-content/5 shrink-0"
               style={{ background: `${color}08` }}
             >
               <span className="text-[10px] font-black uppercase tracking-widest opacity-40">
@@ -561,12 +561,12 @@ const Coverage = () => {
               <CoverageMap coverageData={filteredData} />
             </div>
 
-            {/* Premium edge fades */}
+            {/* edge fades */}
             <div className="absolute inset-0 pointer-events-none z-10">
-              <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-base-200/50 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-base-200/50 to-transparent" />
-              <div className="absolute top-0 left-0 bottom-0 w-12 bg-gradient-to-r from-base-200/40 to-transparent" />
-              <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-l from-base-200/40 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-20 bg-linear-to-b from-base-200/50 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-base-200/50 to-transparent" />
+              <div className="absolute top-0 left-0 bottom-0 w-12 bg-linear-to-r from-base-200/40 to-transparent" />
+              <div className="absolute top-0 right-0 bottom-0 w-12 bg-linear-to-l from-base-200/40 to-transparent" />
             </div>
 
            

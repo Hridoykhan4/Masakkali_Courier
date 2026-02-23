@@ -28,7 +28,6 @@ const Navbar = ({ fromAuth }) => {
     const links = [
       { label: "Home", to: "/" },
       { label: "Coverage", to: "/coverage" },
-      { label: "About", to: "/about" },
     ];
     if (role === "user") {
       links.push(
@@ -36,6 +35,7 @@ const Navbar = ({ fromAuth }) => {
         { label: "Send Parcel", to: "/sendParcel" },
       );
     }
+    links.push({ label: "About", to: "/about" });
     return links;
   }, [role]);
 
@@ -306,7 +306,7 @@ const Navbar = ({ fromAuth }) => {
                 <div className="absolute bottom-10 left-6 right-6">
                   {user ? (
                     <button
-                      onClick={confirmLogout} 
+                      onClick={confirmLogout}
                       className="btn btn-error btn-block text-white rounded-xl shadow-lg shadow-error/20"
                     >
                       Logout

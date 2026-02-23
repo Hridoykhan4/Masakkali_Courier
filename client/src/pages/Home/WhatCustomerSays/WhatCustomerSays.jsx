@@ -14,7 +14,7 @@ const WhatCustomerSays = () => {
     queryKey: ["reviews-home"],
     queryFn: async () => {
       const { data } = await axiosPublic.get("/reviews");
-      return Array.isArray(data) ? data : [];
+      return  data || [];
     },
   });
 
@@ -51,13 +51,11 @@ const WhatCustomerSays = () => {
 
   return (
     <section className="bg-base-100 section-spacing overflow-hidden relative">
-      {/* Subtle Background Text for Luxury Feel */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 text-[15vw] font-black opacity-[0.02] whitespace-nowrap pointer-events-none select-none">
         TESTIMONIALS
       </div>
 
       <div className="container-page relative z-10">
-        {/* Header Section: Sophisticated & High-Contrast */}
         <div className="max-w-4xl mx-auto text-center mb-20">
           <Motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -84,13 +82,13 @@ const WhatCustomerSays = () => {
           </p>
         </div>
 
-        {/* Slider Wrapper */}
+        {/* Slider */}
         <div 
           className="relative max-w-5xl mx-auto"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          {/* Minimalist Side Nav */}
+          {/* Side Nav */}
           <div className="absolute -inset-x-20 top-1/2 -translate-y-1/2 hidden lg:flex justify-between pointer-events-none">
             <button onClick={handlePrev} className="pointer-events-auto p-4 text-base-content/20 hover:text-primary transition-colors">
               <FaChevronLeft size={40} strokeWidth={1} />
@@ -114,7 +112,7 @@ const WhatCustomerSays = () => {
                     <FaQuoteLeft className="text-6xl text-primary/10 absolute top-12 left-12" />
 
                     <div className="relative z-10">
-                      <div className="flex gap-1 text-primary mb-10">
+                      <div className="flex justify-end gap-1 text-primary  mb-10">
                         {[...Array(5)].map((_, i) => (
                           <FaStar key={i} size={18} fill={i < Math.floor(item.ratings || 5) ? "currentColor" : "none"} className="stroke-current" />
                         ))}
@@ -148,13 +146,13 @@ const WhatCustomerSays = () => {
             )}
           </div>
 
-          {/* Luxury Dot Progress */}
+          {/* Dot Progress */}
           <div className="flex justify-center gap-4 mt-16">
             {reviews.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => scrollToSelector(idx)}
-                className={`h-1 transition-all duration-700 rounded-full ${
+                className={`h-1 cursor-pointer transition-all duration-700 rounded-full ${
                   currentIndex === idx ? "w-16 bg-primary" : "w-4 bg-base-content/10"
                 }`}
               />

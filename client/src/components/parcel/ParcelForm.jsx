@@ -1,18 +1,17 @@
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import calculateParcelCost from "./parcel.utils";
 import coverageData from "../../utils/coverageData";
-import { useEffect, useRef, useState } from "react";
 import useAuthValue from "../../hooks/useAuthValue";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router";
 import {
   FaBoxOpen,
-  FaTruckLoading,
   FaUserCircle,
   FaMapMarkedAlt,
   FaCheckCircle,
   FaCalculator,
 } from "react-icons/fa";
+import { useState } from "react";
 
 const generateTrackingID = () => {
   const date = new Date();
@@ -22,6 +21,7 @@ const generateTrackingID = () => {
 };
 
 const ParcelForm = ({
+  // eslint-disable-next-line no-unused-vars
   mode = "create",
   defaultValues = {},
   onSubmitParcel,
@@ -31,10 +31,8 @@ const ParcelForm = ({
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors },
-    control,
+    formState: { isSubmitting },
     watch,
-    setValue,
   } = useForm({ defaultValues });
 
   const [pendingData, setPendingData] = useState(null);
@@ -42,10 +40,9 @@ const ParcelForm = ({
   const [showModal, setShowModal] = useState(false);
 
   const { user } = useAuthValue();
-  const navigate = useNavigate();
   const coverage = coverageData;
 
-  // Watchers for Live Preview Card
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedData = watch();
   const senderRegion = watchedData.senderRegion;
   const receiverRegion = watchedData.receiverRegion;
@@ -83,13 +80,12 @@ const ParcelForm = ({
     await onSubmitParcel(parcelData, {
       onSuccess: () => {
         reset();
-        navigate("/dashboard/myParcels");
       },
     });
   };
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-10">
+    <section>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* LEFT: MULTI-STEP FORM (8 Cols) */}
         <div className="lg:col-span-8 order-2 lg:order-1">
@@ -115,7 +111,7 @@ const ParcelForm = ({
               ))}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="min-h-[400px]">
+            <form onSubmit={handleSubmit(onSubmit)} className="min-h-100">
               <AnimatePresence mode="wait">
                 {/* STEP 1: PARCEL INFO */}
                 {step === 1 && (
@@ -437,7 +433,7 @@ const ParcelForm = ({
       {/* --- REFINED MODAL --- */}
       <AnimatePresence>
         {showModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

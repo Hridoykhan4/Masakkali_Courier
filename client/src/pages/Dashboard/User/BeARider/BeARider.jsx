@@ -21,7 +21,6 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useScrollTo from "../../../../hooks/useScrollTo";
 import coverageData from "../../../../utils/coverageData";
 
-// ── LOTTIE (memoized, stable engine) ──────
 const RiderAnimation = memo(() => (
   <Lottie
     path="/animations/rider.json"
@@ -32,7 +31,6 @@ const RiderAnimation = memo(() => (
 ));
 RiderAnimation.displayName = "RiderAnimation";
 
-// ── PERKS ──────────────────────────────────
 const PERKS = [
   {
     icon: <IoSpeedometer />,
@@ -51,7 +49,7 @@ const PERKS = [
   },
 ];
 
-// ── STEPS CONFIG ───────────────────────────
+// ── STEPS ──────────────────────────
 const STEPS = ["Personal", "Location", "Vehicle"];
 
 // ── FIELD WRAPPER ──────────────────────────
@@ -136,7 +134,7 @@ const BeARider = () => {
 
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
-  const color = "var(--color-primary)"; // respects light/dark theme
+  // const color = "var(--color-primary)";
 
   const regions = useMemo(
     () => [...new Set(coverageData.map((d) => d.region))],
@@ -213,7 +211,7 @@ const BeARider = () => {
           <Motion.span
             animate={{ scale: [1, 1.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
+            className="w-2 h-2 rounded-full bg-primary shrink-0"
           />
           <span className="text-[11px] font-black tracking-[0.3em] uppercase text-primary">
             Carrier Opportunity
@@ -281,7 +279,7 @@ const BeARider = () => {
                 className="group flex items-center gap-4 p-4 rounded-2xl border border-base-content/5 bg-base-200/40 hover:bg-base-200/70 transition-all duration-300"
               >
                 <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm transition-transform duration-300 group-hover:scale-110"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-sm transition-transform duration-300 group-hover:scale-110"
                   style={{
                     background:
                       "color-mix(in srgb, var(--color-primary) 15%, transparent)",
@@ -370,7 +368,7 @@ const BeARider = () => {
                   }}
                 >
                   <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       background: "var(--color-primary)",
                       color: "#020617",
@@ -521,7 +519,7 @@ const BeARider = () => {
                                     "color-mix(in srgb, var(--color-primary) 8%, transparent)",
                                 }}
                               >
-                                <MdElectricBolt className="text-primary flex-shrink-0" />
+                                <MdElectricBolt className="text-primary shrink-0" />
                                 <p className="text-[10px] font-bold opacity-50">
                                   <span className="text-primary opacity-100">
                                     {districts.length} districts

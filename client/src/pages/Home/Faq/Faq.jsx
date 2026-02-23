@@ -1,4 +1,5 @@
 import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaPlus,
@@ -138,7 +139,7 @@ const Faq = () => {
               24/7.
             </p>
 
-            {/* Using btn-main for the high-level action */}
+  
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -236,7 +237,6 @@ const Faq = () => {
                   </div>
                 </a>
 
-                {/* Email using standard interaction */}
                 <a
                   href="mailto:support@masakkali.com"
                   className="btn btn-ghost border border-base-content/10 h-auto py-6 flex items-center justify-start gap-6 px-8 rounded-4xl group"
