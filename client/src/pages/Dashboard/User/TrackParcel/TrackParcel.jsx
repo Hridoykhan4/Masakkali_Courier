@@ -15,7 +15,7 @@ const STATUS_META = {
 const TrackParcel = () => {
   const axiosSecure = useAxiosSecure();
   const [params, setParams] = useSearchParams();
-  const initialTid = params.get("tid") || "";
+  const initialTid = params.get("tid") || ""; 
   const [trackingId, setTrackingId] = useState(initialTid);
 
   const { data, isPending, isError } = useQuery({
@@ -51,8 +51,9 @@ const TrackParcel = () => {
     }).format(new Date(dateString));
   };
 
+
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-8">
+    <div className="space-y-8">
       {/* Search Section */}
       <section className="bg-base-200 p-6 rounded-2xl shadow-sm">
         <h1 className="text-2xl font-bold mb-4 text-center">
@@ -89,6 +90,7 @@ const TrackParcel = () => {
           <span>Error: Tracking ID not found or server error.</span>
         </div>
       )}
+      
 
       {data && (
         <div className="grid lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
@@ -113,9 +115,11 @@ const TrackParcel = () => {
                     <p className="font-medium">{data.parcel.receiverRegion}</p>
                   </div>
                   <div className="divider my-1"></div>
-                  <p className="text-xs">
+                   {
+                    data.parcel?.weight && <p className="text-xs">
                     <strong>Weight:</strong> {data.parcel.weight} kg
                   </p>
+                   } 
                   <p className="text-xs">
                     <strong>Payment:</strong>{" "}
                     <span className="capitalize">

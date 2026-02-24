@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router"; // Use Link for SPA performance
 import {
@@ -70,15 +71,15 @@ const Profile = () => {
   const currentActions = roleActions[role?.toLowerCase()] || [];
 
   return (
-    <section className="container-page py-10">
+    <section>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto bg-base-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden border border-base-content/5"
+        className="bg-base-100 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden border border-base-content/5"
       >
-        {/* --- DYNAMIC HEADER --- */}
+        {/* --- HEADER --- */}
         <div className="h-40 bg-neutral relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/40 to-secondary/40 backdrop-blur-3xl" />
+          <div className="absolute inset-0 bg-linear-to-r from-primary/40 to-secondary/40 backdrop-blur-3xl" />
           <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
         </div>
 
@@ -86,7 +87,7 @@ const Profile = () => {
           {/* --- AVATAR & PRIMARY INFO --- */}
           <div className="relative -mt-20 flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
             <div className="relative group">
-              <div className="w-40 h-40 rounded-[3rem] ring-[12px] ring-base-100 overflow-hidden shadow-2xl bg-base-200">
+              <div className="w-40 h-40 rounded-[3rem] ring-12 ring-base-100 overflow-hidden shadow-2xl bg-base-200">
                 <img
                   src={
                     user?.photoURL ||
@@ -166,9 +167,9 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="bg-primary/5 border border-primary/10 p-6 rounded-[2rem] flex items-center justify-between">
+              <div className="bg-primary/5 border border-primary/10 p-6 rounded-4xl flex items-center justify-between">
                 <div>
-                  <h4 className="font-black text-sm uppercase italic italic">
+                  <h4 className="font-black text-sm uppercase italic">
                     Account Status
                   </h4>
                   <p className="text-xs opacity-60 mt-0.5">

@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import useMyParcels from "../hooks/useMyParcels";
 import MasakkaliLogo from "../pages/Shared/MasakkaliLogo/MasakkaliLogo";
@@ -314,7 +314,7 @@ const DashboardLayout = () => {
   return (
     <div className="flex min-h-screen bg-base-200/40 font-urbanist">
       {/* ══════════════════════════════════════════
-          DESKTOP SIDEBAR (always visible ≥ lg)
+          DESKTOP SIDEBAR 
       ══════════════════════════════════════════ */}
       <aside className="hidden lg:flex flex-col w-64 xl:w-72 shrink-0 bg-base-100 border-r border-base-content/5 sticky top-0 h-screen overflow-hidden">
         <SidebarContent
@@ -322,7 +322,7 @@ const DashboardLayout = () => {
           meta={meta}
           myParcels={myParcels}
           payments={payments}
-          onNavigate={undefined} // desktop: no drawer to close
+          onNavigate={undefined} 
         />
       </aside>
 
