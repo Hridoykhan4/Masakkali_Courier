@@ -21,7 +21,7 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useTheme from "../../../../hooks/useTheme";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 
-// ── STRIPE CARD ELEMENT STYLES (theme-aware) ──
+// ── STRIPE CARD ELEMENT STYLES 
 const cardStyles = (isDark) => ({
   style: {
     base: {
@@ -46,7 +46,7 @@ const DetailRow = ({ icon, label, value }) => (
         {label}
       </span>
     </div>
-    <span className="text-xs font-black text-primary-content/80 max-w-[140px] truncate text-right">
+    <span className="text-xs font-black text-primary-content/80 max-w-35 truncate text-right">
       {value ?? "—"}
     </span>
   </div>
@@ -158,16 +158,16 @@ const CheckoutForm = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="flex flex-col lg:flex-row min-h-[500px]"
+      className="flex flex-col lg:flex-row min-h-125"
     >
       {/* ══════════════════════════════════════════
-          LEFT PANEL — Order summary (primary bg)
+          LEFT PANEL — Order summary 
       ══════════════════════════════════════════ */}
-      <div className="relative lg:w-5/12 p-8 lg:p-10 bg-primary text-primary-content overflow-hidden flex flex-col">
-        {/* Background icon watermark */}
-        <FaBoxOpen className="absolute -bottom-8 -right-8 text-[12rem] text-primary-content/[0.04] pointer-events-none select-none" />
+      <div className="relative lg:w-5/12 p-8 lg:p-10 bg-primary text-primary-content selection:bg-base-content selection:text-info overflow-hidden flex flex-col">
+      
+        <FaBoxOpen className="absolute -bottom-8 -right-8 text-[12rem] text-primary-content/4 pointer-events-none select-none" />
 
-        {/* Top accent line */}
+     
         <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-primary-content/20 to-transparent" />
 
         {/* Back button */}
@@ -299,7 +299,7 @@ const CheckoutForm = () => {
                 exit={{ opacity: 0, scale: 0.97 }}
                 className="flex items-start gap-2.5 px-4 py-3 rounded-xl border border-error/20 bg-error/8 text-error text-[11px] font-bold"
               >
-                <span className="mt-0.5 flex-shrink-0">⚠</span>
+                <span className="mt-0.5 shrink-0">⚠</span>
                 {errorMessage}
               </Motion.div>
             )}

@@ -74,6 +74,10 @@ const PaymentHistory = () => {
     error,
   } = usePaymentHistory();
 
+  const totalSpent = payments.reduce((sum, p) => sum + (p.amount ?? 0), 0);
+  const headerRef = useRef(null);
+  const headerInView = useInView(headerRef, { once: true });
+
   if (isPending || isError)
     return (
       <ErrorLoadingState
@@ -82,10 +86,6 @@ const PaymentHistory = () => {
         isPending={isPending}
       />
     );
-
-  const totalSpent = payments.reduce((sum, p) => sum + (p.amount ?? 0), 0);
-  const headerRef = useRef(null);
-  const headerInView = useInView(headerRef, { once: true });
 
   return (
     <section className="font-urbanist space-y-6">
@@ -99,7 +99,7 @@ const PaymentHistory = () => {
           <Motion.span
             animate={{ scale: [1, 1.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
+            className="w-2 h-2 rounded-full bg-primary shrink-0"
           />
           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
             Financial Records
@@ -250,7 +250,7 @@ const PaymentHistory = () => {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: Math.min(i, 10) * 0.035 }}
-                      className="group border-b border-base-content/[0.04] last:border-0 hover:bg-base-100/50 transition-colors duration-200"
+                      className="group border-b border-base-content/4 last:border-0 hover:bg-base-100/50 transition-colors duration-200"
                     >
                       <td className="px-5 py-4 text-[11px] font-black opacity-25 tabular-nums">
                         {String(i + 1).padStart(2, "0")}
@@ -258,7 +258,7 @@ const PaymentHistory = () => {
                       <td className="px-5 py-4 text-xs font-bold whitespace-nowrap">
                         {formatDate(payment.paidAt)}
                       </td>
-                      <td className="px-5 py-4 font-mono text-[10px] opacity-40 max-w-[120px] truncate">
+                      <td className="px-5 py-4 font-mono text-[10px] opacity-40 max-w-30 truncate">
                         {payment.parcelId}
                       </td>
                       <td className="px-5 py-4">
