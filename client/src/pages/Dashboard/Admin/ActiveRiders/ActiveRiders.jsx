@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useState } from "react";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import {
   FaSearch,
   FaMotorcycle,
@@ -37,7 +37,7 @@ const ActiveRiders = () => {
     );
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-10">
+    <div className="space-y-8 pb-10">
       {/* --- HEADER & SEARCH COMMAND --- */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6 bg-base-100 p-8 rounded-[2.5rem] shadow-sm border border-base-content/5">
         <div className="space-y-1">
@@ -87,13 +87,13 @@ const ActiveRiders = () => {
             <tbody className="divide-y divide-base-content/5">
               <AnimatePresence mode="popLayout">
                 {filteredRiders.map((rider) => (
-                  <motion.tr
+                  <Motion.tr
                     layout
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     key={rider._id}
-                    className="hover:bg-primary/[0.02] transition-colors group"
+                    className="hover:bg-primary/2 transition-colors group"
                   >
                     {/* Rider Detail */}
                     <td className="pl-10 py-6">
@@ -159,7 +159,7 @@ const ActiveRiders = () => {
                         </span>
                       </div>
                     </td>
-                  </motion.tr>
+                  </Motion.tr>
                 ))}
               </AnimatePresence>
             </tbody>

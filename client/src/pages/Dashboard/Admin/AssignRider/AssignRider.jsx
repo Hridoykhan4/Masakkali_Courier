@@ -11,6 +11,7 @@ import {
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
 const AssignRider = () => {
@@ -24,7 +25,6 @@ const AssignRider = () => {
     data: parcels = [],
     isLoading,
     isError,
-    refetch,
   } = useQuery({
     queryKey: ["assignableParcels"],
     queryFn: async () => {
@@ -128,7 +128,7 @@ const AssignRider = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     key={parcel._id}
-                    className="hover:bg-primary/[0.02] transition-colors group"
+                    className="hover:bg-primary/2 transition-colors group"
                   >
                     <td className="pl-10">
                       <div className="font-mono text-xs font-black text-primary">
@@ -181,7 +181,7 @@ const AssignRider = () => {
       {/* --- PRO LEVEL MODAL --- */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -194,7 +194,7 @@ const AssignRider = () => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-base-100 w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10 border border-base-content/5"
+              className="bg-base-100 selection:bg-base-content selection:text-info w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden relative z-10 border border-base-content/5"
             >
               {/* Modal Header */}
               <div className="p-8 bg-primary text-primary-content flex justify-between items-center">
@@ -215,7 +215,7 @@ const AssignRider = () => {
               </div>
 
               {/* Rider List */}
-              <div className="p-8 space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+              <div className="p-8 space-y-4 max-h-160 overflow-y-auto custom-scrollbar">
                 {ridersLoading ? (
                   <div className="flex justify-center py-10">
                     <span className="loading loading-bars loading-lg text-primary"></span>
@@ -231,7 +231,7 @@ const AssignRider = () => {
                   riders.map((rider) => (
                     <div
                       key={rider._id}
-                      className="group flex justify-between items-center p-4 rounded-2xl border border-base-content/5 hover:border-primary/30 hover:bg-primary/[0.02] transition-all"
+                      className="group flex justify-between items-center p-4 rounded-2xl border border-base-content/5 hover:border-primary/30 hover:bg-primary/2 transition-all"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-base-200 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">

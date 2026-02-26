@@ -28,7 +28,7 @@ const DetailRow = ({ icon, label, value, mono }) => (
       </span>
     </div>
     <span
-      className={`text-xs font-black max-w-[160px] truncate text-right ${
+      className={`text-xs font-black max-w-40 truncate text-right ${
         mono ? "font-mono tracking-wider text-[11px]" : ""
       }`}
     >
@@ -195,7 +195,7 @@ const RiderReviewModal = ({ rider, onClose, refetch }) => {
 
             <div className="flex items-center gap-3">
               <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-sm flex-shrink-0"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0"
                 style={{ background: `${COLOR}20`, color: COLOR }}
               >
                 <FaIdBadge />
@@ -225,7 +225,7 @@ const RiderReviewModal = ({ rider, onClose, refetch }) => {
               style={{ background: "var(--color-base-200)" }}
             >
               <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 font-black"
+                className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shrink-0 font-black"
                 style={{ background: `${COLOR}20`, color: COLOR }}
               >
                 {rider.name?.[0]?.toUpperCase()}
@@ -239,7 +239,7 @@ const RiderReviewModal = ({ rider, onClose, refetch }) => {
                 </p>
               </div>
               <div
-                className="flex items-center gap-1.5 text-[9px] font-black px-2.5 py-1.5 rounded-full flex-shrink-0"
+                className="flex items-center gap-1.5 text-[9px] font-black px-2.5 py-1.5 rounded-full shrink-0"
                 style={{ background: "#fbbf2418", color: "#fbbf24" }}
               >
                 <Motion.span
