@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaBox,
@@ -61,7 +62,7 @@ const PendingDeliveries = () => {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* --- Mission Header --- */}
-      <div className="bg-base-100 p-6 md:p-8 rounded-[2rem] shadow-sm border border-base-content/5 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="bg-base-100 p-6 md:p-8 rounded-4xl shadow-sm border border-base-content/5 flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-inner">
             <FaRoute size={24} />
@@ -100,7 +101,7 @@ const PendingDeliveries = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-20 bg-base-100 rounded-[2rem] border-2 border-dashed border-base-content/10"
+              className="text-center py-20 bg-base-100 rounded-4xl border-2 border-dashed border-base-content/10"
             >
               <FaTruckLoading size={40} className="mx-auto mb-4 opacity-10" />
               <p className="font-black italic uppercase opacity-20 text-xl">
@@ -115,7 +116,7 @@ const PendingDeliveries = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 key={p._id}
-                className="bg-base-100 p-6 rounded-[2rem] shadow-xl shadow-base-content/5 border border-base-content/5 hover:border-primary/20 transition-all flex flex-col md:flex-row items-center gap-6"
+                className="bg-base-100 p-6 rounded-4xl shadow-xl shadow-base-content/5 border border-base-content/5 hover:border-primary/20 transition-all flex flex-col md:flex-row items-center gap-6"
               >
                 {/* Status Icon */}
                 <div

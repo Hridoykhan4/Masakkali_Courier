@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import {
   FaMotorcycle,
   FaUserTie,
-  FaBox,
   FaClock,
   FaTimes,
   FaMapPin,
