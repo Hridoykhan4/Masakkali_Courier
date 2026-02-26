@@ -11,7 +11,6 @@ import { MdElectricBolt } from "react-icons/md";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 import usePaymentHistory from "../../../../hooks/usePaymentHistory";
 
-// ── FORMAT HELPERS ─────────────────────────
 const formatDate = (iso) =>
   new Date(iso).toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -73,7 +72,6 @@ const PaymentHistory = () => {
     isError,
     error,
   } = usePaymentHistory();
-
   const totalSpent = payments.reduce((sum, p) => sum + (p.amount ?? 0), 0);
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
@@ -85,7 +83,7 @@ const PaymentHistory = () => {
         isError={isError}
         isPending={isPending}
       />
-    );
+    ); 
 
   return (
     <section className="font-urbanist space-y-6">
@@ -184,7 +182,7 @@ const PaymentHistory = () => {
           <EmptyState />
         ) : (
           <>
-            {/* ── MOBILE CARD LIST (< md) ── */}
+            {/* ── MOBILE CARD LIST  */}
             <div className="md:hidden divide-y divide-base-content/5">
               {payments.map((payment, i) => (
                 <Motion.div
@@ -217,7 +215,7 @@ const PaymentHistory = () => {
               ))}
             </div>
 
-            {/* ── DESKTOP TABLE (≥ md) ── */}
+            {/* ── DESKTOP TABLE  ── */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
