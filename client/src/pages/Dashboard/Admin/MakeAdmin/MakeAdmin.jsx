@@ -18,7 +18,7 @@ import { HiOutlineShieldCheck } from "react-icons/hi";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 
-const COLOR = "#38bdf8"; // admin sky-blue accent
+const COLOR = "#38bdf8";
 
 // ── ROLE CHIP ──────────────────────────────
 const RoleChip = ({ role }) => {
@@ -63,14 +63,14 @@ const UserRow = ({ user, onRoleChange, isUpdating }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: 20, scale: 0.97 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-      className="group border-b border-base-content/[0.04] last:border-0"
+      className="group border-b border-base-content/4 last:border-0"
     >
       {/* ── MAIN ROW ── */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-4 hover:bg-base-200/30 transition-colors duration-200">
         {/* Avatar + identity */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div
-            className="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
+            className="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 transition-transform duration-200 group-hover:scale-105"
             style={{
               background: isAdmin ? `${COLOR}20` : "var(--color-base-200)",
               color: isAdmin ? COLOR : "var(--color-base-content)",
@@ -90,7 +90,7 @@ const UserRow = ({ user, onRoleChange, isUpdating }) => {
         </div>
 
         {/* Role + Date */}
-        <div className="flex items-center gap-4 flex-shrink-0">
+        <div className="flex items-center gap-4 shrink-0">
           <RoleChip role={user.role ?? "user"} />
           <p className="text-[10px] font-bold opacity-25 hidden md:block">
             {new Date(user.createdAt).toLocaleDateString("en-GB", {
@@ -102,7 +102,7 @@ const UserRow = ({ user, onRoleChange, isUpdating }) => {
         </div>
 
         {/* Action */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {isRider ? (
             <span className="text-[9px] font-black uppercase tracking-widest opacity-20 px-3 py-2 rounded-xl border border-base-content/8">
               Restricted
@@ -181,7 +181,7 @@ const UserRow = ({ user, onRoleChange, isUpdating }) => {
                     : `${user.name} will gain full admin control over the platform.`}
                 </p>
               </div>
-              <div className="flex items-center gap-2.5 flex-shrink-0">
+              <div className="flex items-center gap-2.5 shrink-0">
                 <button
                   onClick={() => setConfirming(false)}
                   className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider border border-base-content/10 opacity-50 hover:opacity-80 transition-all"
@@ -280,7 +280,7 @@ const MakeAdmin = () => {
           <Motion.span
             animate={{ scale: [1, 1.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-2 h-2 rounded-full flex-shrink-0"
+            className="w-2 h-2 rounded-full shrink-0"
             style={{ backgroundColor: COLOR }}
           />
           <span
@@ -403,7 +403,7 @@ const MakeAdmin = () => {
         <button
           onClick={handleSearch}
           disabled={!query.trim() || isFetching}
-          className="flex items-center gap-2 px-6 rounded-2xl font-black text-sm uppercase tracking-wider transition-all duration-250 hover:scale-[1.02] hover:shadow-xl active:scale-95 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:scale-100 flex-shrink-0"
+          className="flex items-center gap-2 px-6 rounded-2xl font-black text-sm uppercase tracking-wider transition-all duration-250 hover:scale-[1.02] hover:shadow-xl active:scale-95 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:scale-100 shrink-0"
           style={{
             background: "var(--color-primary)",
             color: "#020617",

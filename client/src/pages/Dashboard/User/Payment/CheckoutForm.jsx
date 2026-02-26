@@ -21,7 +21,7 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useTheme from "../../../../hooks/useTheme";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 
-// ── STRIPE CARD ELEMENT STYLES 
+// ── STRIPE CARD ELEMENT STYLES
 const cardStyles = (isDark) => ({
   style: {
     base: {
@@ -127,7 +127,9 @@ const CheckoutForm = () => {
         if (res?.insertedId) {
           await queryClient.invalidateQueries(["parcels"]);
           await queryClient.invalidateQueries(["parcel", id]);
-          toast.success("Transaction Securely Completed");
+          toast.success("Transaction Securely Completed", {
+            theme: theme === "light" ? "light" : "dark",
+          });
           nav("/dashboard/myParcels");
         }
       }
@@ -164,10 +166,8 @@ const CheckoutForm = () => {
           LEFT PANEL — Order summary 
       ══════════════════════════════════════════ */}
       <div className="relative lg:w-5/12 p-8 lg:p-10 bg-primary text-primary-content selection:bg-base-content selection:text-info overflow-hidden flex flex-col">
-      
         <FaBoxOpen className="absolute -bottom-8 -right-8 text-[12rem] text-primary-content/4 pointer-events-none select-none" />
 
-     
         <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-primary-content/20 to-transparent" />
 
         {/* Back button */}

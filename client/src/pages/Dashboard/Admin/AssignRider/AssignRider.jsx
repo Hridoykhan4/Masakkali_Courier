@@ -13,13 +13,14 @@ import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 import { useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
+import useTheme from "../../../../hooks/useTheme";
 
 const AssignRider = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const {theme} = useTheme()
   /* --- FETCH ASSIGNABLE PARCELS --- */
   const {
     data: parcels = [],
@@ -57,6 +58,7 @@ const AssignRider = () => {
     onSuccess: () => {
       toast.success("Logistics Updated: Rider Dispatched", {
         position: "top-right",
+        theme: theme === "light" ? "light" : "dark",
       });
       queryClient.invalidateQueries(["assignableParcels"]);
       setIsModalOpen(false);
