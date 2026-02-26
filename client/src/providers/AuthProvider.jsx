@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
   const resetPassword = (email) => {
     setLoading(true);
     const actionCodeSettings = {
-      url: "http://localhost:5173/login", 
+      url: "https://masakkali-server.vercel.app", 
       handleCodeInApp: true,
     };
 

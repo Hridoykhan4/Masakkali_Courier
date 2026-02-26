@@ -14,8 +14,10 @@ const WhatCustomerSays = () => {
     queryKey: ["reviews-home"],
     queryFn: async () => {
       const { data } = await axiosPublic.get("/reviews");
+      console.log(data);
       return  data || [];
     },
+    retry: 3
   });
 
   const scrollToSelector = (index) => {

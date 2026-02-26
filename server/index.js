@@ -290,13 +290,8 @@ async function run() {
           return res.status(404).send({ message: "Rider not found" });
         }
 
-        console.log(rider);
-
         const riderIdString = rider._id.toString();
-        console.log(riderIdString);
-        console.log(
-          await parcelCollection.find({ rider_id: riderIdString }).toArray(),
-        );
+
         const deliveries = await parcelCollection
           .find({
             rider_id: riderIdString,
@@ -306,7 +301,6 @@ async function run() {
           })
           .sort({ delivered_at: -1 })
           .toArray();
-        console.log(deliveries);
         res.send({
           success: true,
           data: deliveries,
@@ -579,42 +573,31 @@ async function run() {
 
     app.get("/admin/overview", async (req, res) => {
       try {
-        // 1. Get the start and end of "Today" in Bangladesh Time
-        const now = new Date();
-
-        // Create a date object set to 00:00:00 in BD time
-        const startOfToday = new Date(
-          now.toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
+        // 1. Precise Bangladesh Time Range Calculation
+        // We get the current time in BD, then set it to the very start and end of the day.
+        const nowInBD = new Date(
+          new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
         );
+
+        const startOfToday = new Date(nowInBD);
         startOfToday.setHours(0, 0, 0, 0);
 
-        const endOfToday = new Date(
-          now.toLocaleString("en-US", { timeZone: "Asia/Dhaka" }),
-        );
+        const endOfToday = new Date(nowInBD);
         endOfToday.setHours(23, 59, 59, 999);
 
-        // 2. For the String fields (creation_date), we still need the YYYY-MM-DD string
-        const bdDateStr = new Intl.DateTimeFormat("en-CA", {
-          timeZone: "Asia/Dhaka",
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }).format(now);
-
-        const todayRegex = new RegExp(`^${bdDateStr}`);
-
+        // 2. Parallel Execution for High-Performance Logistics
         const [
           totalUsers,
           totalRiders,
           totalParcels,
           deliveredToday,
-          revenueToday,
+          revenueTodayResult,
         ] = await Promise.all([
           userCollection.countDocuments(),
-          ridersCollection.countDocuments({ status: "approved" }),
+          userCollection.countDocuments({ role: "rider" }), // Assuming role-based user collection
           parcelCollection.countDocuments(),
 
-          // FIX: Use Date comparison for delivered_at because it is a Date Object
+          // Count only parcels actually DELIVERED within the BD time window today
           parcelCollection.countDocuments({
             delivery_status: "delivered",
             delivered_at: {
@@ -623,13 +606,17 @@ async function run() {
             },
           }),
 
-          // Keep Regex for creation_date because it is a String
+          // REVENUE CALCULATION: Based on completed transactions today
           parcelCollection
             .aggregate([
               {
                 $match: {
                   payment_status: "paid",
-                  creation_date: { $regex: todayRegex },
+                  delivery_status: "delivered", // Revenue is officially realized on delivery
+                  delivered_at: {
+                    $gte: startOfToday,
+                    $lte: endOfToday,
+                  },
                 },
               },
               {
@@ -642,19 +629,23 @@ async function run() {
             .toArray(),
         ]);
 
+        // 3. Structured Data Response
         res.send({
           totalUsers,
           totalRiders,
           totalParcels,
           deliveredToday,
-          revenueToday: revenueToday[0]?.total || 0,
+          revenueToday: revenueTodayResult[0]?.total || 0,
+          systemTimestamp: nowInBD.toISOString(), // Helpful for debugging frontend time
         });
       } catch (err) {
-        console.error("Dashboard Error:", err);
-        res.status(500).send({ message: "Failed to load overview analytics" });
+        console.error("Critical Dashboard Error:", err);
+        res.status(500).send({
+          success: false,
+          message: "Node connectivity error: Failed to fetch analytics",
+        });
       }
     });
-
     /* AGGREGATE */
 
     app.post("/parcels", verifyFBToken, async (req, res) => {

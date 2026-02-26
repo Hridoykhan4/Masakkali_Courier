@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import {
   FaWallet,
@@ -11,7 +12,8 @@ import {
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 
-const StatCard = ({ title, value, color, icon: Icon, delay }) => (
+// eslint-disable-next-line no-unused-vars
+const StatCard = ({ title, value, color, Icon, delay }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -98,21 +100,21 @@ const MyEarnings = () => {
             title="Lifetime Revenue"
             value={data.total}
             color="border-green-500"
-            icon={FaCoins}
+            Icon={FaCoins}
             delay={0.1}
           />
           <StatCard
             title="Successfully Cashed"
             value={data.cashedOut}
             color="border-blue-500"
-            icon={FaWallet}
+            Icon={FaWallet}
             delay={0.2}
           />
           <StatCard
             title="Pending Settlement"
             value={data.pending}
             color="border-yellow-500"
-            icon={FaClock}
+            Icon={FaClock}
             delay={0.3}
           />
         </div>
@@ -132,21 +134,21 @@ const MyEarnings = () => {
             title="Weekly Velocity"
             value={data.weekly}
             color="border-purple-500"
-            icon={FaRegCalendarAlt}
+            Icon={FaRegCalendarAlt}
             delay={0.4}
           />
           <StatCard
             title="Monthly Yield"
             value={data.monthly}
             color="border-indigo-500"
-            icon={FaCalendarCheck}
+            Icon={FaCalendarCheck}
             delay={0.5}
           />
           <StatCard
             title="Annual Forecast"
             value={data.yearly}
             color="border-pink-500"
-            icon={FaChartLine}
+            Icon={FaChartLine}
             delay={0.6}
           />
         </div>

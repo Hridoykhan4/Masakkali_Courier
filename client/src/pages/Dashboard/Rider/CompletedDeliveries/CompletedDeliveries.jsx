@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaCheckDouble,
@@ -28,8 +29,6 @@ const CompletedDeliveries = () => {
       return res.data.data;
     },
   });
-
-
 
   const { mutate: cashoutParcel, isPending } = useMutation({
     mutationFn: async (parcelId) => {
@@ -95,13 +94,13 @@ const CompletedDeliveries = () => {
       </div>
     );
 
- const totalEarning = deliveries.reduce((sum, d) => {
-  // Defensive check: Ensure we handle cases where earning might be a string or undefined
-  const amount = typeof d.earning === 'number' ? d.earning : parseFloat(d.earning || 0);
-  return sum + amount;
-}, 0);
+  const totalEarning = deliveries.reduce((sum, d) => {
+    const amount =
+      typeof d.earning === "number" ? d.earning : parseFloat(d.earning || 0);
+    return sum + amount;
+  }, 0);
 
-console.log(totalEarning);
+  console.log(totalEarning);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-12">
@@ -180,7 +179,7 @@ console.log(totalEarning);
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     key={p._id}
-                    className="hover:bg-primary/[0.02] transition-colors group"
+                    className="hover:bg-primary/2 transition-colors group"
                   >
                     <td className="pl-10">
                       <div className="flex items-center gap-4">
