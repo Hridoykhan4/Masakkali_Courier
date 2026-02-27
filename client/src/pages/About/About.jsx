@@ -1,4 +1,7 @@
+import useScrollTo from "../../hooks/useScrollTo";
+
 const About = () => {
+    useScrollTo()
     return (
         <section className="section-spacing container-page">
             aa

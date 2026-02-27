@@ -176,7 +176,7 @@ const ParcelForm = ({
                     <button
                       type="button"
                       onClick={nextStep}
-                      className="btn btn-primary w-full h-14 rounded-2xl font-black text-lg shadow-lg shadow-primary/20 mt-8"
+                      className="btn-main w-full mt-6"
                     >
                       NEXT: PICKUP INFO
                     </button>

@@ -101,7 +101,7 @@ const Login = () => {
 
         <button
           disabled={isSubmitting}
-          className="btn btn-primary w-full h-14 rounded-2xl text-lg font-black italic tracking-widest shadow-xl shadow-primary/20"
+          className="btn-main w-full"
         >
           {isSubmitting ? (
             <span className="loading loading-spinner" />

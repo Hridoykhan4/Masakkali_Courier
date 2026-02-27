@@ -13,8 +13,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-
-const googleProvider = new GoogleAuthProvider()
+const googleProvider = new GoogleAuthProvider();
 const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -29,11 +28,10 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-
   const loginByGoogle = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
-  }
+  };
 
   const updateUserInfo = (name = "Anonymous", photo) => {
     return updateProfile(auth.currentUser, {
@@ -50,13 +48,12 @@ const AuthProvider = ({ children }) => {
   const resetPassword = (email) => {
     setLoading(true);
     const actionCodeSettings = {
-      url: "https://masakkali-server.vercel.app", 
+      url: "https://masakkali-server.vercel.app",
       handleCodeInApp: true,
     };
 
     return sendPasswordResetEmail(auth, email, actionCodeSettings);
   };
-
 
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {

@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import Banner from "../Banner/Banner";
 import HowItWorks from "../HowItWorks/HowItWorks";
 import ClientLogoMarquee from "../ClientLogoMarquee/ClientLogoMarquee";
+import useScrollTo from "../../../hooks/useScrollTo";
 
 const OurServices = lazy(() => import("../Services/OurServices"));
 const Benefits = lazy(() => import("../Benefits/Benefits"));
@@ -10,6 +11,7 @@ const WhatCustomerSays = lazy(() => import("../WhatCustomerSays/WhatCustomerSays
 const Faq = lazy(() => import("../Faq/Faq"));
 
 const Home = () => {
+  useScrollTo()
   return (
     <main>
       <Banner />

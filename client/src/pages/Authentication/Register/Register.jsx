@@ -188,7 +188,7 @@ const Register = () => {
 
         <button
           disabled={isSubmitting || imageLoading}
-          className="btn btn-primary w-full h-14 rounded-2xl text-lg font-black italic tracking-widest shadow-xl shadow-primary/20 mt-4"
+          className="btn-main w-full pt-3"
         >
           {isSubmitting ? "CREATING..." : "START JOURNEY"}
         </button>
