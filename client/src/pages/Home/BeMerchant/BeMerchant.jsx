@@ -1,5 +1,5 @@
-import merchantImg from "../../../assets/location-merchant.png";
-import beMerchantBg from "../../../assets/be-a-merchant-bg.png";
+import merchantImg from "../../../assets/location-merchant.avif";
+import beMerchantBg from "../../../assets/be-a-merchant-bg.jpg";
 import { motion as Motion } from "motion/react";
 import ActionPortal from "../../../components/shared/ActionPortal";
 import { FaHandshake } from "react-icons/fa";
