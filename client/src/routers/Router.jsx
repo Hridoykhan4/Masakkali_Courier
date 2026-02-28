@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 
-// Layouts (Loaded immediately for instant Shell)
+// Layouts
 import RootLayout from "../layouts/RootLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -11,11 +11,8 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import RiderRoute from "./RiderRoute";
 import UserRoute from "./UserRoute";
-import ErrorPage from "../pages/ErrorPage/ErrorPage";
-import ErrorLoadingState from "../components/ErrorLoadingState";
-import About from "../pages/About/About";
 
-// Helper: Standardized Loading Wrapper
+// Helper Loading Wrapper
 // eslint-disable-next-line no-unused-vars
 const Loadable = (Component) => (props) => (
   <Suspense fallback={<ErrorLoadingState isPending={true} />}>
@@ -27,6 +24,9 @@ const Loadable = (Component) => (props) => (
 const Home = lazy(() => import("../pages/Home/Home/Home"));
 const Coverage = lazy(() => import("../pages/Coverage/Coverage"));
 const Login = lazy(() => import("../pages/Authentication/Login/Login"));
+const About = lazy(() => import("../pages/About/About"));
+const ErrorLoadingState = lazy(() => import("../components/ErrorLoadingState"));
+const ErrorPage = lazy(() => import("../pages/ErrorPage/ErrorPage"));
 const ForgetPassword = lazy(
   () => import("../pages/Authentication/ForgetPassword/ForgetPassword"),
 );
@@ -108,9 +108,9 @@ const Router = createBrowserRouter([
         ),
       },
       {
-        path: 'about',
-        element: React.createElement(Loadable(About))
-      }
+        path: "about",
+        element: React.createElement(Loadable(About)),
+      },
     ],
   },
   {

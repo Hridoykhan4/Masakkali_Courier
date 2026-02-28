@@ -11,11 +11,10 @@ const useUserRole = () => {
         queryFn: async() => {
             try {
                 const {data} = await axiosSecure.get(`/users/${user?.email}/role`);
-                // FIX: Ensure we return something other than undefined
                 return data?.role || 'user'; 
             } catch (error) {
                 console.error("Role fetch error", error);
-                return 'user'; // Fallback value
+                return 'user'; 
             }
         },
         enabled: !authLoading && !!user?.email
@@ -24,3 +23,4 @@ const useUserRole = () => {
     return {role, loading: authLoading || roleLoading, refetch}
 };
 export default useUserRole;
+

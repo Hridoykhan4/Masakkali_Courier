@@ -19,17 +19,13 @@ const ErrorPage = () => {
     <main className="min-h-screen flex flex-col items-center justify-center bg-base-100 p-6 text-center">
       <div className="max-w-md w-full">
         <Suspense
-          fallback={
-            <div className="h-72 flex items-center justify-center">
-              Loading...
-            </div>
-          }
+          fallback={null}
         >
           {animationData ? (
             <Lottie
               animationData={animationData}
               // 2. Pass the light engine here to stop the 'Activity' error
-              lottieObj={lottieLight}
+              lottieobj={lottieLight}
               loop={true}
               className="h-72 w-full mx-auto"
             />
