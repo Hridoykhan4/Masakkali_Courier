@@ -51,6 +51,7 @@ const Navbar = ({ fromAuth }) => {
       toast.error("Logout failed. Please try again.");
     }
   };
+
   const confirmLogout = () => {
     toast.info(
       ({ closeToast }) => (
@@ -64,7 +65,7 @@ const Navbar = ({ fromAuth }) => {
             </p>
           </div>
           <p className="text-xs text-base-content/70">
-            Are you sure you want to sign out of your session?
+            Are you sure you want to sign out of your session ?
           </p>
           <div className="flex justify-end gap-2">
             <button
@@ -246,6 +247,7 @@ const Navbar = ({ fromAuth }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{duration: 0.3, delay: 0.2, ease: 'backInOut'}}
               onClick={() => setIsOpen(false)}
               className="fixed inset-0 bg-base-300/60 backdrop-blur-sm lg:hidden z-101"
             />

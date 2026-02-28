@@ -70,7 +70,7 @@ const MasakkaliLogo = () => {
               scale: [1, 1.3, 1],
               opacity: [1, 0.5, 1],
             }}
-            transition={{ repeat: Infinity, duration: 2 }}
+            transition={{ repeat: Infinity, duration: 2 }}  
             className="w-1.5 h-1.5 rounded-full bg-primary mt-3"
           />
         </div>

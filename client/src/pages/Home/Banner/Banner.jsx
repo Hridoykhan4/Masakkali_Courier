@@ -36,7 +36,6 @@ const slides = [
   },
 ];
 
-
 const StatBadge = ({ stat, statLabel, color }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -60,7 +59,6 @@ const StatBadge = ({ stat, statLabel, color }) => (
     </span>
   </motion.div>
 );
-
 
 const GridLines = () => (
   <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -140,7 +138,6 @@ const Banner = () => {
   const nextSlide = useCallback(() => {
     setIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   }, []);
-
 
   useEffect(() => {
     if (isHovered) return;
@@ -226,6 +223,7 @@ const Banner = () => {
           </AnimatePresence>
 
           {/* Slide counter */}
+
           <div className="flex items-center gap-2 opacity-30">
             <span className="text-xs font-bold text-base-content tabular-nums">
               {String(index + 1).padStart(2, "0")}
@@ -240,7 +238,7 @@ const Banner = () => {
         {/* MIDDLE ROW: headline + stat + CTA */}
         <div className="flex flex-col lg:flex-row lg:items-end gap-10 lg:gap-0 my-auto">
           {/* ─── HEADLINE ─── */}
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 space-y-4 lg:space-y-8">
             <div className="relative overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.h1
@@ -337,9 +335,9 @@ const Banner = () => {
         </div>
 
         {/* BOTTOM ROW: mobile dots + scroll hint */}
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center mt-6 justify-between w-full">
           {/* Mobile dots */}
-          <div className="flex lg:hidden items-center gap-3">
+          <div className="flex lg:hidden  items-center gap-3">
             {slides.map((item, i) => (
               <button
                 key={i}
@@ -354,7 +352,6 @@ const Banner = () => {
                   opacity: index === i ? 1 : 0.2,
                 }}
               >
-                {/* Auto-progress bar inside active dot */}
                 {index === i && (
                   <motion.div
                     className="absolute inset-y-0 left-0 rounded-full"

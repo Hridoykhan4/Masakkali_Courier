@@ -22,7 +22,7 @@ const Home = () => {
 
       <Suspense
         fallback={
-          <div className="h-64 animate-pulse bg-gray-100 m-10 rounded-3xl" />
+          <div className="h-64 animate-pulse bg-base-100 m-10 rounded-3xl" />
         }
       >
         <OurServices />

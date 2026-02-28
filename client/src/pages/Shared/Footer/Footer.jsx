@@ -68,7 +68,7 @@ const Footer = () => {
             <h4 className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 opacity-70">
               Newsletter
             </h4>
-            <form className="relative flex items-center">
+            <form onSubmit={(e) => e.preventDefault()} className="relative flex items-center">
               <input
                 type="email"
                 placeholder="Email address"
@@ -94,7 +94,7 @@ const Footer = () => {
             </div>
             <button
               onClick={scrollToTop}
-              className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity"
+              className="group cursor-pointer flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity"
             >
               Top{" "}
               <FaArrowUp className="group-hover:-translate-y-1 transition-transform" />
@@ -103,7 +103,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* GIANT WATERMARK */}
+      {/* WATERMARK */}
       <div className="absolute -bottom-4 left-0 right-0 pointer-events-none select-none overflow-hidden opacity-[0.02] dark:opacity-[0.03]">
         <p className="text-[15vw] font-black text-center tracking-tighter leading-none">
           MASAKKALI
