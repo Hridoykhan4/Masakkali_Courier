@@ -134,7 +134,6 @@ const BeARider = () => {
 
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
-  // const color = "var(--color-primary)";
 
   const regions = useMemo(
     () => [...new Set(coverageData.map((d) => d.region))],

@@ -1,4 +1,3 @@
-// Frontend version
 const calculateParcelCost = ({ type, weight: weightData, isSameRegion }) => {
   const weight = Number(weightData) || 0;
 

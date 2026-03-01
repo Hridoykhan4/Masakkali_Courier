@@ -148,21 +148,26 @@ async function run() {
     });
 
     // Getting the role of a user
-    app.get("/users/:email/role", verifyFBToken, verifyAuthorizeEmail('params'), async (req, res) => {
-      try {
-        const email = req.params.email;
-        if (!email) {
-          return res.status(400).send({ message: "Email is required" });
+    app.get(
+      "/users/:email/role",
+      verifyFBToken,
+      verifyAuthorizeEmail("params"),
+      async (req, res) => {
+        try {
+          const email = req.params.email;
+          if (!email) {
+            return res.status(400).send({ message: "Email is required" });
+          }
+          const user = await userCollection.findOne({ email });
+          if (!user) {
+            return res.status(404).send({ message: "Users not found" });
+          }
+          res.send({ role: user?.role || "user" });
+        } catch (err) {
+          res.status(500).send({ message: "Failed to get role" });
         }
-        const user = await userCollection.findOne({ email });
-        if (!user) {
-          return res.status(404).send({ message: "Users not found" });
-        }
-        res.send({ role: user?.role || "user" });
-      } catch (err) {
-        res.status(500).send({ message: "Failed to get role" });
-      }
-    });
+      },
+    );
 
     app.post("/users", async (req, res) => {
       const { email, lastLoggedIn } = req.body;
@@ -190,7 +195,7 @@ async function run() {
           return res.status(400).send({ message: "Invalid role" });
         }
 
-        const user = await userCollection.findOne({ _id: new ObjectId(id) }); 
+        const user = await userCollection.findOne({ _id: new ObjectId(id) });
 
         if (!user) {
           return res.status(404).send({ message: "User not found" });
@@ -310,63 +315,68 @@ async function run() {
       }
     });
 
-    app.get("/riders/earnings-summary", verifyFBToken, verifyRider, async (req, res) => {
-      try {
-        const email = req.tokenEmail;
-        const rider = await ridersCollection.findOne({ email });
-        if (!rider) {
-          return res.status(404).send({ message: "Rider not found" });
-        }
-
-        const deliveries = await parcelCollection
-          .find({
-            rider_id: rider._id.toString(),
-            delivery_status: {
-              $in: ["delivered", "delivered-to-service-center"],
-            },
-          })
-          .toArray();
-
-        const now = new Date();
-        const startOfWeek = new Date(now);
-        startOfWeek.setDate(now.getDate() - now.getDay());
-
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const startOfYear = new Date(now.getFullYear(), 0, 1);
-
-        let total = 0;
-        let cashedOut = 0;
-        let pending = 0;
-        let weekly = 0;
-        let monthly = 0;
-        let yearly = 0;
-
-        deliveries.forEach((d) => {
-          const earning = d.earning || 0;
-          const deliveredAt = new Date(d.delivered_at);
-          total += earning;
-          if (d.cashout_status === "cashed_out") {
-            cashedOut += earning;
-          } else {
-            pending += earning;
+    app.get(
+      "/riders/earnings-summary",
+      verifyFBToken,
+      verifyRider,
+      async (req, res) => {
+        try {
+          const email = req.tokenEmail;
+          const rider = await ridersCollection.findOne({ email });
+          if (!rider) {
+            return res.status(404).send({ message: "Rider not found" });
           }
 
-          if (deliveredAt >= startOfWeek) weekly += earning;
-          if (deliveredAt >= startOfMonth) monthly += earning;
-          if (deliveredAt >= startOfYear) yearly += earning;
-        });
-        res.send({
-          total,
-          cashedOut,
-          pending,
-          weekly,
-          monthly,
-          yearly,
-        });
-      } catch (error) {
-        res.status(500).send({ message: "Failed to load earnings summary" });
-      }
-    });
+          const deliveries = await parcelCollection
+            .find({
+              rider_id: rider._id.toString(),
+              delivery_status: {
+                $in: ["delivered", "delivered-to-service-center"],
+              },
+            })
+            .toArray();
+
+          const now = new Date();
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() - now.getDay());
+
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          const startOfYear = new Date(now.getFullYear(), 0, 1);
+
+          let total = 0;
+          let cashedOut = 0;
+          let pending = 0;
+          let weekly = 0;
+          let monthly = 0;
+          let yearly = 0;
+
+          deliveries.forEach((d) => {
+            const earning = d.earning || 0;
+            const deliveredAt = new Date(d.delivered_at);
+            total += earning;
+            if (d.cashout_status === "cashed_out") {
+              cashedOut += earning;
+            } else {
+              pending += earning;
+            }
+
+            if (deliveredAt >= startOfWeek) weekly += earning;
+            if (deliveredAt >= startOfMonth) monthly += earning;
+            if (deliveredAt >= startOfYear) yearly += earning;
+          });
+          res.send({
+            total,
+            cashedOut,
+            pending,
+            weekly,
+            monthly,
+            yearly,
+          });
+        } catch (error) {
+          res.status(500).send({ message: "Failed to load earnings summary" });
+        }
+      },
+    );
 
     app.post("/riders", verifyFBToken, async (req, res) => {
       const {

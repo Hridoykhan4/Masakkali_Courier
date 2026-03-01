@@ -14,6 +14,8 @@ const SendParcel = () => {
   const axiosSecure = useAxiosSecure();
   const { theme } = useTheme();
   const nav = useNavigate();
+
+
   const { isPending, mutateAsync } = useMutation({
     mutationFn: async (parcel) => {
       const { data } = await axiosSecure.post("/parcels", parcel);
@@ -56,7 +58,6 @@ const SendParcel = () => {
           </div>
         </div>
 
-        {/* 2. THE STATUS TEXT */}
         <div className="text-center space-y-2">
           <h3 className="text-xl font-black italic uppercase tracking-tighter">
             Initializing <span className="text-primary">Shipment</span>
@@ -69,7 +70,7 @@ const SendParcel = () => {
           </div>
         </div>
 
-        {/* 3. THE UX SAFETY NET */}
+
         <p className="text-[10px] text-base-content/30 font-medium max-w-50 text-center leading-relaxed">
           Please do not refresh or close this window while we secure your slot.
         </p>

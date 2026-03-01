@@ -21,8 +21,6 @@ const generateTrackingID = () => {
 };
 
 const ParcelForm = ({
-  // eslint-disable-next-line no-unused-vars
-  mode = "create",
   defaultValues = {},
   onSubmitParcel,
 }) => {
@@ -86,7 +84,7 @@ const ParcelForm = ({
 
   return (
     <section>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 selection:bg-primary selection:text-white lg:grid-cols-12 gap-8 items-start">
         {/* LEFT: MULTI-STEP FORM (8 Cols) */}
         <div className="lg:col-span-8 order-2 lg:order-1">
           <motion.div
@@ -95,7 +93,8 @@ const ParcelForm = ({
             className="bg-base-100 rounded-[2.5rem] p-8 md:p-12 shadow-2xl border border-base-content/5 overflow-hidden relative"
           >
             {/* PROGRESS BAR */}
-            <div className="flex items-center justify-between mb-12 relative">
+            
+              <div className="flex items-center justify-between mb-12 relative">
               <div className="absolute top-1/2 left-0 w-full h-0.5 bg-base-content/10 -translate-y-1/2 z-0" />
               <div
                 className="absolute top-1/2 left-0 h-0.5 bg-primary -translate-y-1/2 z-0 transition-all duration-500"
