@@ -183,7 +183,7 @@ const HowItWorks = () => {
         {steps.map((step, i) => (
           <div key={step.id} className="contents">
             <StepCard step={step} index={i} />
-            {i < steps.length - 1 && <Connector color={steps[i + 1].color} />}
+            {i < steps.length - 1 && <Connector color={steps[i + 1].color}></Connector>}
           </div>
         ))}
       </div>
