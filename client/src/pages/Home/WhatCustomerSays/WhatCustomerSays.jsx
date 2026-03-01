@@ -153,7 +153,7 @@ const WhatCustomerSays = () => {
               <button
                 key={idx}
                 onClick={() => scrollToSelector(idx)}
-                className={`h-1 cursor-pointer transition-all duration-700 rounded-full ${
+                className={`h-1 cursor-pointer hover:bg-accent transition-all duration-700 rounded-full ${
                   currentIndex === idx ? "w-16 bg-primary" : "w-4 bg-base-content/10"
                 }`}
               />

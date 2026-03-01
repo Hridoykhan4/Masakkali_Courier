@@ -148,14 +148,11 @@ async function run() {
     });
 
     // Getting the role of a user
-    app.get("/users/:email/role", verifyFBToken, async (req, res) => {
+    app.get("/users/:email/role", verifyFBToken, verifyAuthorizeEmail('params'), async (req, res) => {
       try {
         const email = req.params.email;
         if (!email) {
           return res.status(400).send({ message: "Email is required" });
-        }
-        if (email !== req.tokenEmail) {
-          return res.status(403).send({ message: "Forbidden Access" });
         }
         const user = await userCollection.findOne({ email });
         if (!user) {
@@ -193,7 +190,7 @@ async function run() {
           return res.status(400).send({ message: "Invalid role" });
         }
 
-        const user = await userCollection.findOne({ _id: new ObjectId(id) });
+        const user = await userCollection.findOne({ _id: new ObjectId(id) }); 
 
         if (!user) {
           return res.status(404).send({ message: "User not found" });
@@ -313,7 +310,7 @@ async function run() {
       }
     });
 
-    app.get("/riders/earnings-summary", verifyFBToken, async (req, res) => {
+    app.get("/riders/earnings-summary", verifyFBToken, verifyRider, async (req, res) => {
       try {
         const email = req.tokenEmail;
         const rider = await ridersCollection.findOne({ email });

@@ -44,6 +44,7 @@ const steps = [
 ];
 
 // Connector line between cards (desktop only)
+
 const Connector = ({ color }) => (
   <div className="hidden lg:flex items-center shrink-0 w-8 mt-10">
     <div className="relative w-full h-px" style={{ background: `${color}30` }}>
@@ -183,7 +184,9 @@ const HowItWorks = () => {
         {steps.map((step, i) => (
           <div key={step.id} className="contents">
             <StepCard step={step} index={i} />
-            {i < steps.length - 1 && <Connector color={steps[i + 1].color}></Connector>}
+            {i < steps.length - 1 && (
+              <Connector color={steps[i + 1].color}></Connector>
+            )}
           </div>
         ))}
       </div>
@@ -222,7 +225,7 @@ const HowItWorks = () => {
               </p>
             </div>
           </div>
-      ))}
+        ))}
       </Motion.div>
     </section>
   );

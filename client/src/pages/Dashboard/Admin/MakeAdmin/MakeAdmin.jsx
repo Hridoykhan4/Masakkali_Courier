@@ -108,7 +108,6 @@ const UserRow = ({ user, onRoleChange, isUpdating }) => {
               Restricted
             </span>
           ) : confirming ? (
-            // Cancel when already confirming
             <button
               onClick={() => setConfirming(false)}
               className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider px-3 py-2 rounded-xl border border-base-content/10 opacity-50 hover:opacity-80 transition-all"
@@ -139,7 +138,7 @@ const UserRow = ({ user, onRoleChange, isUpdating }) => {
                 <span className="loading loading-spinner loading-xs" />
               ) : isAdmin ? (
                 <>
-                  <FaUserTimes className="text-xs" /> Revoke
+                  <FaUserTimes className="text-xs" /> Revoke 
                 </>
               ) : (
                 <>
@@ -338,7 +337,7 @@ const MakeAdmin = () => {
               ].map((s) => (
                 <div
                   key={s.label}
-                  className="flex items-center gap-2.5 px-4 py-3 rounded-2xl border border-base-content/5 bg-base-200/50"
+                  className="flex gap-2.5 px-4 py-3 rounded-2xl border border-base-content/5 bg-base-200/50"
                 >
                   <span className="text-sm" style={{ color: s.color }}>
                     {s.icon}
