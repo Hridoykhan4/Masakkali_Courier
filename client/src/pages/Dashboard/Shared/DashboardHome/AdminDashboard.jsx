@@ -1,308 +1,402 @@
-/* eslint-disable no-unused-vars */
 import { useQuery } from "@tanstack/react-query";
+import { useRef } from "react";
 import {
-  FaUsers,
-  FaMotorcycle,
-  FaBox,
-  FaCheckCircle,
-  FaMoneyBillWave,
+  FaUsers, FaMotorcycle, FaBox, FaCheckCircle, FaMoneyBillWave,
 } from "react-icons/fa";
+import { MdElectricBolt } from "react-icons/md";
+import { HiOutlineTrendingUp } from "react-icons/hi";
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis,
+  Tooltip, PieChart, Pie, Cell, Legend,
 } from "recharts";
+import { motion as Motion, useInView } from "framer-motion";
 
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
 
-/* ===============================
-   THEME-STABLE CHART COLORS
-   (Using Hex for SVG engine stability)
-================================ */
+// ── STATUS PALETTE ────────────────────────
 const STATUS_COLORS = {
-  delivered: "#10b981", // success
-  pending: "#f59e0b", // warning
-  assigned: "#0ea5e9", // info/secondary
-  "in-transit": "#8b5cf6", // primary/accent
-  cancelled: "#ef4444", // error
-  default: "#64748b",
+  delivered:   "#10b981",
+  pending:     "#fbbf24",
+  assigned:    "#38bdf8",
+  "in-transit":"#a78bfa",
+  cancelled:   "#f87171",
+  default:     "#64748b",
 };
 
-/* ===============================
-   CUSTOM TOOLTIP (Fixed Visibility)
-================================ */
+// ── STAT CARD META ────────────────────────
+const STATS_META = [
+  { key: "totalUsers",     label: "Total Users",      icon: FaUsers,        color: "#38bdf8" },
+  { key: "totalRiders",    label: "Active Riders",    icon: FaMotorcycle,   color: "#fbbf24" },
+  { key: "totalParcels",   label: "Total Parcels",    icon: FaBox,          color: "#a78bfa" },
+  { key: "deliveredToday", label: "Delivered Today",  icon: FaCheckCircle,  color: "#10b981" },
+  { key: "revenueToday",   label: "Revenue Today",    icon: FaMoneyBillWave,color: "#34d399", prefix: "৳ " },
+];
+
+// ── CUSTOM TOOLTIP ─────────────────────────
 const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-base-100 border border-base-300 p-3 rounded-xl shadow-xl ring-1 ring-black/5">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-base-content/40 mb-1">
-          {label}
-        </p>
-        <p className="text-sm font-bold text-base-content">
-          Total: <span className="text-primary">{payload[0].value}</span>
-        </p>
-      </div>
-    );
-  }
-  return null;
-};
-
-/* ===============================
-   STAT CARD
-================================ */
-const colorMap = {
-  primary: "bg-primary/10 text-primary",
-  secondary: "bg-secondary/10 text-secondary",
-  accent: "bg-accent/10 text-accent",
-  success: "bg-success/10 text-success",
-  warning: "bg-warning/10 text-warning",
-};
-
-const StatCard = ({ icon: Icon, label, value, variant = "primary" }) => {
+  if (!active || !payload?.length) return null;
+  const color = payload[0]?.fill ?? "var(--color-primary)";
   return (
-    <div className="group bg-base-100 rounded-2xl p-5 ring-1 ring-base-300/50 shadow-sm hover:shadow-md transition-all duration-300">
-      <div className="flex items-center justify-between mb-3">
-        <div
-          className={`p-3 rounded-xl group-hover:scale-110 transition-transform ${colorMap[variant]}`}
-        >
-          <Icon className="text-xl" />
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-          </span>
-          <span className="text-[10px] uppercase font-bold text-base-content/30 tracking-tighter">
-            Live
-          </span>
-        </div>
-      </div>
-      <p className="text-xs font-semibold text-base-content/50 uppercase tracking-tight mb-1">
-        {label}
-      </p>
-      <p className="text-2xl font-bold tracking-tight text-base-content">
-        {value ?? 0}
+    <div
+      className="px-4 py-3 rounded-2xl border border-base-content/8 shadow-2xl backdrop-blur-sm text-sm"
+      style={{ background: "var(--color-base-100)" }}
+    >
+      <p className="text-[9px] font-black uppercase tracking-widest opacity-35 mb-1">{label}</p>
+      <p className="font-black" style={{ color }}>
+        {payload[0].value} <span className="text-[10px] opacity-40 font-medium">parcels</span>
       </p>
     </div>
   );
 };
 
-/* ===============================
-   DELIVERY CHARTS
-================================ */
+// ── STAT CARD ──────────────────────────────
+// eslint-disable-next-line no-unused-vars
+const StatCard = ({ icon: Icon, label, value, color, prefix = "", delay = 0 }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+
+  return (
+    <Motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 18 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative flex flex-col gap-3 p-5 rounded-2xl border border-base-content/5 bg-base-100 overflow-hidden transition-all duration-400 hover:border-base-content/10 hover:shadow-xl"
+    >
+      {/* Hover glow */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: `radial-gradient(circle at 0% 0%, ${color}12, transparent 65%)` }}
+      />
+
+      {/* Top row */}
+      <div className="flex items-center justify-between">
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0 transition-transform duration-300 group-hover:scale-110"
+          style={{ background: `${color}18`, color }}
+        >
+          <Icon />
+        </div>
+        {/* Live pulse */}
+        <div className="flex items-center gap-1.5">
+          <Motion.span
+            animate={{ opacity: [1, 0.3, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: color }}
+          />
+          <span className="text-[8px] font-black uppercase tracking-widest opacity-25">Live</span>
+        </div>
+      </div>
+
+      {/* Value */}
+      <div>
+        <p className="text-2xl md:text-3xl font-black tabular-nums leading-none" style={{ color }}>
+          {prefix}{value ?? 0}
+        </p>
+        <p className="text-[9px] font-black uppercase tracking-widest opacity-25 mt-1.5">{label}</p>
+      </div>
+    </Motion.div>
+  );
+};
+
+// ── STATUS MINI CARD ──────────────────────
+const StatusMini = ({ status, count, delay }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  const color = STATUS_COLORS[status] ?? STATUS_COLORS.default;
+  const label = status.replace("-", " ");
+
+  return (
+    <Motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 12 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.45, delay }}
+      className="group relative flex flex-col gap-3 p-5 rounded-2xl border border-base-content/5 bg-base-100 overflow-hidden transition-all duration-300 hover:border-base-content/10"
+    >
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: `radial-gradient(circle at 50% 100%, ${color}10, transparent 70%)` }}
+      />
+      {/* Bottom accent bar */}
+      <Motion.div
+        className="absolute bottom-0 left-4 right-4 h-0.5 rounded-full"
+        style={{ backgroundColor: color }}
+        initial={{ scaleX: 0 }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 0.6, delay: delay + 0.15, ease: "easeOut" }}
+      />
+      <p
+        className="text-[9px] font-black uppercase tracking-[0.25em] "
+        style={{ color }}
+      >
+        {label}
+      </p>
+      <div className="flex items-baseline gap-1.5">
+        <p className="text-3xl font-black tabular-nums leading-none">{count}</p>
+        <span className="text-[9px] font-bold opacity-25 uppercase tracking-widest mb-0.5">units</span>
+      </div>
+    </Motion.div>
+  );
+};
+
+// ── CHARTS SECTION ─────────────────────────
 const DeliveryCharts = ({ data }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
   const formatted = data.map((d) => ({
-    name:
-      d.status.charAt(0).toUpperCase() + d.status.slice(1).replace("-", " "),
+    name: d.status.charAt(0).toUpperCase() + d.status.slice(1).replace("-", " "),
     value: d.count,
-    color: STATUS_COLORS[d.status] || STATUS_COLORS.default,
+    color: STATUS_COLORS[d.status] ?? STATUS_COLORS.default,
   }));
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div ref={ref} className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
       {/* BAR CHART */}
-      <div className="lg:col-span-7 bg-base-100 rounded-2xl p-6 ring-1 ring-base-300/50 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-base-content">Delivery Volume</h3>
-          <span className="text-[10px] bg-base-200 px-2 py-1 rounded text-base-content/50 font-bold uppercase">
-            Parcels
+      <Motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="lg:col-span-7 rounded-3xl border border-base-content/5 bg-base-100 overflow-hidden"
+      >
+        <div
+          className="flex items-center justify-between px-6 py-4 border-b border-base-content/5"
+          style={{ background: "color-mix(in srgb, var(--color-primary) 4%, transparent)" }}
+        >
+          <div className="flex items-center gap-2">
+            <HiOutlineTrendingUp className="text-primary text-base" />
+            <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Delivery Volume</span>
+          </div>
+          <span
+            className="text-[9px] font-black px-2 py-1 rounded-full"
+            style={{ color: "var(--color-primary)", background: "color-mix(in srgb, var(--color-primary) 12%, transparent)" }}
+          >
+            By Status
           </span>
         </div>
-        <div className="h-70 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={formatted}
-              margin={{ top: 0, right: 0, left: -25, bottom: 0 }}
-            >
+
+        <div className="p-4 md:p-6" style={{ minHeight: 280 }}>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={formatted} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
               <XAxis
                 dataKey="name"
-                fontSize={11}
+                fontSize={10}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "currentColor", opacity: 0.5 }}
+                tick={{ fill: "currentColor", opacity: 0.4, fontWeight: 700 }}
               />
               <YAxis
-                fontSize={11}
+                fontSize={10}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "currentColor", opacity: 0.5 }}
+                tick={{ fill: "currentColor", opacity: 0.3, fontWeight: 700 }}
               />
-              <Tooltip
-                content={<CustomTooltip />}
-                cursor={{ fill: "currentColor", opacity: 0.05 }}
-              />
-              <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={35}>
-                {formatted.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "currentColor", opacity: 0.04 }} />
+              <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={40}>
+                {formatted.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} />
                 ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </Motion.div>
 
       {/* DONUT CHART */}
-      <div className="lg:col-span-5 bg-base-100 rounded-2xl p-6 ring-1 ring-base-300/50 shadow-sm">
-        <h3 className="font-bold mb-6 text-base-content">
-          Status Distribution
-        </h3>
-        <div className="h-70 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+      <Motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        className="lg:col-span-5 rounded-3xl border border-base-content/5 bg-base-100 overflow-hidden"
+      >
+        <div
+          className="flex items-center justify-between px-6 py-4 border-b border-base-content/5"
+          style={{ background: "color-mix(in srgb, var(--color-primary) 4%, transparent)" }}
+        >
+          <div className="flex items-center gap-2">
+            <MdElectricBolt className="text-primary text-base" />
+            <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Distribution</span>
+          </div>
+        </div>
+        
+        <div className="p-4 md:p-6" style={{ minHeight: 280 }}>
+          <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
                 data={formatted}
                 dataKey="value"
                 nameKey="name"
-                innerRadius={65}
-                outerRadius={90}
-                paddingAngle={5}
+                innerRadius="52%"
+                outerRadius="72%"
+                paddingAngle={4}
                 stroke="none"
               >
-                {formatted.map((entry, index) => (
-                  <Cell key={`cell-pie-${index}`} fill={entry.color} />
+                {formatted.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
               <Legend
                 verticalAlign="bottom"
                 iconType="circle"
-                wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }}
+                iconSize={8}
+                wrapperStyle={{ fontSize: "10px", fontWeight: 700, paddingTop: 16, opacity: 0.6 }}
               />
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </Motion.div>
     </div>
   );
 };
 
-/* ===============================
-   ADMIN DASHBOARD
-================================ */
+// ─────────────────────────────────────────
+// MAIN DASHBOARD
+// ─────────────────────────────────────────
 const AdminDashboard = () => {
   const axiosSecure = useAxiosSecure();
+  const headerRef = useRef(null);
+  const headerInView = useInView(headerRef, { once: true });
 
-  // OVERVIEW STATS
   const { data: overview, isLoading } = useQuery({
     queryKey: ["admin-overview"],
-    queryFn: async () => {
-      const res = await axiosSecure.get("/admin/overview");
-      return res.data;
-    },
+    queryFn: async () => (await axiosSecure.get("/admin/overview")).data,
     staleTime: 60_000,
     refetchInterval: 30_000,
   });
 
-  // DELIVERY STATUS COUNT
   const { data: statusCount = [] } = useQuery({
     queryKey: ["delivery-status-count"],
-    queryFn: async () => {
-      const res = await axiosSecure.get("/parcels/delivery/status-count");
-      return res.data;
-    },
+    queryFn: async () => (await axiosSecure.get("/parcels/delivery/status-count")).data,
     staleTime: 60_000,
     refetchInterval: 30_000,
   });
 
   if (isLoading) return <ErrorLoadingState isPending />;
 
-  console.log(overview);
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString("en-US", {
+    hour: "2-digit", minute: "2-digit", hour12: true,
+  });
+  const dateStr = now.toLocaleDateString("en-GB", {
+    weekday: "long", day: "numeric", month: "long",
+  });
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8 font-urbanist animate-in fade-in duration-500">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-base-300/30 pb-6">
-        <div>
-          <h1 className="text-3xl font-black tracking-tight text-base-content">
+    <div className="space-y-8 font-urbanist">
+
+      {/* ── HEADER ── */}
+      <div ref={headerRef}>
+        <Motion.div
+          // initial={{ opacity: 0, x: -14 }}
+          // animate={headerInView ? { opacity: 1, x: 0 } : {}}
+          className="flex items-center gap-2.5 mb-4"
+        >
+          <Motion.span
+            animate={{ scale: [1, 1.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-2 h-2 rounded-full bg-primary shrink-0"
+          />
+          <span className="text-[11px] font-black tracking-[0.3em] uppercase text-primary">
             System Analytics
-          </h1>
-          <p className="text-base-content/50 font-medium">
-            Real-time monitoring of delivery operations
-          </p>
-        </div>
+          </span>
+        </Motion.div>
 
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 bg-base-200 rounded-lg text-xs font-bold text-base-content/60 uppercase tracking-widest border border-base-300/50">
-            Dashboard v2.1
-          </div>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <Motion.div
+            // initial={{ opacity: 0, y: 22 }}
+            // animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            // transition={{ delay: 0.07, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter leading-[0.9]">
+              COMMAND
+              <br />
+              <span style={{ WebkitTextStroke: "2px var(--color-primary)", color: "transparent" }}>
+                CENTER.
+              </span>
+            </h1>
+            <p className="text-sm font-medium opacity-40 mt-3">
+              Real-time monitoring of all delivery operations.
+            </p>
+          </Motion.div>
+
+          {/* Date + time chip */}
+          <Motion.div
+            initial={{ opacity: 0 }}
+            animate={headerInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.25 }}
+            className="flex flex-col items-start sm:items-end gap-0.5 shrink-0"
+          >
+            <p className="text-[10px] font-black uppercase tracking-widest opacity-25">{dateStr}</p>
+            <p className="text-2xl font-black tabular-nums text-primary leading-none">{timeStr}</p>
+          </Motion.div>
         </div>
       </div>
 
-      {/* TOP LEVEL STATS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-        <StatCard
-          icon={FaUsers}
-          label="Total Users"
-          value={overview?.totalUsers}
-          variant="primary"
-        />
-        <StatCard
-          icon={FaMotorcycle}
-          label="Active Riders"
-          value={overview?.totalRiders}
-          variant="secondary"
-        />
-        <StatCard
-          icon={FaBox}
-          label="Total Parcels"
-          value={overview?.totalParcels}
-          variant="accent"
-        />
-        <StatCard
-          icon={FaCheckCircle}
-          label="Delivered Today"
-          value={overview?.deliveredToday}
-          variant="success"
-        />
-        <StatCard
-          icon={FaMoneyBillWave}
-          label="Revenue Today"
-          value={`৳ ${overview?.revenueToday}`}
-          variant="warning"
-        />
+      {/* ── STAT CARDS ── */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+        {STATS_META.map((s, i) => (
+          <StatCard
+            key={s.key}
+            icon={s.icon}
+            label={s.label}
+            value={overview?.[s.key]}
+            color={s.color}
+            prefix={s.prefix ?? ""}
+            delay={i * 0.07}
+          />
+        ))}
       </div>
 
-      {/* ANALYTICS SECTION */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-base-content">
+      {/* ── CHARTS ── */}
+      <div>
+        <Motion.div
+          initial={{ opacity: 0, x: -12 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45 }}
+          className="flex items-center gap-3 mb-5"
+        >
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">
             Logistics Performance
-          </h2>
-          <div className="h-px flex-1 bg-base-300/30 mx-6 hidden md:block"></div>
-        </div>
+          </span>
+          <div className="flex-1 h-px bg-base-content/5" />
+        </Motion.div>
 
         <DeliveryCharts data={statusCount} />
+      </div>
 
-        {/* STATUS CARDS GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {statusCount.map((item) => (
-            <div
+      {/* ── STATUS MINI CARDS ── */}
+      <div>
+        <Motion.div
+          initial={{ opacity: 0, x: -12 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45 }}
+          className="flex items-center gap-3 mb-5"
+        >
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">
+            Status Breakdown
+          </span>
+          <div className="flex-1 h-px bg-base-content/5" />
+        </Motion.div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+          {statusCount.map((item, i) => (
+            <StatusMini
               key={item.status}
-              className="bg-base-200/40 rounded-2xl p-6 ring-1 ring-base-300/20 hover:ring-primary/30 transition-all group"
-            >
-              <p className="text-[10px] font-black uppercase tracking-widest text-base-content/40 mb-2 group-hover:text-primary transition-colors">
-                {item.status.replace("-", " ")}
-              </p>
-              <div className="flex items-baseline gap-1">
-                <p className="text-3xl font-black italic text-base-content">
-                  {item.count}
-                </p>
-                <span className="text-[10px] font-bold text-base-content/30 italic">
-                  Units
-                </span>
-              </div>
-            </div>
+              status={item.status}
+              count={item.count}
+              delay={i * 0.06}
+            />
           ))}
         </div>
-      </section>
+      </div>
+
     </div>
   );
 };

@@ -24,7 +24,7 @@ import coverageData from "../../../../utils/coverageData";
 const RiderAnimation = memo(() => (
   <Lottie
     path="/animations/rider.json"
-    lottieObj={lottieLight}
+    lottieobj={lottieLight}
     loop
     className="w-full h-auto drop-shadow-xl"
   />
@@ -85,7 +85,7 @@ const StepIndicator = ({ current, color }) => (
                     }
             }
           >
-            {i < current ? <FaCheckCircle className="text-[10px]" /> : i + 1}
+            {i < current ? <FaCheckCircle className="text-[10px]" /> : i + 1}  
           </div>
           <span
             className="text-[8px] font-black uppercase tracking-widest transition-colors duration-300"
@@ -147,13 +147,14 @@ const BeARider = () => {
     [region],
   );
 
-  // ── Collect data per step ──
+  // ── Data Collection
   const handleNext = (e) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget.closest("form") ?? e.currentTarget);
     const raw = Object.fromEntries(fd);
+    console.log(fd, raw);
 
-    if (step === 0) {
+    if (step === 0) { 
       const bdPhone = /^01[3-9]\d{8}$/;
       if (!bdPhone.test(raw.phone)) {
         toast.error("Enter a valid BD phone number (01XXXXXXXXX)");
@@ -182,7 +183,7 @@ const BeARider = () => {
 
     setLoading(true);
     try {
-      const { data } = await axiosSecure.post("/riders", payload);
+      const { data } = await axiosSecure.post("/riders", payload); 
       if (data?.insertedId) {
         setDone(true);
         toast.success("Application submitted! Track status in your dashboard.");
