@@ -554,7 +554,44 @@ async function run() {
       );
     });
 
-    /* AGGREGATE */
+    /* AGGREGATE *
+/* 
+
+    app.get('/admin/info', async(req, res) => {
+  
+      const userStatus = await userCollection.aggregate([
+        {
+          $group: {
+            _id: '$role',
+            total: {
+              $sum: 1
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            role: "$_id",
+            total: 1
+          }
+        }
+      ]).toArray()
+
+      const allRevenue = await paymentCollection.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalCollection: {
+              $sum: '$amount'
+            }
+          }
+        }
+      ]).toArray()
+
+      res.send(allRevenue[0].totalCollection)
+    })
+ */
+
     app.get("/parcels/delivery/status-count", async (req, res) => {
       const pipeline = [
         {
