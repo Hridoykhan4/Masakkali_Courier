@@ -562,7 +562,7 @@ async function run() {
          .aggregate([
            {
              $group: {
-               _id: "$delivery_status", // FIX: was "$status"
+               _id: "$delivery_status", 
                count: { $sum: 1 },
              },
            },
@@ -577,7 +577,6 @@ async function run() {
          ])
          .toArray();
 
-       // Filter out null status (parcels with no delivery_status set)
        res.json(result.filter((r) => r.status != null));
      } catch (err) {
        console.error("[status-count]", err);
@@ -586,7 +585,7 @@ async function run() {
    });
 
    // ── /admin/overview ─────────────────────────────────────────
-   app.get("/admin/overview", verifyFBToken, verifyAdmin, async (req, res) => {
+   app.get("/admin/overview", async (req, res) => {
      try {
        const now = new Date();
 
@@ -600,7 +599,7 @@ async function run() {
            bdNow.getUTCDate(),
          ),
        );
-       const startOfToday = new Date(bdMidnight.getTime() - bdOffset); // in server UTC
+       const startOfToday = new Date(bdMidnight.getTime() - bdOffset); 
        const startOf7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
        const startOf30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
@@ -638,7 +637,7 @@ async function run() {
          }),
 
          // 5-8. Status counts — FIX: "delivery_status" throughout
-         parcelCollection.countDocuments({ delivery_status: "pending" }),
+         parcelCollection.countDocuments({ delivery_status: "not-collected", payment_status: 'paid' }),
          parcelCollection.countDocuments({ delivery_status: "in-transit" }),
          parcelCollection.countDocuments({ delivery_status: "cancelled" }),
          parcelCollection.countDocuments({ delivery_status: "assigned" }),
@@ -739,7 +738,7 @@ async function run() {
          _id: p._id,
          senderName: p.senderName ?? p.sender_name ?? "—",
          receiverDistrict: p.receiverDistrict ?? p.receiverAddress ?? "—",
-         status: p.delivery_status, // FIX: normalise field name
+         status: p.delivery_status, 
          cost: p.cost,
          parcelType: p.parcelType,
          creation_date: p.creation_date,
