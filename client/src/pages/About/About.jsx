@@ -5,7 +5,6 @@ import {
   FaUserShield,
   FaMotorcycle,
   FaCheckCircle,
-  FaArrowRight,
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import {

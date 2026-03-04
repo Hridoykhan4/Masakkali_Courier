@@ -6,13 +6,13 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     target: "esnext",
-    minify: "esbuild", 
+    minify: "esbuild",
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined,
-        chunkFileNames: "assets/js/[name]-[hash].js",
-        entryFileNames: "assets/js/[name]-[hash].js",
-        assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
+        chunkFileNames: "assets/[name]-[hash].js",
+        entryFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash].[ext]",
       },
     },
   },

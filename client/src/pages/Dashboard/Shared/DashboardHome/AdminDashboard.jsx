@@ -31,6 +31,7 @@ import { motion as Motion, AnimatePresence, useInView } from "framer-motion";
 
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import ErrorLoadingState from "../../../../components/ErrorLoadingState";
+import useAuthValue from "../../../../hooks/useAuthValue";
 
 // ── PALETTE ───────────────────────────────────────────────────
 const S = {
@@ -399,12 +400,13 @@ const AdminDashboard = () => {
   const axiosSecure = useAxiosSecure();
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
-
+  const { user, loading } = useAuthValue();
   const { data: overview, isLoading } = useQuery({
     queryKey: ["admin-overview"],
     queryFn: async () => (await axiosSecure.get("/admin/overview")).data,
     staleTime: 60_000,
     refetchInterval: 30_000,
+    enabled: !loading && !!user,
   });
 
   const { data: statusCount = [] } = useQuery({
@@ -436,9 +438,7 @@ const AdminDashboard = () => {
     <div className="space-y-8 font-urbanist pb-10">
       {/* ── HEADER ────────────────────────────────────────── */}
       <div ref={headerRef}>
-        <Motion.div
-          className="flex items-center gap-2.5 mb-4"
-        >
+        <Motion.div className="flex items-center gap-2.5 mb-4">
           <Motion.span
             animate={{ scale: [1, 1.6, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -450,9 +450,7 @@ const AdminDashboard = () => {
         </Motion.div>
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
-          <Motion.div
-            transition={{ delay: 0.07, ease: [0.22, 1, 0.36, 1] }}
-          >
+          <Motion.div transition={{ delay: 0.07, ease: [0.22, 1, 0.36, 1] }}>
             <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-[0.88]">
               COMMAND
               <br />

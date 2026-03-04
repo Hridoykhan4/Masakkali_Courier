@@ -750,7 +750,7 @@ const EmptyState = ({ firstName }) => (
 // ─────────────────────────────────────────────────
 const UserDashboard = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const email = user?.email;
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
@@ -763,7 +763,7 @@ const UserDashboard = () => {
           `/users/dashboard?email=${encodeURIComponent(email)}`,
         )
       ).data,
-    enabled: !!email,
+    enabled: !!email && !loading,
     staleTime: 60_000,
     refetchInterval: 60_000,
   });
