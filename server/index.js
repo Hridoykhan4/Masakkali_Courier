@@ -523,9 +523,9 @@ async function run() {
       },
     );
 
-    /* RIDERS APIS */
+    /* RIDERS APIS END */
 
-    /* Parcel APIs */
+    /* Parcel APIs START*/
 
     app.get("/parcels", async (req, res) => {
       try {
@@ -554,7 +554,7 @@ async function run() {
       );
     });
 
-    /* AGGREGATE */
+    /* AGGREGATE END */
 
     app.get("/parcels/delivery/status-count", async (req, res) => {
       try {
@@ -639,7 +639,10 @@ async function run() {
           }),
 
           // 5-8. Status counts
-          parcelCollection.countDocuments({ delivery_status: "not-collected", payment_status: 'paid' }),
+          parcelCollection.countDocuments({
+            delivery_status: "not-collected",
+            payment_status: "paid",
+          }),
           parcelCollection.countDocuments({ delivery_status: "in-transit" }),
           parcelCollection.countDocuments({ delivery_status: "cancelled" }),
           parcelCollection.countDocuments({ delivery_status: "assigned" }),
@@ -765,7 +768,178 @@ async function run() {
         res.status(500).json({ message: "Internal Server Error" });
       }
     });
-    /* AGGREGATE */
+
+    app.get(
+      "/users/dashboard",
+      // verifyFBToken,
+      // verifyAuthorizeEmail("query"),
+      async (req, res) => {
+        try {
+          const { email } = req.query;
+
+          const [
+            recentParcels, // ← allParcels REMOVED (was declared but never read)
+            activeParcel,
+            paymentSummaryAgg,
+            recentPayments,
+            statusBreakdown,
+          ] = await Promise.all([
+            // Last 6 parcels for activity feed
+            parcelCollection
+              .find({ created_by: email })
+              .sort({ creation_date: -1 })
+              .limit(6)
+              .project({
+                _id: 1,
+                title: 1,
+                parcelType: 1,
+                trackingId: 1,
+                delivery_status: 1,
+                payment_status: 1,
+                cost: 1,
+                creation_date: 1,
+                senderRegion: 1,
+                receiverRegion: 1,
+                senderServiceCenter: 1,
+                receiverServiceCenter: 1,
+                receiverName: 1,
+                rider_name: 1,
+                rider_phone: 1,
+                assigned_at: 1,
+                picked_up_at: 1,
+                delivered_at: 1,
+                weight: 1,
+                costBreakDown: 1,
+              })
+              .toArray(),
+
+            // Most urgent active parcel (in-transit > assigned > pending)
+            parcelCollection.findOne(
+              {
+                created_by: email,
+                delivery_status: { $in: ["in-transit", "assigned", "pending"] },
+              },
+              {
+                sort: { assigned_at: -1 },
+                projection: {
+                  _id: 1,
+                  title: 1,
+                  parcelType: 1,
+                  trackingId: 1,
+                  delivery_status: 1,
+                  cost: 1,
+                  creation_date: 1,
+                  senderRegion: 1,
+                  senderServiceCenter: 1,
+                  senderAddress: 1,
+                  receiverRegion: 1,
+                  receiverServiceCenter: 1,
+                  receiverName: 1,
+                  receiverAddress: 1,
+                  rider_name: 1,
+                  rider_phone: 1,
+                  assigned_at: 1,
+                  picked_up_at: 1,
+                },
+              },
+            ),
+
+            // Total spent + transaction count (paidAt is a Date object)
+            paymentCollection
+              .aggregate([
+                { $match: { email } },
+                {
+                  $group: {
+                    _id: null,
+                    totalSpent: { $sum: "$amount" },
+                    totalTransactions: { $sum: 1 },
+                  },
+                },
+              ])
+              .toArray(),
+
+            // Last 3 payments for preview strip
+            paymentCollection
+              .find({ email })
+              .sort({ paidAt: -1 })
+              .limit(3)
+              .project({
+                _id: 1,
+                amount: 1,
+                transactionId: 1,
+                paymentMethod: 1,
+                paidAt: 1,
+                parcelId: 1,
+              })
+              .toArray(),
+
+            // Per-status counts — drives KPI cards + donut chart
+            parcelCollection
+              .aggregate([
+                { $match: { created_by: email } },
+                { $group: { _id: "$delivery_status", count: { $sum: 1 } } },
+                { $project: { status: "$_id", count: 1, _id: 0 } },
+              ])
+              .toArray(),
+          ]);
+
+          // Tracking history for active parcel (sequential — needs trackingId from above)
+          let activeTracking = [];
+          if (activeParcel?.trackingId) {
+            activeTracking = await trackingCollection
+              .find({ trackingId: activeParcel.trackingId })
+              .sort({ createdAt: 1 })
+              .toArray();
+          }
+
+          const totalParcels = statusBreakdown.reduce((s, i) => s + i.count, 0);
+          const deliveredCount =
+            statusBreakdown.find((s) => s.status === "delivered")?.count ?? 0;
+          const inTransitCount =
+            statusBreakdown.find((s) => s.status === "in-transit")?.count ?? 0;
+          const assignedCount =
+            statusBreakdown.find((s) => s.status === "assigned")?.count ?? 0;
+          const pendingCount =
+            statusBreakdown.find((s) => s.status === "pending")?.count ?? 0;
+          const notCollectedCount =
+            statusBreakdown.find((s) => s.status === "not-collected")?.count ??
+            0;
+          const totalSpent = paymentSummaryAgg[0]?.totalSpent ?? 0;
+          const totalTransactions =
+            paymentSummaryAgg[0]?.totalTransactions ?? 0;
+          const successRate =
+            totalParcels > 0
+              ? Math.round((deliveredCount / totalParcels) * 100)
+              : 0;
+
+          res.json({
+            stats: {
+              totalParcels,
+              deliveredCount,
+              inTransitCount,
+              assignedCount,
+              pendingCount,
+              notCollectedCount,
+              successRate,
+              totalSpent,
+              totalTransactions,
+            },
+            activeParcel: activeParcel
+              ? { ...activeParcel, trackingHistory: activeTracking }
+              : null,
+            recentParcels,
+            recentPayments,
+            statusBreakdown,
+            generatedAt: new Date().toISOString(),
+          });
+        } catch (err) {
+          console.error("[users/dashboard]", err);
+          res.status(500).json({ message: "Failed to load user dashboard." });
+        }
+      },
+    );
+
+    /* AGGREGATE END */
 
     app.post("/parcels", verifyFBToken, async (req, res) => {
       try {
@@ -976,7 +1150,7 @@ async function run() {
           });
         }
 
-        const result = await parcelCollection.updateOne(
+        await parcelCollection.updateOne(
           { _id: new ObjectId(parcelId) },
           {
             $set: {
