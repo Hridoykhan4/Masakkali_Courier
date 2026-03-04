@@ -727,7 +727,7 @@ const EmptyState = ({ firstName }) => (
       </div>
 
       <Link
-        to="/dashboard/send-parcel"
+        to="/sendParcel"
         className="flex items-center gap-2.5 px-8 py-4 rounded-2xl font-black text-sm uppercase
           tracking-wider transition-all hover:scale-[1.04] hover:shadow-2xl active:scale-95"
         style={{
@@ -830,7 +830,7 @@ const UserDashboard = () => {
             className="shrink-0"
           >
             <Link
-              to="/dashboard/send-parcel"
+              to="/sendParcel"
               className="flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-xs
                 uppercase tracking-wider transition-all hover:scale-[1.03] hover:shadow-xl active:scale-95"
               style={{
@@ -942,7 +942,7 @@ const UserDashboard = () => {
                   style={{ background: "var(--color-base-200)" }}
                 >
                   <Link
-                    to="/dashboard/send-parcel"
+                    to="/sendParcel"
                     className="flex items-center justify-center gap-2 w-full py-3 rounded-xl
                       text-[10px] font-black uppercase tracking-wider border border-base-content/8
                       hover:border-base-content/20 transition-all opacity-50 hover:opacity-80"
@@ -1024,7 +1024,7 @@ const UserDashboard = () => {
                       districts.
                     </p>
                     <Link
-                      to="/dashboard/send-parcel"
+                      to="/sendParcel"
                       className="flex items-center gap-1.5 mt-3 text-[10px] font-black uppercase tracking-wider"
                       style={{ color: ACC }}
                     >
@@ -1065,7 +1065,7 @@ const UserDashboard = () => {
               </p>
             </div>
             <Link
-              to="/dashboard/send-parcel"
+              to="/sendParcel"
               className="flex items-center gap-2 px-6 py-3.5 rounded-2xl font-black text-sm
                 uppercase tracking-wider transition-all hover:scale-[1.03] hover:shadow-xl
                 active:scale-95 shrink-0"

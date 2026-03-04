@@ -554,7 +554,7 @@ async function run() {
       );
     });
 
-    /* AGGREGATE END */
+    /* AGGREGATE Start */
 
     app.get("/parcels/delivery/status-count", async (req, res) => {
       try {
@@ -769,10 +769,11 @@ async function run() {
       }
     });
 
+    // User/Overview
     app.get(
       "/users/dashboard",
-      // verifyFBToken,
-      // verifyAuthorizeEmail("query"),
+      verifyFBToken,
+      verifyAuthorizeEmail("query"),
       async (req, res) => {
         try {
           const { email } = req.query;
@@ -935,6 +936,288 @@ async function run() {
         } catch (err) {
           console.error("[users/dashboard]", err);
           res.status(500).json({ message: "Failed to load user dashboard." });
+        }
+      },
+    );
+
+    // Rider Overview
+    app.get(
+      "/rider/dashboard",
+      verifyFBToken,
+      verifyRider,
+      async (req, res) => {
+        try {
+          const email = req.tokenEmail;
+
+          const rider = await ridersCollection.findOne({ email });
+          if (!rider) {
+            return res
+              .status(404)
+              .json({ message: "Rider profile not found." });
+          }
+
+          const riderId = rider._id.toString();
+
+          // ── 2. Time windows ───────────────────────────────────────────
+          const now = new Date();
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() - now.getDay()); 
+          startOfWeek.setHours(0, 0, 0, 0);
+
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          const startOfToday = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+          );
+
+          // ── 3. All parallel queries ───────────────────────────────────
+          const [
+            activeParcels,
+            recentDeliveries, 
+            earningsBreakdown, 
+            deliveryStats, 
+          ] = await Promise.all([
+            parcelCollection
+              .find({
+                rider_id: riderId,
+                delivery_status: { $in: ["assigned", "in-transit"] },
+              })
+              .sort({ assigned_at: -1 })
+              .limit(5)
+              .project({
+                _id: 1,
+                title: 1,
+                parcelType: 1,
+                trackingId: 1,
+                delivery_status: 1,
+                cost: 1,
+                earning: 1,
+                earning_rate: 1,
+                senderName: 1,
+                senderRegion: 1,
+                senderServiceCenter: 1,
+                senderAddress: 1,
+                receiverName: 1,
+                receiverRegion: 1,
+                receiverServiceCenter: 1,
+                receiverAddress: 1,
+                delivery_type: 1,
+                assigned_at: 1,
+                picked_up_at: 1,
+              })
+              .toArray(),
+
+            parcelCollection
+              .find({
+                rider_id: riderId,
+                delivery_status: {
+                  $in: ["delivered", "delivered-to-service-center"],
+                },
+              })
+              .sort({ delivered_at: -1 })
+              .limit(5)
+              .project({
+                _id: 1,
+                title: 1,
+                parcelType: 1,
+                trackingId: 1,
+                delivery_status: 1,
+                cost: 1,
+                earning: 1,
+                receiverName: 1,
+                receiverRegion: 1,
+                receiverServiceCenter: 1,
+                delivery_type: 1,
+                delivered_at: 1,
+                cashout_status: 1,
+                cashed_out_at: 1,
+              })
+              .toArray(),
+
+            parcelCollection
+              .aggregate([
+                {
+                  $match: {
+                    rider_id: riderId,
+                    delivery_status: {
+                      $in: ["delivered", "delivered-to-service-center"],
+                    },
+                  },
+                },
+                {
+                  $group: {
+                    _id: null,
+                    // All-time
+                    totalEarned: { $sum: "$earning" },
+                    totalDeliveries: { $sum: 1 },
+                    // Cashed vs pending
+                    cashedOut: {
+                      $sum: {
+                        $cond: [
+                          { $eq: ["$cashout_status", "cashed_out"] },
+                          "$earning",
+                          0,
+                        ],
+                      },
+                    },
+                    pendingCashout: {
+                      $sum: {
+                        $cond: [
+                          { $ne: ["$cashout_status", "cashed_out"] },
+                          "$earning",
+                          0,
+                        ],
+                      },
+                    },
+                    // Weekly (delivered_at >= startOfWeek)
+                    weeklyEarned: {
+                      $sum: {
+                        $cond: [
+                          { $gte: ["$delivered_at", startOfWeek] },
+                          "$earning",
+                          0,
+                        ],
+                      },
+                    },
+                    weeklyDeliveries: {
+                      $sum: {
+                        $cond: [{ $gte: ["$delivered_at", startOfWeek] }, 1, 0],
+                      },
+                    },
+                    // Monthly
+                    monthlyEarned: {
+                      $sum: {
+                        $cond: [
+                          { $gte: ["$delivered_at", startOfMonth] },
+                          "$earning",
+                          0,
+                        ],
+                      },
+                    },
+                    monthlyDeliveries: {
+                      $sum: {
+                        $cond: [
+                          { $gte: ["$delivered_at", startOfMonth] },
+                          1,
+                          0,
+                        ],
+                      },
+                    },
+                    // Today
+                    todayEarned: {
+                      $sum: {
+                        $cond: [
+                          { $gte: ["$delivered_at", startOfToday] },
+                          "$earning",
+                          0,
+                        ],
+                      },
+                    },
+                    todayDeliveries: {
+                      $sum: {
+                        $cond: [
+                          { $gte: ["$delivered_at", startOfToday] },
+                          1,
+                          0,
+                        ],
+                      },
+                    },
+                    // Inter vs Same district breakdown
+                    interDistrictCount: {
+                      $sum: {
+                        $cond: [
+                          { $eq: ["$delivery_type", "Inter District"] },
+                          1,
+                          0,
+                        ],
+                      },
+                    },
+                    sameDistrictCount: {
+                      $sum: {
+                        $cond: [
+                          { $eq: ["$delivery_type", "Same District"] },
+                          1,
+                          0,
+                        ],
+                      },
+                    },
+                  },
+                },
+              ])
+              .toArray(),
+
+            // Active task counts
+            parcelCollection
+              .aggregate([
+                {
+                  $match: {
+                    rider_id: riderId,
+                    delivery_status: { $in: ["assigned", "in-transit"] },
+                  },
+                },
+                {
+                  $group: {
+                    _id: "$delivery_status",
+                    count: { $sum: 1 },
+                  },
+                },
+                { $project: { status: "$_id", count: 1, _id: 0 } },
+              ])
+              .toArray(),
+          ]);
+
+          // ── 4. Unpack aggregate ───────────────────────────────────────
+          const e = earningsBreakdown[0] ?? {};
+
+          const assignedCount =
+            deliveryStats.find((s) => s.status === "assigned")?.count ?? 0;
+          const inTransitCount =
+            deliveryStats.find((s) => s.status === "in-transit")?.count ?? 0;
+
+          // ── 5. Respond ────────────────────────────────────────────────
+          res.json({
+            profile: {
+              name: rider.name,
+              email: rider.email,
+              phone: rider.phone,
+              district: rider.district,
+              region: rider.region,
+              bikeBrand: rider.bikeBrand,
+              bikeRegistration: rider.bikeRegistration,
+              status: rider.status,
+              appliedAt: rider.appliedAt,
+              reviewedAt: rider.reviewedAt,
+            },
+
+            // KPI stats
+            stats: {
+              totalDeliveries: e.totalDeliveries ?? 0,
+              totalEarned: e.totalEarned ?? 0,
+              cashedOut: e.cashedOut ?? 0,
+              pendingCashout: e.pendingCashout ?? 0,
+              todayDeliveries: e.todayDeliveries ?? 0,
+              todayEarned: e.todayEarned ?? 0,
+              weeklyDeliveries: e.weeklyDeliveries ?? 0,
+              weeklyEarned: e.weeklyEarned ?? 0,
+              monthlyDeliveries: e.monthlyDeliveries ?? 0,
+              monthlyEarned: e.monthlyEarned ?? 0,
+              interDistrictCount: e.interDistrictCount ?? 0,
+              sameDistrictCount: e.sameDistrictCount ?? 0,
+              assignedCount,
+              inTransitCount,
+              activeTotal: assignedCount + inTransitCount,
+            },
+
+            // For dashboard feed (full pages use their own routes)
+            activeParcels,
+            recentDeliveries,
+
+            generatedAt: now.toISOString(),
+          });
+        } catch (err) {
+          console.error("[rider/dashboard]", err);
+          res.status(500).json({ message: "Failed to load rider dashboard." });
         }
       },
     );
