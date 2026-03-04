@@ -131,7 +131,7 @@ async function run() {
 
     /* USER APIS------ */
 
-    app.get("/users/search", async (req, res) => {
+    app.get("/users/search", verifyFBToken, verifyAdmin, async (req, res) => {
       const { searchQuery } = req.query;
       if (!searchQuery) {
         return res.status(400).send({ message: "Missing search query" });
@@ -218,7 +218,7 @@ async function run() {
     /* USER APIS------ */
 
     /* RIDERS APIS */
-    app.get("/riders", async (req, res) => {
+    app.get("/riders", verifyFBToken, verifyAdmin,  async (req, res) => {
       res.send(await ridersCollection.find().toArray());
     });
 
@@ -235,7 +235,7 @@ async function run() {
       }
     });
 
-    app.get("/riders/available", verifyFBToken, async (req, res) => {
+    app.get("/riders/available", verifyFBToken, verifyAdmin, async (req, res) => {
       const { district } = req.query;
       if (!district) {
         return res.status(400).send({ message: "District required" });
@@ -259,7 +259,7 @@ async function run() {
       }
     });
 
-    app.get("/rider/tasks", verifyFBToken, async (req, res) => {
+    app.get("/rider/tasks", verifyFBToken, verifyRider, async (req, res) => {
       try {
         const rider = await ridersCollection.findOne({
           email: req.tokenEmail,
@@ -283,7 +283,7 @@ async function run() {
       }
     });
 
-    app.get("/rider/completed-deliveries", verifyFBToken, async (req, res) => {
+    app.get("/rider/completed-deliveries", verifyFBToken, verifyRider,  async (req, res) => {
       try {
         const email = req.tokenEmail;
         const rider = await ridersCollection.findOne({ email });
@@ -445,7 +445,7 @@ async function run() {
       res.send(result);
     });
 
-    app.patch("/riders/:id", async (req, res) => {
+    app.patch("/riders/:id", verifyFBToken, verifyAdmin, async (req, res) => {
       const { id } = req.params;
       const { status } = req.body;
       if (!["approved", "rejected"].includes(status)) {
@@ -527,7 +527,7 @@ async function run() {
 
     /* Parcel APIs START*/
 
-    app.get("/parcels", async (req, res) => {
+    app.get("/parcels", verifyFBToken, async (req, res) => {
       try {
         const { payment_status, delivery_status, email } = req.query;
         let query = {};
@@ -556,7 +556,7 @@ async function run() {
 
     /* AGGREGATE Start */
 
-    app.get("/parcels/delivery/status-count", async (req, res) => {
+    app.get("/parcels/delivery/status-count", verifyFBToken, verifyAdmin,  async (req, res) => {
       try {
         const result = await parcelCollection
           .aggregate([
@@ -585,7 +585,7 @@ async function run() {
     });
 
     // ── /admin/overview ─────────────────────────────────────────
-    app.get("/admin/overview", async (req, res) => {
+    app.get("/admin/overview", verifyFBToken, verifyAdmin, async (req, res) => {
       try {
         const now = new Date();
 
@@ -1258,7 +1258,7 @@ async function run() {
       }
     });
 
-    app.patch("/parcels/:id/assign-rider", async (req, res) => {
+    app.patch("/parcels/:id/assign-rider", verifyFBToken, verifyAdmin, async (req, res) => {
       const { id } = req.params;
       const { riderId } = req.body;
       if (!riderId) {

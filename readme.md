@@ -1,399 +1,224 @@
 <div align="center">
 
-<img src="client/public/preview.png" alt="Masakkali Preview" width="100%" />
-
-<br/>
-<br/>
-
-<img src="https://readme-typing-svg.demolab.com?font=Urbanist&weight=900&size=40&pause=1200&color=10B981&center=true&vCenter=true&width=700&lines=MASAKKALI;Full-Stack+Parcel+Delivery+Platform;Customer+%7C+Rider+%7C+Admin+Portals;Live+Tracking.+Real+Payments.+Built+Right." alt="Masakkali Typing SVG" />
-
-<br/>
-
-<p>
-  <strong>A production-grade logistics platform with three role-based portals,<br/>
-  real Stripe payments, Firebase auth, live parcel tracking, and a 16-query<br/>
-  parallel MongoDB aggregation engine — covering all 64 districts of Bangladesh.</strong>
-</p>
+<a href="https://masakkali-courier.web.app" target="_blank">
+  <img src="https://raw.githubusercontent.com/Hridoykhan4/Masakkali_Courier/main/client/public/preview.png"
+       alt="Masakkali — Parcel Delivery Platform" width="100%" style="border-radius:12px" />
+</a>
 
 <br/>
 
-<p>
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
-  <img src="https://img.shields.io/badge/Express-5-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express 5" />
-  <img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
-  <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
-  <img src="https://img.shields.io/badge/Stripe-Payments-635BFF?style=for-the-badge&logo=stripe&logoColor=white" alt="Stripe" />
-  <img src="https://img.shields.io/badge/TailwindCSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind" />
-</p>
+<img
+  src="https://readme-typing-svg.demolab.com?font=Urbanist&weight=900&size=34&pause=1400&color=10B981&center=true&vCenter=true&width=720&lines=MASAKKALI+%E2%80%94+Courier+Platform;3+Portals.+Real+Payments.+Live+Tracking.;Built+for+Production%2C+Not+a+Tutorial."
+  alt="Masakkali" />
 
-<p>
-  <a href="https://masakkali.vercel.app">
-    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-10B981?style=for-the-badge&labelColor=10B981&color=10B981" alt="Live Demo" />
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://github.com/YOUR_USERNAME/masakkali-server">
-    <img src="https://img.shields.io/badge/⚙️%20Server%20Repo-0f172a?style=for-the-badge" alt="Server Repo" />
-  </a>
-</p>
+<br/>
+
+> **A full-stack parcel delivery system** with three role-based portals (Customer · Rider · Admin),  
+> real Stripe payments, Firebase JWT auth, live tracking, and a 16-query parallel MongoDB  
+> aggregation engine — covering all 64 districts of Bangladesh.
+
+<br/>
+
+![React](https://img.shields.io/badge/React_19-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Express](https://img.shields.io/badge/Express_5-000?style=flat-square&logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB_7-47A248?style=flat-square&logo=mongodb&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase_Auth-FFCA28?style=flat-square&logo=firebase&logoColor=black)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=flat-square&logo=stripe&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Framer](https://img.shields.io/badge/Framer_Motion-black?style=flat-square&logo=framer)
+![TanStack](https://img.shields.io/badge/TanStack_Query_5-FF4154?style=flat-square&logo=reactquery&logoColor=white)
+
+<br/>
+
+[![🚀 Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-10B981?style=for-the-badge)](https://masakkali-courier.web.app)
+&nbsp;
+[![⚙️ Server Repo](https://img.shields.io/badge/⚙️%20Server%20Repo-0f172a?style=for-the-badge)](https://github.com/Hridoykhan4/Masakkali_Courier/tree/main/server)
 
 </div>
 
 ---
 
-## 🔐 Try It Live — No Signup Needed
+## 🔐 Try It Right Now — No Signup
 
-> Three pre-seeded accounts, one for each role. Jump straight into any portal.
-
-<table>
-<thead>
-<tr>
-<th>Role</th>
-<th>Email</th>
-<th>Password</th>
-<th>What to explore</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>👤 <strong>Customer</strong></td>
-<td><code>admin4@gmail.com</code></td>
-<td><code>123456aA</code></td>
-<td>Book a parcel → pay via Stripe test card → watch live tracking update</td>
-</tr>
-<tr>
-<td>🛵 <strong>Rider</strong></td>
-<td><code>admin11@gmail.com</code></td>
-<td><code>123456aA</code></td>
-<td>Pick up the task → mark delivered → watch earnings wallet update</td>
-</tr>
-<tr>
-<td>🛡️ <strong>Admin</strong></td>
-<td><code>admin1@gmail.com</code></td>
-<td><code>123456aA</code></td>
-<td>Approve riders → assign deliveries → view revenue analytics dashboard</td>
-</tr>
-</tbody>
-</table>
+| Role | Email | Password | Suggested flow |
+|------|-------|----------|----------------|
+| 👤 **Customer** | `admin4@gmail.com` | `123456aA` | Book parcel → pay → watch status update live |
+| 🛵 **Rider** | `admin11@gmail.com` | `123456aA` | Open task queue → confirm pickup → deliver → earnings update |
+| 🛡️ **Admin** | `admin1@gmail.com` | `123456aA` | Approve a rider → assign a delivery → explore the KPI dashboard |
 
 <details>
-<summary><strong>💳 Stripe Test Card Details</strong></summary>
-<br/>
+<summary>💳 <strong>Stripe test card</strong></summary>
 
 ```
-Card Number : 4242 4242 4242 4242
-Expiry      : Any future date  (e.g. 12/29)
-CVC         : Any 3 digits     (e.g. 123)
-ZIP         : Any 5 digits     (e.g. 10001)
+4242 4242 4242 4242   ·   Any future expiry   ·   Any CVC
 ```
-
-No real money is charged. This runs on Stripe's test environment.
-
+Stripe test mode — no real charge, ever.
 </details>
 
 ---
 
-## 🎯 What Is Masakkali?
+## 🎯 Why this isn't just another portfolio project
 
-Masakkali is a **home & office pickup parcel delivery platform** that models how a real-world courier business operates — end-to-end, from customer booking through rider dispatch to admin oversight.
+Most portfolio apps stop at a UI with mock data. This one doesn't.
 
-This is not a UI showcase. It is a fully-integrated system with:
-- Live database (MongoDB Atlas) with real seeded parcel and payment data
-- Server-side **cost validation** — pricing is recalculated on the backend and compared against the frontend value before any parcel is inserted (prevents price tampering)
-- **Firebase JWT** verification on every protected route
-- **Stripe PaymentIntents** flow with webhook-ready payment recording
-- **16 parallel MongoDB aggregation queries** powering the admin overview in a single round-trip
-- Animated, mobile-first dashboards for all three roles using Framer Motion + Recharts
+| What it does | Why it matters |
+|---|---|
+| **Server-side pricing validation** | Parcel cost is recalculated on the backend and compared to the client value. Mismatch → `400`. Price tampering is impossible. |
+| **Firebase JWT on every route** | `firebase-admin` decodes and verifies tokens server-side. Role is checked from MongoDB — not the token claim. A modified token does nothing. |
+| **16 parallel MongoDB aggregations** | The admin overview fires all KPI queries inside a single `Promise.all()`. Zero sequential waterfalls, one round-trip. |
+| **Full Stripe PaymentIntents flow** | Secret key never touches the client. Only the `client_secret` does. Webhook-ready payment recording. |
+| **Three purpose-built dashboards** | Each role has a separate data model, API, and animated UI — not the same page with hidden tabs. |
 
 ---
 
-## ✨ Feature Breakdown
+## ✨ What each role can do
 
 <details>
-<summary><strong>👤 Customer Portal</strong></summary>
-<br/>
+<summary>👤 <strong>Customer Portal</strong></summary>
 
 | Feature | Detail |
 |---------|--------|
-| **Parcel Booking** | Multi-step form with automated cost calculation — document vs non-document, weight tiers, same vs inter-district |
-| **Stripe Payment** | Full PaymentIntent flow — card UI, confirmation, payment recorded to DB and parcel marked paid |
-| **Live Tracking** | Public tracking page — unique `PCL-YYYYMMDD-XXXXX` ID, full event timeline with location + timestamp |
-| **Dashboard** | Single API endpoint returns stats, active parcel tracker with progress stepper, recent parcels, spend chart, status donut (Recharts) |
-| **Payment History** | Transaction IDs, amounts, dates — everything a real customer needs |
-
+| Parcel Booking | Multi-step form — document vs non-document, weight tiers, same/inter-district auto-pricing |
+| Stripe Payment | Full PaymentIntent flow — card UI → confirmation → DB write → parcel marked paid |
+| Live Tracking | Public page — unique `PCL-YYYYMMDD-XXXXX` ID, full event log with location + timestamp |
+| Dashboard | Single API: stats, active parcel progress stepper, monthly spend bar chart, status donut |
+| Payment History | Transaction IDs, amounts, dates |
 </details>
 
 <details>
-<summary><strong>🛵 Rider Portal</strong></summary>
-<br/>
+<summary>🛵 <strong>Rider Portal</strong></summary>
 
 | Feature | Detail |
 |---------|--------|
-| **Task Queue** | Live queue of assigned + in-transit parcels, colour-coded by delivery type |
-| **Pickup Flow** | One-tap pickup confirmation → parcel status → `in-transit`, tracking event logged |
-| **Delivery Flow** | Delivery confirmation → status → `delivered`, `delivered_at` timestamp written |
-| **Earnings Wallet** | Lifetime / weekly / monthly breakdown, settled vs pending cashout, commission rate display |
-| **Cashout** | Rider requests cashout → admin marks as cashed → wallet updates |
-| **Dashboard** | Profile card, active queue preview, delivery type split (inter 30% / same 80%), Recharts bar chart |
-
+| Task Queue | Live assigned + in-transit parcels, colour-coded by delivery type |
+| Pickup / Delivery | One-tap confirmation → status update → tracking event written to DB |
+| Earnings Wallet | Lifetime / weekly / monthly breakdown, settled vs pending cashout |
+| Commission | 80% same-district · 30% inter-district — shown inline, always visible |
+| Dashboard | Profile card, active queue, route analysis chart, cashout nudge |
 </details>
 
 <details>
-<summary><strong>🛡️ Admin Command Centre</strong></summary>
-<br/>
+<summary>🛡️ <strong>Admin Command Centre</strong></summary>
 
 | Feature | Detail |
 |---------|--------|
-| **Overview KPIs** | 16 parallel MongoDB queries — revenue today/7d/30d, parcel counts, status breakdown, top districts, 7-day sparkline |
-| **Pending Riders** | Review applicant cards with NID, bike info, region → approve or reject with inline confirm |
-| **Rider Assignment** | Assign rider to parcel filtered by matching district — shows rider phone for coordination |
-| **User Management** | View all users, last login, role badges — promote any user to admin with one click |
-| **Role Guard** | `verifyAdmin` middleware on every admin route — rider/customer tokens are rejected server-side |
-
+| KPI Overview | 16 parallel queries — revenue today/7d/30d, parcel counts, top districts, 7-day sparkline |
+| Rider Approval | Review NID, bike, region → approve or reject inline |
+| Rider Assignment | Filter by district → assign → rider phone shown for coordination |
+| User Management | All users + last login + roles → promote to admin in one click |
 </details>
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ How it's built
 
 ```
-┌──────────────────────────────────────────────────────┐
-│                  React 19 Frontend (Vite)            │
-│                                                      │
-│   Customer Portal    Rider Portal    Admin Portal    │
-│        │                  │               │          │
-│        └──────────────────┼───────────────┘          │
-│                    TanStack Query v5                 │
-│              (cache, background refetch)             │
-└───────────────────────────┬──────────────────────────┘
-                            │
-                   Axios + Firebase JWT
-                   (Authorization header)
-                            │
-┌───────────────────────────▼──────────────────────────┐
-│                   Express 5 API Server               │
-│                                                      │
-│  verifyFBToken   →  verifyAdmin / verifyRider        │
-│  (Firebase Admin SDK token decode + role check)      │
-│                                                      │
-│  Route Handlers:                                     │
-│  /users  /parcels  /riders  /payments  /tracking     │
-│  /admin  /rider   /track   /stripe                   │
-└───────────────────────────┬──────────────────────────┘
-                            │
-┌───────────────────────────▼──────────────────────────┐
-│                   MongoDB Atlas                      │
-│                                                      │
-│   users ──── parcels ──── tracking                   │
-│                │                                     │
-│           payments   riders                          │
-│                                                      │
-│   Aggregation pipelines: $match + $group + $project  │
-│   Parallel execution: Promise.all([...16 queries])   │
-└──────────────────────────────────────────────────────┘
+  React 19 + Vite 7
+  ┌────────────┬────────────┬────────────┐
+  │  Customer  │   Rider    │   Admin    │
+  └─────┬──────┴─────┬──────┴─────┬──────┘
+        └────────────┼────────────┘
+              TanStack Query v5
+         (cache · stale-time · refetch)
+                     │
+           Axios + Firebase JWT
+                     │
+        Express 5  ──  verifyFBToken
+                        → verifyAdmin
+                        → verifyRider
+                     │
+        MongoDB Atlas  ──  $match · $group
+                    Promise.all([...16])
+                     │
+     users · parcels · riders · payments · tracking
 ```
 
 ---
 
-## 🛠️ Full Tech Stack
+## 🛠️ Tech Stack
 
-| Layer | Technology | Version | Purpose |
-|-------|-----------|---------|---------|
-| Frontend framework | React | 19 | UI with concurrent rendering |
-| Build tool | Vite | 7 | Sub-second HMR, optimised bundles |
-| Routing | React Router | 7 | Nested layouts, protected routes |
-| Server state | TanStack Query | 5 | Caching, stale-time, auto-refetch |
-| Styling | Tailwind CSS + DaisyUI | 4 / 5 | Utility-first + light/dark theme |
-| Animation | Framer Motion | 12 | Spring physics, scroll-triggered reveals |
-| Charts | Recharts | 3 | Donut + bar + radial charts |
-| Forms | React Hook Form | 7 | Validated, uncontrolled forms |
-| Maps | React Leaflet | 5 | Coverage zone visualisation |
-| Payments (client) | Stripe.js + React Stripe | 8 | Card element, PaymentIntent |
-| Auth (client) | Firebase SDK | 12 | Google / email-password auth |
-| Backend | Express | 5 | REST API, async error handling |
-| Database | MongoDB | 7 | Atlas hosted, aggregation pipelines |
-| Auth (server) | Firebase Admin SDK | 13 | JWT decode + verification |
-| Payments (server) | Stripe Node | 20 | PaymentIntent creation |
+| | Tech | Version | Role |
+|-|------|---------|------|
+| **Frontend** | React, Vite, React Router | 19 · 7 · 7 | UI, routing, layouts |
+| **State** | TanStack Query, React Hook Form | 5 · 7 | Server cache, forms |
+| **Styling** | Tailwind CSS, DaisyUI | 4 · 5 | Utility-first, light/dark |
+| **Motion** | Framer Motion, Recharts | 12 · 3 | Animations, charts |
+| **Payments** | Stripe.js + Stripe Node | 8 · 20 | PaymentIntents, PCI |
+| **Auth** | Firebase SDK + Admin SDK | 12 · 13 | Client auth + server JWT |
+| **Backend** | Express, MongoDB Atlas | 5 · 7 | REST API, aggregations |
+| **Maps** | React Leaflet | 5 | Coverage visualisation |
 
 ---
 
-## 📁 Project Structure
+## 💰 Pricing logic
 
 ```
-client/
-├── public/
-│   └── preview.png              ← Hero screenshot for README
-├── src/
-│   ├── components/
-│   │   ├── ErrorLoadingState.jsx
-│   │   ├── Navbar.jsx
-│   │   └── Footer.jsx
-│   ├── hooks/
-│   │   ├── useAuth.js           ← Firebase current user
-│   │   ├── useAxiosSecure.js    ← Axios instance with JWT header
-│   │   ├── useUserRole.js       ← Fetches + caches user role
-│   │   └── useScrollTo.js       ← Scroll to top on route change
-│   ├── pages/
-│   │   ├── Home/                ← Landing, HowItWorks, Coverage, Features
-│   │   ├── About/               ← Full about page (roles, pricing, stack)
-│   │   ├── Auth/                ← Login, Register, Forbidden (role-aware)
-│   │   └── Dashboard/
-│   │       ├── Admin/
-│   │       │   ├── AdminDashboard.jsx    ← 16-query KPI overview
-│   │       │   ├── PendingRiders.jsx     ← Rider approval flow
-│   │       │   ├── RiderReviewModal.jsx  ← Application detail + action
-│   │       │   └── MakeAdmin.jsx         ← User role management
-│   │       ├── Rider/
-│   │       │   ├── RiderDashboard.jsx    ← Earnings, queue, profile
-│   │       │   ├── PendingDeliveries.jsx ← Active task list
-│   │       │   ├── CompletedDeliveries.jsx
-│   │       │   └── RiderEarnings.jsx
-│   │       └── User/
-│   │           ├── UserDashboard.jsx     ← Stats, active tracker, charts
-│   │           ├── SendParcel.jsx        ← Booking + Stripe payment
-│   │           ├── MyParcels.jsx
-│   │           └── PaymentHistory.jsx
-│   └── routes/
-│       ├── AdminRoute.jsx
-│       ├── RiderRoute.jsx
-│       └── PrivateRoute.jsx
+Document        Same district ৳60  ·  Inter district ৳80
 
-server/
-└── index.js                     ← All Express routes + middleware
+Non-Document    Base ≤ 3 kg:  ৳110 same  /  ৳150 inter
+                Extra weight: +৳40 per kg above 3 kg
+                Inter surcharge: +৳40
+
+Rider cut       Same district 80%  ·  Inter district 30%
 ```
 
----
-
-## 💰 Business Logic — Pricing
-
-```
-DOCUMENT  (any weight)
-├── Same district   →  ৳ 60
-└── Inter district  →  ৳ 80
-
-NON-DOCUMENT  (weight-based)
-├── Base ≤ 3 kg
-│   ├── Same district   →  ৳ 110
-│   └── Inter district  →  ৳ 150
-├── Extra weight (per kg above 3 kg)  →  + ৳ 40 / kg
-└── Inter district surcharge           →  + ৳ 40
-
-RIDER COMMISSION
-├── Same district   →  80%  of parcel cost
-└── Inter district  →  30%  of parcel cost
-```
-
-> Pricing is **calculated independently on the server** and verified against the client-submitted value before insertion. A mismatch returns `400 Bad Request`.
+Calculated client-side for UX, **recalculated server-side for trust**.
 
 ---
 
-## 🗺️ Key API Endpoints
+## 🔒 Security model
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| `GET` | `/health` | Public | Server + DB status |
-| `POST` | `/users` | Public | Upsert user on login |
-| `GET` | `/users/:email/role` | Private | Get own role |
-| `GET` | `/users/dashboard` | Private | All-in-one customer dashboard |
-| `PATCH` | `/users/:id/role` | Admin | Promote / demote role |
-| `GET` | `/admin/overview` | Admin | 16-query KPI aggregation |
-| `GET` | `/riders/pending` | Admin | Pending rider applications |
-| `PATCH` | `/riders/:id` | Admin | Approve or reject rider |
-| `POST` | `/parcels` | Private | Create parcel (server validates cost) |
-| `PATCH` | `/parcels/:id/assign-rider` | Admin | Assign rider |
-| `PATCH` | `/parcels/:id/pickup` | Rider | Confirm pickup |
-| `PATCH` | `/parcels/:id/deliver` | Rider | Confirm delivery |
-| `GET` | `/rider/dashboard` | Rider | All-in-one rider dashboard |
-| `GET` | `/rider/tasks` | Rider | Active task queue |
-| `GET` | `/riders/earnings-summary` | Rider | Full earnings breakdown |
-| `GET` | `/track/:trackingId` | Public | Full tracking timeline |
-| `POST` | `/create-payment-intent` | Public | Stripe PaymentIntent |
-| `POST` | `/payments` | Public | Record payment + mark parcel paid |
+- Firebase Admin SDK verifies JWT on every protected route — forged tokens rejected
+- Role stored in MongoDB — changing the token claim does nothing
+- Email ownership enforced server-side — users can't read each other's data
+- Rider role explicitly blocked from the role-promotion endpoint
+- Stripe secret key is server-only — client only receives `client_secret`
 
 ---
 
-## 🔒 Security
-
-- Every protected route verifies the Firebase JWT via `firebase-admin` on the server — tokens signed by Firebase, decoded and checked server-side
-- `verifyAdmin` and `verifyRider` middleware check the user's role from MongoDB — changing the role claim in the token alone does nothing
-- Email-ownership check on user-scoped endpoints — you cannot query another user's data even with a valid token
-- Rider role is explicitly blocked from the admin-only role promotion endpoint
-- Stripe keys are server-only — the client only receives the PaymentIntent `client_secret`
-
----
-
-## 🚀 Run Locally
-
-### Prerequisites
-- Node.js 18+
-- MongoDB Atlas cluster URI
-- Firebase project with service account JSON
-- Stripe account (test mode)
-
-### Clone
+## 🚀 Run locally
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/masakkali-client
-git clone https://github.com/YOUR_USERNAME/masakkali-server
+git clone https://github.com/Hridoykhan4/masakkali-client
+git clone https://github.com/Hridoykhan4/masakkali-server
 ```
 
-### Server `.env`
-
+**`server/.env`**
 ```env
 PORT=5000
-DB_USER=your_atlas_username
-DB_PASS=your_atlas_password
-Stripe_KEY=sk_test_xxxxxxxxxxxxxxxx
-FB_SERVICE_KEY=base64_of_firebase_service_account_json
+DB_USER=
+DB_PASS=
+Stripe_KEY=sk_test_...
+FB_SERVICE_KEY=base64_firebase_service_account
 ```
 
-```bash
-cd masakkali-server && npm install && npm run dev
-```
-
-### Client `.env.local`
-
+**`client/.env.local`**
 ```env
 VITE_API_URL=http://localhost:5000
-VITE_FIREBASE_API_KEY=AIza...
-VITE_FIREBASE_AUTH_DOMAIN=your-app.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-app
-VITE_FIREBASE_STORAGE_BUCKET=your-app.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=000000000000
-VITE_FIREBASE_APP_ID=1:000:web:000
-VITE_STRIPE_PK=pk_test_xxxxxxxxxxxxxxxx
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_STRIPE_PK=pk_test_...
 ```
 
 ```bash
-cd masakkali-client && npm install && npm run dev
+cd masakkali-server && npm i && npm run dev
+cd masakkali-client && npm i && npm run dev
 ```
-
----
-
-## 📸 Screenshots
-
-| Page | Preview |
-|------|---------|
-| Landing | ![Landing](screenshots/01-landing.png) |
-| Customer Dashboard | ![Customer](screenshots/02-customer-dashboard.png) |
-| Rider Dashboard | ![Rider](screenshots/03-rider-dashboard.png) |
-| Admin Command Centre | ![Admin](screenshots/04-admin-dashboard.png) |
-| Live Tracking | ![Tracking](screenshots/05-tracking.png) |
-| Parcel Booking + Payment | ![Booking](screenshots/06-booking.png) |
-
----
-
-## 👤 Author
-
-**[Your Name]**
-
-[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://yourportfolio.dev)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yourhandle)
-[![GitHub](https://img.shields.io/badge/GitHub-171515?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YOUR_USERNAME)
 
 ---
 
 <div align="center">
-  <sub>
-    Built with precision · Full-stack · Production-grade · Bangladesh 🇧🇩 · 2026
-  </sub>
+
+**Built by [Md. Toyob Uddin Hridoy](https://md-toyob-hridoy-portfolio.vercel.app)**
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-000?style=for-the-badge&logo=vercel&logoColor=white)](https://md-toyob-hridoy-portfolio.vercel.app)
+&nbsp;
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/md-toyob-uddin-hridoy)
+
+<sub>Full-stack · Production-grade · Bangladesh 🇧🇩 · 2026</sub>
+
 </div>
