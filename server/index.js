@@ -556,218 +556,215 @@ async function run() {
 
     /* AGGREGATE */
 
-   app.get("/parcels/delivery/status-count", async (req, res) => {
-     try {
-       const result = await parcelCollection
-         .aggregate([
-           {
-             $group: {
-               _id: "$delivery_status", 
-               count: { $sum: 1 },
-             },
-           },
-           { $sort: { count: -1 } },
-           {
-             $project: {
-               _id: 0,
-               status: "$_id",
-               count: 1,
-             },
-           },
-         ])
-         .toArray();
+    app.get("/parcels/delivery/status-count", async (req, res) => {
+      try {
+        const result = await parcelCollection
+          .aggregate([
+            {
+              $group: {
+                _id: "$delivery_status",
+                count: { $sum: 1 },
+              },
+            },
+            { $sort: { count: -1 } },
+            {
+              $project: {
+                _id: 0,
+                status: "$_id",
+                count: 1,
+              },
+            },
+          ])
+          .toArray();
 
-       res.json(result.filter((r) => r.status != null));
-     } catch (err) {
-       console.error("[status-count]", err);
-       res.status(500).json({ message: "Failed to load status counts." });
-     }
-   });
+        res.json(result.filter((r) => r.status != null));
+      } catch (err) {
+        console.error("[status-count]", err);
+        res.status(500).json({ message: "Failed to load status counts." });
+      }
+    });
 
-   // ── /admin/overview ─────────────────────────────────────────
-   app.get("/admin/overview", async (req, res) => {
-     try {
-       const now = new Date();
+    // ── /admin/overview ─────────────────────────────────────────
+    app.get("/admin/overview", async (req, res) => {
+      try {
+        const now = new Date();
 
-       // Bangladesh midnight (UTC+6)
-       const bdOffset = 6 * 60 * 60 * 1000;
-       const bdNow = new Date(now.getTime() + bdOffset);
-       const bdMidnight = new Date(
-         Date.UTC(
-           bdNow.getUTCFullYear(),
-           bdNow.getUTCMonth(),
-           bdNow.getUTCDate(),
-         ),
-       );
-       const startOfToday = new Date(bdMidnight.getTime() - bdOffset); 
-       const startOf7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-       const startOf30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        // Bangladesh Timezone Setup (UTC+6)
+        const bdOffset = 6 * 60 * 60 * 1000;
+        const bdNow = new Date(now.getTime() + bdOffset);
+        const bdMidnight = new Date(
+          Date.UTC(
+            bdNow.getUTCFullYear(),
+            bdNow.getUTCMonth(),
+            bdNow.getUTCDate(),
+          ),
+        );
+        const startOfToday = new Date(bdMidnight.getTime() - bdOffset);
+        const startOf7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const startOf30Days = new Date(
+          now.getTime() - 30 * 24 * 60 * 60 * 1000,
+        );
 
-       const [
-         totalUsers,
-         totalRiders,
-         totalParcels,
-         deliveredToday, // FIX: delivery_status + delivered_at (Date object)
-         pendingCount, // FIX: delivery_status
-         inTransitCount, // FIX: delivery_status
-         cancelledCount, // FIX: delivery_status
-         assignedCount, // FIX: delivery_status
-         revenueTodayAgg, // FIX: paidAt is Date object — compare directly
-         revenue7dAgg,
-         revenue30dAgg,
-         newUsersToday,
-         newUsers7d,
-         topDistricts,
-         recentActivity,
-         dailyVolume,
-       ] = await Promise.all([
-         // 1. Users (role "user")
-         userCollection.countDocuments({ role: "user" }),
+        const [
+          totalUsers,
+          totalRiders,
+          totalParcels,
+          deliveredToday,
+          pendingCount,
+          inTransitCount,
+          cancelledCount,
+          assignedCount,
+          revenueTodayAgg,
+          revenue7dAgg,
+          revenue30dAgg,
+          newUsersToday,
+          newUsers7d,
+          topDistricts,
+          recentActivity,
+          dailyVolume,
+        ] = await Promise.all([
+          // 1. Users (role "user")
+          userCollection.countDocuments({ role: "user" }),
 
-         // 2. Active riders
-         userCollection.countDocuments({ role: "rider" }),
+          // 2. Riders
+          userCollection.countDocuments({ role: "rider" }),
 
-         // 3. All-time parcels
-         parcelCollection.countDocuments(),
+          // 3. All-time parcels
+          parcelCollection.countDocuments(),
 
-         // 4. Delivered today — FIX: "delivery_status" + "delivered_at" (Date)
-         parcelCollection.countDocuments({
-           delivery_status: "delivered",
-           delivered_at: { $gte: startOfToday },
-         }),
+          // 4. Delivered today (Comparing Date object vs Date object)
+          parcelCollection.countDocuments({
+            delivery_status: "delivered",
+            delivered_at: { $gte: startOfToday },
+          }),
 
-         // 5-8. Status counts — FIX: "delivery_status" throughout
-         parcelCollection.countDocuments({ delivery_status: "not-collected", payment_status: 'paid' }),
-         parcelCollection.countDocuments({ delivery_status: "in-transit" }),
-         parcelCollection.countDocuments({ delivery_status: "cancelled" }),
-         parcelCollection.countDocuments({ delivery_status: "assigned" }),
+          // 5-8. Status counts
+          parcelCollection.countDocuments({ delivery_status: "not-collected", payment_status: 'paid' }),
+          parcelCollection.countDocuments({ delivery_status: "in-transit" }),
+          parcelCollection.countDocuments({ delivery_status: "cancelled" }),
+          parcelCollection.countDocuments({ delivery_status: "assigned" }),
 
-         // 9-11. Revenue — FIX: paidAt is stored as new Date() (Date object),
-         //        so compare with Date objects, NOT .toISOString() strings.
-         paymentCollection
-           .aggregate([
-             { $match: { paidAt: { $gte: startOfToday } } },
-             { $group: { _id: null, total: { $sum: "$amount" } } },
-           ])
-           .toArray(),
+          // 9. Revenue today
+          paymentCollection
+            .aggregate([
+              { $match: { paidAt: { $gte: startOfToday } } },
+              { $group: { _id: null, total: { $sum: "$amount" } } },
+            ])
+            .toArray(),
 
-         paymentCollection
-           .aggregate([
-             { $match: { paidAt: { $gte: startOf7Days } } },
-             { $group: { _id: null, total: { $sum: "$amount" } } },
-           ])
-           .toArray(),
+          // 10. Revenue 7 days
+          paymentCollection
+            .aggregate([
+              { $match: { paidAt: { $gte: startOf7Days } } },
+              { $group: { _id: null, total: { $sum: "$amount" } } },
+            ])
+            .toArray(),
 
-         paymentCollection
-           .aggregate([
-             { $match: { paidAt: { $gte: startOf30Days } } },
-             { $group: { _id: null, total: { $sum: "$amount" } } },
-           ])
-           .toArray(),
+          // 11. Revenue 30 days
+          paymentCollection
+            .aggregate([
+              { $match: { paidAt: { $gte: startOf30Days } } },
+              { $group: { _id: null, total: { $sum: "$amount" } } },
+            ])
+            .toArray(),
 
-         // 12-13. New users — your POST /users stores whatever is in req.body.
-         //         If frontend sends createdAt as ISO string, compare with string.
-         //         If not sent at all, these will return 0 — that's fine.
-         userCollection.countDocuments({
-           createdAt: { $gte: startOfToday.toISOString() },
-         }),
-         userCollection.countDocuments({
-           createdAt: { $gte: startOf7Days.toISOString() },
-         }),
+          // 12-13. New Users (Comparing ISO string vs ISO string)
+          userCollection.countDocuments({
+            createdAt: { $gte: startOfToday.toISOString() },
+          }),
+          userCollection.countDocuments({
+            createdAt: { $gte: startOf7Days.toISOString() },
+          }),
 
-         // 14. Top districts — FIX: filter out null receiverDistrict
-         parcelCollection
-           .aggregate([
-             { $match: { receiverDistrict: { $ne: null, $exists: true } } },
-             { $group: { _id: "$receiverDistrict", count: { $sum: 1 } } },
-             { $sort: { count: -1 } },
-             { $limit: 5 },
-             { $project: { _id: 0, district: "$_id", count: 1 } },
-           ])
-           .toArray(),
+          // 14. Top Districts
+          parcelCollection
+            .aggregate([
+              {
+                $match: { receiverServiceCenter: { $ne: null, $exists: true } },
+              },
+              { $group: { _id: "$receiverServiceCenter", count: { $sum: 1 } } },
+              { $sort: { count: -1 } },
+              { $limit: 5 },
+              { $project: { _id: 0, district: "$_id", count: 1 } },
+            ])
+            .toArray(),
 
-         // 15. Recent activity — FIX: sort by creation_date (your actual field)
-         //     and project senderName, receiverDistrict — if your parcels store
-         //     "sender_name" instead, change accordingly
-         parcelCollection
-           .aggregate([
-             { $sort: { creation_date: -1 } }, // FIX: was "createdAt"
-             { $limit: 6 },
-             {
-               $project: {
-                 _id: 1,
-                 senderName: 1,
-                 sender_name: 1, // include both in case of naming variation
-                 receiverDistrict: 1,
-                 receiverAddress: 1, // fallback field
-                 delivery_status: 1, // FIX: was "status"
-                 cost: 1,
-                 creation_date: 1,
-                 parcelType: 1,
-               },
-             },
-           ])
-           .toArray(),
+          // 15. Recent Activity (Sorting by creation_date string)
+          parcelCollection
+            .aggregate([
+              { $sort: { creation_date: -1 } },
+              { $limit: 6 },
+              {
+                $project: {
+                  _id: 1,
+                  senderName: 1,
+                  receiverDistrict: 1,
+                  receiverServiceCenter: 1,
+                  delivery_status: 1,
+                  cost: 1,
+                  creation_date: 1,
+                },
+              },
+            ])
+            .toArray(),
 
-         // 16. Daily parcel volume last 7 days
-         //     FIX: use "creation_date" (your actual field, stored as Date object)
-         //     No $dateFromString needed — it's already a Date.
-         parcelCollection
-           .aggregate([
-             { $match: { creation_date: { $gte: startOf7Days } } }, // FIX
-             {
-               $group: {
-                 _id: {
-                   $dateToString: {
-                     format: "%Y-%m-%d",
-                     date: "$creation_date", // FIX: was $dateFromString(createdAt)
-                     timezone: "Asia/Dhaka",
-                   },
-                 },
-                 count: { $sum: 1 },
-               },
-             },
-             { $sort: { _id: 1 } },
-             { $project: { _id: 0, date: "$_id", count: 1 } },
-           ])
-           .toArray(),
-       ]);
+          // 16. Daily Volume (FIXED: Converting string to date for comparison)
+          parcelCollection
+            .aggregate([
+              {
+                $addFields: {
+                  convertedDate: {
+                    $dateFromString: {
+                      dateString: "$creation_date",
+                      onError: new Date(0),
+                      onNull: new Date(0),
+                    },
+                  },
+                },
+              },
+              { $match: { convertedDate: { $gte: startOf7Days } } },
+              {
+                $group: {
+                  _id: {
+                    $dateToString: {
+                      format: "%Y-%m-%d",
+                      date: "$convertedDate",
+                      timezone: "Asia/Dhaka",
+                    },
+                  },
+                  count: { $sum: 1 },
+                },
+              },
+              { $sort: { _id: 1 } },
+              { $project: { _id: 0, date: "$_id", count: 1 } },
+            ])
+            .toArray(),
+        ]);
 
-       // Normalise recentActivity: map "delivery_status" → "status" for frontend
-       const normalisedActivity = recentActivity.map((p) => ({
-         _id: p._id,
-         senderName: p.senderName ?? p.sender_name ?? "—",
-         receiverDistrict: p.receiverDistrict ?? p.receiverAddress ?? "—",
-         status: p.delivery_status, 
-         cost: p.cost,
-         parcelType: p.parcelType,
-         creation_date: p.creation_date,
-       }));
-
-       res.json({
-         totalUsers,
-         totalRiders,
-         totalParcels,
-         deliveredToday,
-         pendingCount,
-         inTransitCount,
-         cancelledCount,
-         assignedCount,
-         revenueToday: revenueTodayAgg[0]?.total ?? 0,
-         revenue7d: revenue7dAgg[0]?.total ?? 0,
-         revenue30d: revenue30dAgg[0]?.total ?? 0,
-         newUsersToday,
-         newUsers7d,
-         topDistricts,
-         recentActivity: normalisedActivity,
-         dailyVolume,
-         generatedAt: now.toISOString(),
-       });
-     } catch (err) {
-       console.error("[admin/overview]", err);
-       res.status(500).json({ message: "Failed to load overview." });
-     }
-   });
+        res.json({
+          totalUsers,
+          totalRiders,
+          totalParcels,
+          deliveredToday,
+          pendingCount,
+          inTransitCount,
+          cancelledCount,
+          assignedCount,
+          revenueToday: revenueTodayAgg[0]?.total ?? 0,
+          revenue7d: revenue7dAgg[0]?.total ?? 0,
+          revenue30d: revenue30dAgg[0]?.total ?? 0,
+          newUsersToday,
+          newUsers7d,
+          topDistricts,
+          recentActivity,
+          dailyVolume,
+          generatedAt: now.toISOString(),
+        });
+      } catch (err) {
+        console.error("[admin/overview]", err);
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+    });
     /* AGGREGATE */
 
     app.post("/parcels", verifyFBToken, async (req, res) => {
@@ -1111,8 +1108,6 @@ async function run() {
     app.get("/reviews", async (req, res) => {
       res.send(await reviewCollection.find().toArray());
     });
-
-   
   } finally {
     // await client.close();
   }
