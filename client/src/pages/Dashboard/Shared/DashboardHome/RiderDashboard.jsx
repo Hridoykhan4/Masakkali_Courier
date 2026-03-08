@@ -954,7 +954,7 @@ const RiderDashboard = () => {
                   recent deliveries. Head to earnings to withdraw.
                 </p>
                 <Link
-                  to="/dashboard/rider-earnings"
+                  to="/dashboard/myEarnings"
                   className="flex items-center gap-1.5 text-[10px] font-black
                     uppercase tracking-wider"
                   style={{ color: ACC }}

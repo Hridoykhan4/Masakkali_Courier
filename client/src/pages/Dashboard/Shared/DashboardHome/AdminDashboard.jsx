@@ -833,17 +833,6 @@ const AdminDashboard = () => {
           ))}
         </div>
       </section>
-
-      {/* ── FOOTER ───────────────────────────────────────── */}
-      <div className="flex items-center justify-between pt-2 border-t border-base-content/5">
-        <p className="text-[9px] font-black uppercase tracking-widest opacity-15">
-          Masakkali Courier — Command Center
-        </p>
-        <p className="text-[9px] font-black uppercase tracking-widest opacity-25 flex items-center gap-1.5 text-primary">
-          <MdElectricBolt />
-          System Online
-        </p>
-      </div>
     </div>
   );
 };
